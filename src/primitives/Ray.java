@@ -1,6 +1,5 @@
 package primitives;
 
-import static primitives.Util.isZero;
 
 public class Ray {
 	private final Point head;

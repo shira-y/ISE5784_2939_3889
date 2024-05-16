@@ -9,7 +9,7 @@ private final double height;
 public Cylinder(double height) {
 	this.height = height;
 }
-public default Vector getNormal(Point p) {
+public Vector getNormal(Point p) {
 	return null;
 }
 }

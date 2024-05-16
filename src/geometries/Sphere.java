@@ -13,7 +13,7 @@ public class Sphere {
 		this.radius = radius;
 	}
 
-	public default Vector getNormal(Point p) {
+	public Vector getNormal(Point p) {
 		return null;
 	}
 }

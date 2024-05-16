@@ -17,4 +17,7 @@ public class Plane {
 	public Vector getNormal(Point p) {
 		return normalVec;
 	}
+	public Vector getNormal() {
+		return null;
+	}
 }

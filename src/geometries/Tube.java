@@ -13,7 +13,7 @@ public Tube(double radius, Ray ray) {
 	this.radius = radius;
 	this.ray = ray;
 }
-public default Vector getNormal(Point p) {
+public Vector getNormal(Point p) {
 	return null;
 }
 }
