@@ -45,4 +45,13 @@ public class Plane {
 		return normalVec;
 	}
 
+	/**
+	 * A function that normalizes the vector
+	 * 
+	 * @return the normal vector
+	 */
+	public Vector getNormal() {
+		return normalVec;
+	}
+
 }

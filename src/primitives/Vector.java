@@ -37,8 +37,7 @@ public class Vector extends Point {
 	 * @return a new vector
 	 */
 	public Vector add(Vector vector) {
-		Vector newVector = new Vector(xyz.add(vector.xyz));
-		return newVector;
+		return new Vector(xyz.add(vector.xyz));
 	}
 
 	/**
@@ -48,8 +47,7 @@ public class Vector extends Point {
 	 * @return a new vector
 	 */
 	public Vector scale(float number) {
-		Vector newVector = new Vector(xyz.scale(number));
-		return newVector;
+		return new Vector(xyz.scale(number));
 	}
 
 	/**
@@ -59,8 +57,7 @@ public class Vector extends Point {
 	 * @return the result
 	 */
 	public double dotProduct(Vector vector) {
-		double result = (xyz.d1 * vector.xyz.d1) + (xyz.d2 * vector.xyz.d2) + (xyz.d3 * vector.xyz.d3);
-		return result;
+		return (xyz.d1 * vector.xyz.d1) + (xyz.d2 * vector.xyz.d2) + (xyz.d3 * vector.xyz.d3);
 	}
 
 	/**
@@ -99,8 +96,7 @@ public class Vector extends Point {
 	 * @return - a unit vector in the same direction as the original vector
 	 */
 	public Vector normalize() {
-		Vector newVector = new Vector(xyz.reduce(this.length()));
-		return newVector;
+		return new Vector(xyz.reduce(this.length()));
 	}
 
 	@Override
