@@ -1,6 +1,6 @@
 /**
- * Shira Yaish 327242939
- * Yael Nave 213113889
+ * Shira Yaish 327242939 Shirayaish03@gmail.com
+ * Yael Nave 213113889 yaelnave4@gmail.com
  */
 package test;
 
