@@ -9,7 +9,7 @@ import primitives.Vector;
  */
 public class Tube {
 
-	private final double rad;
+	private final double radius;
 	private final Ray ray;
 
 	/**
