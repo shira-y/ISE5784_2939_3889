@@ -1,20 +1,21 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 /**
- * Cylinder class is used for
+ * The Triangle class represents a triangle shape in a 3D space. It extends the
+ * Polygon class, which is a more general representation of a polygon.
  */
 public class Triangle extends Polygon {
 
 	/**
-	 * A function that normalizes the vector
+	 * Constructs a Triangle with three points.
 	 * 
-	 * @param p- receives a point
-	 * @return the normal vector
+	 * @param p1 the first point of the triangle
+	 * @param p2 the second point of the triangle
+	 * @param p3 the third point of the triangle
 	 */
-	public Vector getNormal(Point p) {
-		return null;
+	public Triangle(Point p1, Point p2, Point p3) {
+		super(p1, p2, p3);
 	}
 }

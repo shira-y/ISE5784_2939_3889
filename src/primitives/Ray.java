@@ -6,14 +6,17 @@ package primitives;
  * direction/
  */
 public class Ray {
+	/**
+	 * head the head point of the ray direction the direction vector of the ray
+	 */
 	private final Point head;
 	private final Vector direction;
 
 	/**
 	 * A constructor with a point and a direction vector
 	 * 
-	 * @param head
-	 * @param direction
+	 * @param head      the head point of the ray
+	 * @param direction the direction vector of the ray
 	 */
 	public Ray(Point head, Vector direction) {
 		this.head = head;
@@ -30,7 +33,7 @@ public class Ray {
 
 	@Override
 	public String toString() {
-		return "Ray{" + "head=" + head + ", direction=" + direction + '}';
+		return "Ray{" + head + direction + '}';
 	}
 
 }

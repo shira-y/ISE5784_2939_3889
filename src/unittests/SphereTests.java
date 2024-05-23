@@ -1,5 +1,8 @@
 package unittests;
 
+import geometries.*;
+import primitives.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -9,12 +12,18 @@ import org.junit.jupiter.api.Test;
  */
 class SphereTests {
 
+	private final double DELTA = 0.000001;
+
 	/**
 	 * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.
 	 */
 	@Test
 	void testGetNormal() {
-		fail("Not yet implemented");
+		// Equivalence Partitions tests
+		// ======================================================================
+		// EP01 get normal of point on sphere
+		Sphere s1 = new Sphere(new Point(0, 0, 0), 1);
+		Vector normal = new Vector(1, 0, 0);
+		assertEquals(normal, s1.getNormal(new Point(1, 0, 0)), "Bad normal for sphere");
 	}
-
 }

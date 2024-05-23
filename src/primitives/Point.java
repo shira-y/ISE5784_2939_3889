@@ -64,9 +64,10 @@ public class Point {
 	 * @return the distance
 	 */
 	public double distanceSquared(Point newPoint) {
-		return ((xyz.d1 - newPoint.xyz.d1) * (xyz.d1 - newPoint.xyz.d1)
-				+ (xyz.d2 - newPoint.xyz.d2) * (xyz.d2 - newPoint.xyz.d2)
-				+ (xyz.d3 - newPoint.xyz.d3) * (xyz.d3 - newPoint.xyz.d3));
+		double pointD1 = (xyz.d1 - newPoint.xyz.d1);
+		double pointD2 = (xyz.d2 - newPoint.xyz.d2);
+		double pointD3 = (xyz.d3 - newPoint.xyz.d3);
+		return (pointD1 * pointD1 + pointD2 * pointD2 + pointD3 * pointD3);
 	}
 
 	/**

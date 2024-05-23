@@ -6,9 +6,13 @@ import primitives.Vector;
 /**
  * Plane class which includes a point in space and a vertical vector
  */
-public class Plane {
+public class Plane implements Geometry {
+	/**
+	 * p1: The reference point on the plane. normalVector: The normal vector
+	 * perpendicular to the plane.
+	 */
 	private final Point p;
-	private final Vector normalVec;
+	private final Vector normalVector;
 
 	/**
 	 * A constructor who receives 3 points in the parameters and should calculate
@@ -20,29 +24,29 @@ public class Plane {
 	 * @param p3- point 3 in the parameters
 	 */
 	public Plane(Point p1, Point p2, Point p3) {
-		normalVec = null;
 		p = p1;
+		// Calculate the normal vector using the mathematical model of a normal to a
+		// triangle
+		Vector v1 = p2.subtract(p1);
+		Vector v2 = p3.subtract(p1);
+		normalVector = v1.crossProduct(v2).normalize();
+
 	}
 
 	/**
 	 * A constructor that accepts as parameters a point and the normal vector
 	 * 
-	 * @param p1         - point
-	 * @param normalVec- the normal vector
+	 * @param p1-           point
+	 * @param normalVector- the normal vector
 	 */
 	public Plane(Point p1, Vector normalVec) {
-		this.normalVec = normalVec;
+		this.normalVector = normalVec.normalize();
 		p = p1;
 	}
 
-	/**
-	 * A function that normalizes the vector
-	 * 
-	 * @param p- receives a point
-	 * @return the normal vector
-	 */
+	@Override
 	public Vector getNormal(Point p) {
-		return normalVec;
+		return normalVector;
 	}
 
 	/**
@@ -51,7 +55,7 @@ public class Plane {
 	 * @return the normal vector
 	 */
 	public Vector getNormal() {
-		return normalVec;
+		return normalVector;
 	}
 
 }

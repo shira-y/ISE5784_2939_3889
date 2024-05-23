@@ -1,29 +1,38 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 /**
- * Cylinder class that extends the tube class
+ * The Cylinder class represents a cylinder shape in 3D space. It extends the
+ * Tube class, adding a height attribute to the tube.
  */
-public class Cylinder {
+public class Cylinder extends Tube {
+	/**
+	 * height: The height of the cylinder.
+	 */
 	private final double height;
 
 	/**
-	 * Constructor for Cylinder
+	 * Constructs a Cylinder with a given height, radius, and axis ray.
+	 * 
+	 * @param height the height of the cylinder
+	 * @param radius the radius of the base of the cylinder
+	 * @param ray    the axis ray of the cylinder
 	 */
-
-	public Cylinder(double height) {
+	public Cylinder(double height, double radius, Ray ray) {
+		super(radius, ray);
 		this.height = height;
 	}
 
 	/**
-	 * A function that normalizes the vector
+	 * Calculates the normal vector to the surface of the cylinder at a given point.
 	 * 
-	 * @param p- receives a point
-	 * @return - the normal vector
+	 * @param p the point on the surface of the cylinder
+	 * @return the normal vector at the given point
 	 */
+	@Override
 	public Vector getNormal(Point p) {
+		// Implementation to be added
 		return null;
 	}
 }

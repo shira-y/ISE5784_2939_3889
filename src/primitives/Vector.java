@@ -67,8 +67,8 @@ public class Vector extends Point {
 	 * @return a new vector perpendicular to the two existing vectors
 	 */
 	public Vector crossProduct(Vector vector) {
-		return new Vector(this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2,
-				this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3,
+		return new Vector(this.xyz.d2 * vector.xyz.d3 - this.xyz.d3 * vector.xyz.d2, //
+				this.xyz.d3 * vector.xyz.d1 - this.xyz.d1 * vector.xyz.d3, //
 				this.xyz.d1 * vector.xyz.d2 - this.xyz.d2 * vector.xyz.d1);
 	}
 

@@ -7,19 +7,20 @@ import primitives.Vector;
 /**
  * A Tube class that includes a radius and a beam
  */
-public class Tube {
-
-	private final double radius;
+public class Tube extends RadialGeometry {
+	/**
+	 * ray represents the central axis ray of the tube.
+	 */
 	private final Ray ray;
 
 	/**
 	 * Constructor for Tube class with a ray and a radius
 	 * 
-	 * @param radius- receives a radius
-	 * @param ray-    receives a ray
+	 * @param radius- receives a radius of the tube.
+	 * @param ray-    receives a central axis ray of the tube
 	 */
 	public Tube(double radius, Ray ray) {
-		this.radius = radius;
+		super(radius);
 		this.ray = ray;
 	}
 

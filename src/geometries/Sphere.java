@@ -7,10 +7,9 @@ import primitives.Vector;
  * A sphere class that includes a point and a radius that extends the
  * RadialGeometry class
  */
-public class Sphere {
+public class Sphere extends RadialGeometry {
 
 	private final Point center;
-	private final double radius;
 
 	/**
 	 * Constructor for Sphere
@@ -19,8 +18,8 @@ public class Sphere {
 	 * @param radius- receives a radius
 	 */
 	public Sphere(Point center, double radius) {
+		super(radius);
 		this.center = center;
-		this.radius = radius;
 	}
 
 	/**
@@ -30,6 +29,6 @@ public class Sphere {
 	 * @return the normal vector
 	 */
 	public Vector getNormal(Point p) {
-		return null;
+		return p.subtract(center).normalize();
 	}
 }
