@@ -22,18 +22,29 @@ public class Ray {
 		this.head = head;
 		this.direction = direction.normalize();
 	}
+	
+	public Vector getDirection() {
+		return direction;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		return (obj instanceof Ray other) && this.head.equals(other.head) && this.direction.equals(other.direction);
+		return (obj instanceof Ray other) && this.head.equals(other.head) && this.getDirection().equals(other.getDirection());
 
 	}
 
 	@Override
 	public String toString() {
-		return "Ray{" + head + direction + '}';
+		return "Ray{" + head + getDirection() + '}';
 	}
+
+	public Point getPoint(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 
 }

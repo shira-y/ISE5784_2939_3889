@@ -29,7 +29,11 @@ class CylinderTest {
         assertEquals(new Vector(0, 0, 1), cylinder.getNormal(new Point(1, 0, 3)), "Bad normal to the top-edge of the cylinder");
 
         //TC05: Test with point on the bottom edge of the cylinder
-        assertEquals(new Vector(0, 0, -1), cylinder.getNormal(new Point(0, 1, 0)), "Bad normal to the bottom-edge of the cylinder");
-
+        asserEquals(new Vector(0,0,-1), cylinder.getNormal(new Point(0,1,0)), "Bad normal to the bottom- edge of the of the cylinder");
     }
+
+	private void asserEquals(Vector vector, Vector normal, String string) {
+		// TODO Auto-generated method stub
+		
+	}
 }

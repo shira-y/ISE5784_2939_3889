@@ -18,36 +18,40 @@ class TubeTests {
 	/**
 	 * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
 	 */
-	@Test
-	public void testGetNormal() {
-		// ============ Equivalence Class Tests ==============
-		// TC01: Test the normal vector at a point on the surface of the tube
-		Ray axisRay = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1)); // Define the axis of the tube
-		Tube tube = new Tube(1, axisRay); // Create a tube with radius 1 and axisRay
+	 @Test
+	    void testGetNormal() {
+	        Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+	        Tube tube = new Tube(2, ray);
 
-		// Choose a point on the surface of the tube
-		Point surfacePoint = new Point(1, 0, 0); // Example point on the surface
+	        // ============ Equivalence Partitions Tests ==============
 
-		// Get the normal vector at the surface point
-		Vector normal = tube.getNormal(surfacePoint);
+	        // TC01: Point on the side of the tube
+	        Point sidePoint = new Point(2, 0, 5);
+	        Vector expectedNormalSide = new Vector(1, 0, 0); // assuming the tube is along z-axis and radius is 2
+	        assertEquals(expectedNormalSide, tube.getNormal(sidePoint), "Bad normal to tube on the side");
 
-		// Verify that the normal vector is perpendicular to the axis of the tube
-		assertEquals(0, normal.dotProduct(axisRay.direction), DELTA,
-				"Normal vector should be perpendicular to tube axis");
-		assertEquals(1, normal.length(), DELTA, "Normal vector should have unit length");
+	        // TC02: Point on the top base of the tube
+	        Point topBasePoint = new Point(1, 1, 10); // top base point
+	        Vector expectedNormalTopBase = new Vector(0, 0, 1);
+	        assertEquals(expectedNormalTopBase, tube.getNormal(topBasePoint), "Bad normal to tube on the top base");
 
-		// =============== Boundary Case Test ==================
-		// TC02: Test when the point is in front of the head of the ray (right angle
-		// with the axis)
-		Point frontPoint = axisRay.getPoint(1); // A point in front of the head of the ray
+	        // TC03: Point on the bottom base of the tube
+	        Point bottomBasePoint = new Point(1, 1, 0); // bottom base point
+	        Vector expectedNormalBottomBase = new Vector(0, 0, -1);
+	        assertEquals(expectedNormalBottomBase, tube.getNormal(bottomBasePoint), "Bad normal to tube on the bottom base");
 
-		// Get the normal vector at the front point
-		Vector normalFront = tube.getNormal(frontPoint);
+	        // =============== Boundary Values Tests ==================
 
-		// Verify that the normal vector is perpendicular to the axis of the tube
-		assertEquals(0, normalFront.dotProduct(axisRay.direction), DELTA,
-				"Normal vector should be perpendicular to tube axis");
-		assertEquals(1, normalFront.length(), DELTA, "Normal vector should have unit length");
+	        // TC11: Point at the center of the top base
+	        Point centerTopBase = new Point(0, 0, 10);
+	        assertEquals(new Vector(0, 0, 1), tube.getNormal(centerTopBase), "Bad normal at the center of the top base");
+
+	        // TC12: Point at the center of the bottom base
+	        Point centerBottomBase = new Point(0, 0, 0);
+	        assertEquals(new Vector(0, 0, -1), tube.getNormal(centerBottomBase), "Bad normal at the center of the bottom base");
 	}
+
+	
+
 
 }
