@@ -1,22 +1,18 @@
 /**
  * 
  */
-package unittests;
+package unittests.geometries;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import geometries.Plane;
-import primitives.Point;
-import primitives.Vector;
-
+import geometries.*;
+import primitives.*;
 /**
  * Unit tests for geometries.Plane class
  */
 class PlaneTests {
-
-	private final double DELTA = 0.000001;
 
 	/**
 	 * Test method for
@@ -46,10 +42,13 @@ class PlaneTests {
 	void getNormal() {
 		// ========== Equivalence Partitions tests
 		// ======================================================
-		// EP01 test if normal vector is correct
-		Plane p1 = new Plane(new Point(0, 0, 0), new Point(0, 5, 0), new Point(5, 0, 0));
-		Vector normal = new Vector(0, 0, 1);
-		assertTrue(normal.equals(p1.getNormal(new Point(1, 1, 0))) || normal.equals(p1.getNormal(new Point(-1, -1, 0))),
+		// TC01 test if normal vector is correct
+		Plane plane = new Plane(new Point(0, 0, 0), new Point(0, 5, 0), new Point(5, 0, 0));
+		Vector expectedNormal = new Vector(0, 0, 1).normalize();
+		Vector normal = plane.getNormal(new Point(1, 1, 0));
+
+		// Assert that the normal is either the expected normal or its inverse
+		assertTrue(expectedNormal.equals(normal) || expectedNormal.equals(normal.scale(-1)),
 				"bad normal to plane");
 	}
 }

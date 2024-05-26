@@ -1,4 +1,4 @@
-package unittests;
+package unittests.geometries;
 
 import geometries.*;
 import primitives.*;
@@ -11,8 +11,6 @@ import org.junit.jupiter.api.Test;
  * Unit tests for geometries.Sphere class
  */
 class SphereTests {
-
-	private final double DELTA = 0.000001;
 
 	/**
 	 * Test method for {@link geometries.Sphere#getNormal(primitives.Point)}.
