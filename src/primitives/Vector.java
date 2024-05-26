@@ -56,8 +56,8 @@ public class Vector extends Point {
 	 * @param vector- receives a vector to be duplicated
 	 * @return the result
 	 */
-	public double dotProduct(Vector vector) {
-		return (xyz.d1 * vector.xyz.d1) + (xyz.d2 * vector.xyz.d2) + (xyz.d3 * vector.xyz.d3);
+	public float dotProduct(Vector vector) {
+		return (float) ((xyz.d1 * vector.xyz.d1) + (xyz.d2 * vector.xyz.d2) + (xyz.d3 * vector.xyz.d3));
 	}
 
 	/**

@@ -46,8 +46,7 @@ public class Plane implements Geometry {
 
 	@Override
 	public Vector getNormal(Point p) {
-		return null;
-		//return normalVector;
+		return normalVector;
 	}
 	/**
 	 * A function that normalizes the vector
@@ -55,8 +54,7 @@ public class Plane implements Geometry {
 	 * @return the normal vector
 	 */
 	public Vector getNormal() {
-		return null;
-		//return normalVector;
+		return normalVector;
 	}
 
 }

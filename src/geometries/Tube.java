@@ -11,7 +11,7 @@ public class Tube extends RadialGeometry {
 	/**
 	 * ray represents the central axis ray of the tube.
 	 */
-	private final Ray ray;
+	protected final Ray ray;
 
 	/**
 	 * Constructor for Tube class with a ray and a radius
@@ -30,7 +30,17 @@ public class Tube extends RadialGeometry {
 	 * @param p- receives a point
 	 * @return the normal vector
 	 */
-	public Vector getNormal(Point p) {
-		return null;
-	}
+    public Vector getNormal(Point point) {
+        // Project the point onto the tube's axis
+        Point p0 = ray.getHead();
+        Vector dir = ray.getDirection();
+
+        // Calculate the projection of the point onto the axis ray
+        Vector p0ToPoint = point.subtract(p0);
+        float t = dir.dotProduct(p0ToPoint);  // The scalar projection of p0ToPoint on dir
+        Point projection = p0.add(dir.scale(t));
+
+        // Calculate the normal vector as the vector from the projection point to the given point
+        return point.subtract(projection).normalize();
+    }
 }

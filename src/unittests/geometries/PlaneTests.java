@@ -21,8 +21,7 @@ class PlaneTests {
 	@Test
 	void testConstructor() {
 
-		// ===========Boundary Value Analysis tests
-		// ====================================================
+		// ===========Boundary Value Analysis tests===========
 		// TC01 two points are equal
 		assertThrows(IllegalArgumentException.class,
 				() -> new Plane(new Point(0, 0, 1), new Point(0, 0, 1), new Point(0, 0, 2)),
@@ -40,8 +39,7 @@ class PlaneTests {
 	 */
 	@Test
 	void getNormal() {
-		// ========== Equivalence Partitions tests
-		// ======================================================
+		// ========== Equivalence Partitions tests ==========
 		// TC01 test if normal vector is correct
 		Plane plane = new Plane(new Point(0, 0, 0), new Point(0, 5, 0), new Point(5, 0, 0));
 		Vector expectedNormal = new Vector(0, 0, 1).normalize();

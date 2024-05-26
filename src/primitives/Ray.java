@@ -39,11 +39,18 @@ public class Ray {
 	public String toString() {
 		return "Ray{" + head + getDirection() + '}';
 	}
+//
+//	public Point getPoint(int i) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	public Point getPoint(int i) {
+	public Point getHead() {
 		// TODO Auto-generated method stub
-		return null;
+		return head;
 	}
+	
+
 
 	
 
