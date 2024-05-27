@@ -36,11 +36,11 @@ public class Plane implements Geometry {
 	/**
 	 * A constructor that accepts as parameters a point and the normal vector
 	 * 
-	 * @param p1-           point
-	 * @param normalVector- the normal vector
+	 * @param p1-            point
+	 * @param normalVector1- the normal vector
 	 */
-	public Plane(Point p1, Vector normalVec) {
-		this.normalVector = normalVec.normalize();
+	public Plane(Point p1, Vector normalVector1) {
+		this.normalVector = normalVector1.normalize();
 		p = p1;
 	}
 
@@ -48,6 +48,7 @@ public class Plane implements Geometry {
 	public Vector getNormal(Point p) {
 		return normalVector;
 	}
+
 	/**
 	 * A function that normalizes the vector
 	 * 

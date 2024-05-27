@@ -25,10 +25,10 @@ public class Sphere extends RadialGeometry {
 	/**
 	 * A function that normalizes the vector
 	 * 
-	 * @param p- receives a point
+	 * @param point- receives a point
 	 * @return the normal vector
 	 */
-	public Vector getNormal(Point p) {
-		return p.subtract(center).normalize();
+	public Vector getNormal(Point point) {
+		return point.subtract(center).normalize();
 	}
 }

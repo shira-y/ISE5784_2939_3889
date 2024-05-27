@@ -27,20 +27,21 @@ public class Tube extends RadialGeometry {
 	/**
 	 * A function that normalizes the vector
 	 * 
-	 * @param p- receives a point
+	 * @param point- receives a point
 	 * @return the normal vector
 	 */
-    public Vector getNormal(Point point) {
-        // Project the point onto the tube's axis
-        Point p0 = ray.getHead();
-        Vector dir = ray.getDirection();
+	public Vector getNormal(Point point) {
+		// Project the point onto the tube's axis
+		Point p0 = ray.getHead();
+		Vector direction = ray.getDirection();
 
-        // Calculate the projection of the point onto the axis ray
-        Vector p0ToPoint = point.subtract(p0);
-        float t = dir.dotProduct(p0ToPoint);  // The scalar projection of p0ToPoint on dir
-        Point projection = p0.add(dir.scale(t));
+		// Calculate the projection of the point onto the axis ray
+		Vector p0ToPoint = point.subtract(p0);
+		float scalar = direction.dotProduct(p0ToPoint); // The scalar projection of p0ToPoint on direction
+		Point projection = p0.add(direction.scale(scalar));
 
-        // Calculate the normal vector as the vector from the projection point to the given point
-        return point.subtract(projection).normalize();
-    }
+		// Calculate the normal vector as the vector from the projection point to the
+		// given point
+		return point.subtract(projection).normalize();
+	}
 }

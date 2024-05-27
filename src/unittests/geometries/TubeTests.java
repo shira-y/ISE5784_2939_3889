@@ -11,26 +11,35 @@ import geometries.*;
  */
 class TubeTests {
 
-    /**
-     * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
-     */
-    @Test
-    void testGetNormal() {
-        Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
-        Tube tube = new Tube(2, ray);
+	/**
+	 * Test method for {@link geometries.Tube#getNormal(primitives.Point)}.
+	 */
+	@Test
+	void testGetNormal() {
 
-        // ============ Equivalence Partitions Tests ==============
+		// Setting up the tube with a ray as its axis
+		Ray ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
+		Tube tube = new Tube(2, ray);
 
-        // TC01: Point on the side of the tube
-        Point sidePoint = new Point(2, 0, 5);
-        Vector expectedNormalSide = new Vector(1, 0, 0); // the normal at this point should point outward perpendicular to the surface
-        assertEquals(expectedNormalSide, tube.getNormal(sidePoint), "Bad normal to tube on the side");
+		// ============ Equivalence Partitions Tests ==============
 
-        // =============== Boundary Values Tests ==================
+		// TC01: Point on the side of the tube
+		Point sidePoint = new Point(2, 0, 5);
+		Vector expectedNormalSide = new Vector(1, 0, 0); // the normal at this point should point outward perpendicular
+															// to the surface
+		assertEquals(expectedNormalSide, tube.getNormal(sidePoint), "Bad normal to tube on the side");
 
-        // TC11: Point on the tube axis (should throw exception or handle gracefully)
-        Point pointOnAxis = new Point(0, 0, 5);
-        assertThrows(IllegalArgumentException.class, () -> tube.getNormal(pointOnAxis), 
-                     "Expected exception for normal calculation at the tube axis");
-    }
+		// =============== Boundary Values Tests ==================
+
+		// TC11: Point on the tube axis
+		// According to tube's geometric properties, the normal at any point on the axis
+		// does not exist in the same sense as on the surface
+		// It might be handled differently depending on implementation. For example,
+		// returning a null, a default normal, or throwing an exception.
+		// Here, we choose to check if an exception is thrown, as a possible
+		// implementation choice.
+		Point pointOnAxis = new Point(0, 0, 5);
+		assertThrows(IllegalArgumentException.class, () -> tube.getNormal(pointOnAxis),
+				"Expected exception for normal calculation at the tube axis");
+	}
 }

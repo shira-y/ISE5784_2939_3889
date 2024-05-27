@@ -22,7 +22,7 @@ public class Ray {
 		this.head = head;
 		this.direction = direction.normalize();
 	}
-	
+
 	public Vector getDirection() {
 		return direction;
 	}
@@ -31,7 +31,8 @@ public class Ray {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		return (obj instanceof Ray other) && this.head.equals(other.head) && this.getDirection().equals(other.getDirection());
+		return (obj instanceof Ray other) && this.head.equals(other.head)
+				&& this.getDirection().equals(other.getDirection());
 
 	}
 
@@ -49,9 +50,5 @@ public class Ray {
 		// TODO Auto-generated method stub
 		return head;
 	}
-	
-
-
-	
 
 }
