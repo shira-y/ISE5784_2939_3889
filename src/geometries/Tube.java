@@ -1,5 +1,7 @@
 package geometries;
 
+import java.util.List;
+
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -43,5 +45,9 @@ public class Tube extends RadialGeometry {
 		// Calculate the normal vector as the vector from the projection point to the
 		// given point
 		return point.subtract(projection).normalize();
+	}
+
+	public List<Point> findIntsersections(Ray ray) {
+		return null;
 	}
 }

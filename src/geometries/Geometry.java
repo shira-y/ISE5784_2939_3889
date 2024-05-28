@@ -5,7 +5,7 @@ import primitives.*;
 /**
  * An interface named Geometry for some geometric body
  */
-public interface Geometry {
+public interface Geometry extends Intersectable {
 
 	/**
 	 * A function that receives one parameter of the point type [on the surface of

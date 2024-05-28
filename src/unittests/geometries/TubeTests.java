@@ -2,6 +2,8 @@ package unittests.geometries;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import geometries.*;
@@ -34,5 +36,11 @@ class TubeTests {
 		Point pointOnAxis = new Point(0, 0, 5);
 		assertThrows(IllegalArgumentException.class, () -> tube.getNormal(pointOnAxis),
 				"Expected exception for normal calculation at the tube axis");
+	}
+
+	@Test
+	public List<Point> findIntsersections() {
+		return null;
+
 	}
 }

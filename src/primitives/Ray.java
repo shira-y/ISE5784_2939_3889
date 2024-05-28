@@ -7,7 +7,7 @@ package primitives;
  */
 public class Ray {
 	/**
-	 * head- the head point of the ray 
+	 * head- the head point of the ray
 	 */
 	private final Point head;
 	/**
@@ -25,9 +25,10 @@ public class Ray {
 		this.head = head;
 		this.direction = direction.normalize();
 	}
-	
+
 	/**
 	 * a getter method for head
+	 * 
 	 * @return the head
 	 */
 	public Point getHead() {
@@ -37,6 +38,7 @@ public class Ray {
 
 	/**
 	 * a getter method for direction
+	 * 
 	 * @return the direction
 	 */
 	public Vector getDirection() {
@@ -61,7 +63,5 @@ public class Ray {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
-
-	
 
 }

@@ -2,6 +2,8 @@ package unittests.geometries;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
@@ -81,6 +83,12 @@ public class PolygonTests {
 		for (int i = 0; i < 3; ++i)
 			assertEquals(0d, result.dotProduct(pts[i].subtract(pts[i == 0 ? 3 : i - 1])), DELTA,
 					"Polygon's normal is not orthogonal to one of the edges");
+	}
+
+	@Test
+	public List<Point> findIntsersections() {
+		return null;
+
 	}
 
 }

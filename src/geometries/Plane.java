@@ -1,6 +1,9 @@
 package geometries;
 
+import java.util.List;
+
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
 
 /**
@@ -8,7 +11,7 @@ import primitives.Vector;
  */
 public class Plane implements Geometry {
 	/**
-	 * p1: The reference point on the plane. 
+	 * p1: The reference point on the plane.
 	 */
 	private final Point p;
 	/**
@@ -58,6 +61,10 @@ public class Plane implements Geometry {
 	 */
 	public Vector getNormal() {
 		return normalVector;
+	}
+
+	public List<Point> findIntsersections(Ray ray) {
+		return null;
 	}
 
 }

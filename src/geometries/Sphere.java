@@ -1,6 +1,9 @@
 package geometries;
 
+import java.util.List;
+
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
 
 /**
@@ -33,5 +36,9 @@ public class Sphere extends RadialGeometry {
 	 */
 	public Vector getNormal(Point point) {
 		return point.subtract(center).normalize();
+	}
+
+	public List<Point> findIntsersections(Ray ray) {
+		return null;
 	}
 }
