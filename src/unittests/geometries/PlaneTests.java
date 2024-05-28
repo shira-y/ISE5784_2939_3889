@@ -23,12 +23,12 @@ class PlaneTests {
 	void testConstructor() {
 
 		// =========== Boundary Values Tests ===========
-		// TC10: two points are equal
+		// TC11: two points are equal
 		assertThrows(IllegalArgumentException.class,
 				() -> new Plane(new Point(0, 0, 1), new Point(0, 0, 1), new Point(0, 0, 2)),
 				"constructed Plane with equal points");
 
-		// TC11: points are all on the same line
+		// TC12: points are all on the same line
 		assertThrows(IllegalArgumentException.class,
 				() -> new Plane(new Point(0, 0, 1), new Point(0, 0, 3), new Point(0, 0, 2)),
 				"constructed plane must have Vectors in different directions");

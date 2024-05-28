@@ -12,8 +12,13 @@ import primitives.Vector;
  */
 class PointTests {
 
+	/**
+	 * The allowed difference between 2 values
+	 */
 	private final double DELTA = 0.000001;
-
+	/**
+	 * Define vectors for testing
+	 */
 	Vector v1 = new Vector(1, 2, 3);
 	Vector v2 = new Vector(-2, -4, -6);
 
@@ -43,7 +48,6 @@ class PointTests {
 		assertEquals(new Point(2, 4, 6), p1.add(v1), "ERROR: Connection of point and vector is incorrect");
 	}
 
-	/**///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Test method for {@link primitives.Point#distanceSquared(primitives.Point)}.
 	 */
@@ -74,6 +78,5 @@ class PointTests {
 		// TC11: Test distance with the same point
 		assertEquals(0, p1.distance(p1), DELTA, "worng distance between the point and itself");
 	}
-	/**//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

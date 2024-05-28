@@ -18,11 +18,12 @@ class VectorTests {
 	/**
 	 * Define vectors for testing
 	 */
-
 	Vector v1 = new Vector(1, 2, 3);
 	Vector v2 = new Vector(-2, -4, -6);
 	Vector v3 = new Vector(0, 3, -2);
-
+	/**
+	 * The allowed difference between 2 values
+	 */
 	private final double DELTA = 0.000001;
 
 	/**
@@ -37,7 +38,7 @@ class VectorTests {
 
 		// =============== Boundary Values Tests ==================
 		// TC11: A test that checks if the addition of 2 vectors is equal to the zero
-		// vector.
+		// vector
 		assertThrows(IllegalArgumentException.class, () -> v1.add(new Vector(-1, -2, -3)),
 				"Vector + -itself does not throw an exception");
 	}
