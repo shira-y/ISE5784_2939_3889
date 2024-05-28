@@ -8,10 +8,12 @@ import primitives.Vector;
  */
 public class Plane implements Geometry {
 	/**
-	 * p1: The reference point on the plane. normalVector: The normal vector
-	 * perpendicular to the plane.
+	 * p1: The reference point on the plane. 
 	 */
 	private final Point p;
+	/**
+	 * normalVector: The normal vector perpendicular to the plane.
+	 */
 	private final Vector normalVector;
 
 	/**

@@ -7,9 +7,12 @@ package primitives;
  */
 public class Ray {
 	/**
-	 * head the head point of the ray direction the direction vector of the ray
+	 * head- the head point of the ray 
 	 */
 	private final Point head;
+	/**
+	 * direction- the direction vector of the ray
+	 */
 	private final Vector direction;
 
 	/**
@@ -22,7 +25,20 @@ public class Ray {
 		this.head = head;
 		this.direction = direction.normalize();
 	}
+	
+	/**
+	 * a getter method for head
+	 * @return the head
+	 */
+	public Point getHead() {
+		// TODO Auto-generated method stub
+		return head;
+	}
 
+	/**
+	 * a getter method for direction
+	 * @return the direction
+	 */
 	public Vector getDirection() {
 		return direction;
 	}
@@ -46,9 +62,6 @@ public class Ray {
 //		return null;
 //	}
 
-	public Point getHead() {
-		// TODO Auto-generated method stub
-		return head;
-	}
+	
 
 }
