@@ -57,7 +57,7 @@ class PointTests {
 		// TC01: A test that checks that the squared distance between the points is
 		// correct
 		Point p1 = new Point(1, 2, 3);
-		assertEquals(2, p1.distanceSquared(new Point(1, 3, 4)));
+		assertEquals(2, p1.distanceSquared(new Point(1, 3, 4)), "Error: The squared distance between the points is incorrect");
 
 		// ============ Equivalence Partitions Tests ==============
 		// TC11: Test distanceSquared with the same point
@@ -72,7 +72,7 @@ class PointTests {
 		// ============ Equivalence Partitions Tests ==============
 		// TC01: A test that checks that the distance between the points is correct
 		Point p1 = new Point(1, 2, 0);
-		assertEquals(1, p1.distance(new Point(1, 3, 0)));
+		assertEquals(1, p1.distance(new Point(1, 3, 0)), "Error: The distance between the points is incorrect.");
 
 		// ============ Equivalence Partitions Tests ==============
 		// TC11: Test distance with the same point
