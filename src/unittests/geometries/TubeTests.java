@@ -26,8 +26,7 @@ class TubeTests {
 
 		// TC01: Point on the side of the tube
 		Point sidePoint = new Point(2, 0, 5);
-		Vector expectedNormalSide = new Vector(1, 0, 0); // the normal at this point should point outward perpendicular
-															// to the surface
+		Vector expectedNormalSide = new Vector(1, 0, 0); // the normal at this point should point outward perpendicular to the surface
 		assertEquals(expectedNormalSide, tube.getNormal(sidePoint), "Bad normal to tube on the side");
 
 		// =============== Boundary Values Tests ==================
