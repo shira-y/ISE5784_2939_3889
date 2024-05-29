@@ -16,11 +16,17 @@ import static primitives.Util.isZero;
  */
 class VectorTests {
 	/**
-	 * Define vectors for testing
+	 * Define vector for testing
 	 */
-	Vector v1 = new Vector(1, 2, 3);
-	Vector v2 = new Vector(-2, -4, -6);
-	Vector v3 = new Vector(0, 3, -2);
+	private static final Vector v1 = new Vector(1, 2, 3);
+	/**
+	 * Define vector for testing
+	 */
+	private static final Vector v2 = new Vector(-2, -4, -6);
+	/**
+	 * Define vector for testing
+	 */
+	private static final Vector v3 = new Vector(0, 3, -2);
 	/**
 	 * The allowed difference between 2 values
 	 */
@@ -71,7 +77,7 @@ class VectorTests {
 		// =============== Boundary Values Tests ==================
 		// TC11:A test that checks whether a scalar product between 2 perpendicular
 		// vectors is equal to zero
-		assertTrue(isZero(v1.dotProduct(v3)), "ERROR: dotProduct() for orthogonal vectors is not zero");
+		assertEquals(0, v1.dotProduct(v3),DELTA, "ERROR: dotProduct() for orthogonal vectors is not zero");
 	}
 
 	/**
