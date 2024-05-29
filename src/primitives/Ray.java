@@ -32,7 +32,6 @@ public class Ray {
 	 * @return the head
 	 */
 	public Point getHead() {
-		// TODO Auto-generated method stub
 		return head;
 	}
 
@@ -49,19 +48,14 @@ public class Ray {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		return (obj instanceof Ray other) && this.head.equals(other.head)
-				&& this.getDirection().equals(other.getDirection());
+		return (obj instanceof Ray other) && //
+				this.head.equals(other.head) && this.direction.equals(other.direction);
 
 	}
 
 	@Override
 	public String toString() {
-		return "Ray{" + head + getDirection() + '}';
+		return "Ray{" + head + direction + '}';
 	}
-//
-//	public Point getPoint(int i) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
 }

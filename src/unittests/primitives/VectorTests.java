@@ -85,8 +85,8 @@ class VectorTests {
 		// for simplicity)
 		assertEquals(vr.length(), v1.length() * v3.length(), DELTA, "ERROR: crossProduct() wrong result length");
 		// TC02: Test cross-product result orthogonality to its operands
-		assertEquals(0, vr.dotProduct(v1), "crossProduct() result is not orthogonal to 1st operand");
-		assertEquals(0, vr.dotProduct(v3), "crossProduct() result is not orthogonal to 2nd operand");
+		assertEquals(0, vr.dotProduct(v1), DELTA, "crossProduct() result is not orthogonal to 1st operand");
+		assertEquals(0, vr.dotProduct(v3), DELTA, "crossProduct() result is not orthogonal to 2nd operand");
 		// =============== Boundary Values Tests ==================
 		// TC11: test zero vector from cross-product of parallel vectors
 		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(v2), //
@@ -120,11 +120,11 @@ class VectorTests {
 	@Test
 	void testNormalize() {
 		// ============ Equivalence Partitions Tests ==============
+		// TC01:A test that checks that the vector is normalized correctly
+		// Check that the length of the normalized vector is equal to 1.
 		Vector u = v1.normalize();
-		// TC01:A test that checks that the vector is normalized by checking that the
-		// length of the vector is equal to 1.
 		assertEquals(1, u.length(), "ERROR: the normalized vector is not a unit vector");
-		// TC02: test zero vector from cross-product of co-lined vectors
+		// check that the original and the normalized vectors are co-lined
 		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(u),
 				"ERROR: the normalized vector is not parallel to the original one");
 	}

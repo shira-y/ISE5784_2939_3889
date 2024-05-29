@@ -6,6 +6,6 @@ import primitives.*;
 
 public interface Intersectable {
 
-	List<Point> findIntsersections(Ray ray);
+	List<Point> findIntersections(Ray ray);
 
 }

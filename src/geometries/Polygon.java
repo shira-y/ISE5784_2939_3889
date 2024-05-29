@@ -87,7 +87,7 @@ public class Polygon implements Geometry {
 		return plane.getNormal();
 	}
 
-	public List<Point> findIntsersections(Ray ray) {
+	public List<Point> findIntersections(Ray ray) {
 		return null;
 	}
 

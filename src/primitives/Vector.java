@@ -46,7 +46,7 @@ public class Vector extends Point {
 	 * @param number- receives a number as the scalar
 	 * @return a new vector
 	 */
-	public Vector scale(float number) {
+	public Vector scale(double number) {
 		return new Vector(xyz.scale(number));
 	}
 
@@ -56,8 +56,8 @@ public class Vector extends Point {
 	 * @param vector- receives a vector to be duplicated
 	 * @return the result
 	 */
-	public float dotProduct(Vector vector) {
-		return (float) ((xyz.d1 * vector.xyz.d1) + (xyz.d2 * vector.xyz.d2) + (xyz.d3 * vector.xyz.d3));
+	public double dotProduct(Vector vector) {
+		return (xyz.d1 * vector.xyz.d1) + (xyz.d2 * vector.xyz.d2) + (xyz.d3 * vector.xyz.d3);
 	}
 
 	/**

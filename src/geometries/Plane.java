@@ -13,6 +13,8 @@ public class Plane implements Geometry {
 	/**
 	 * p1: The reference point on the plane.
 	 */
+
+	@SuppressWarnings("unused") // TODO remove after it's used
 	private final Point p;
 	/**
 	 * normalVector: The normal vector perpendicular to the plane.
@@ -27,6 +29,9 @@ public class Plane implements Geometry {
 	 * @param p1- point 1 in the parameters
 	 * @param p2- point 2 in the parameters
 	 * @param p3- point 3 in the parameters
+	 * 
+	 * @throws IllegalArgumentException when there is a pair of converged points or
+	 *                                  the points are co-linear
 	 */
 	public Plane(Point p1, Point p2, Point p3) {
 		p = p1;
@@ -35,7 +40,6 @@ public class Plane implements Geometry {
 		Vector v1 = p2.subtract(p1);
 		Vector v2 = p3.subtract(p1);
 		normalVector = v1.crossProduct(v2).normalize();
-
 	}
 
 	/**
@@ -63,7 +67,7 @@ public class Plane implements Geometry {
 		return normalVector;
 	}
 
-	public List<Point> findIntsersections(Ray ray) {
+	public List<Point> findIntersections(Ray ray) {
 		return null;
 	}
 
