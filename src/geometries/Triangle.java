@@ -3,6 +3,7 @@ package geometries;
 import java.util.List;
 
 import primitives.*;
+import static primitives.Util.*;
 
 /**
  * The Triangle class represents a triangle shape in a 3D space. It extends the
@@ -21,7 +22,39 @@ public class Triangle extends Polygon {
 		super(p1, p2, p3);
 	}
 
-	public List<Point> findIntersections(Ray ray) {
-		return null;
-	}
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        // Step 1: Find intersection with the plane
+        Plane plane = new Plane(vertices.get(0), vertices.get(1), vertices.get(2));
+        List<Point> planeIntersections = plane.findIntersections(ray);
+
+        if (planeIntersections == null) {
+            return null; // No intersection with the plane
+        }
+
+        Point p = planeIntersections.get(0);
+
+        // Step 2: Check if the intersection point is inside the triangle
+        Vector v1 = vertices.get(0).subtract(ray.getHead());
+        Vector v2 = vertices.get(1).subtract(ray.getHead());
+        Vector v3 = vertices.get(2).subtract(ray.getHead());
+
+        Vector n1 = v1.crossProduct(v2).normalize();
+        Vector n2 = v2.crossProduct(v3).normalize();
+        Vector n3 = v3.crossProduct(v1).normalize();
+
+        Vector pVector = p.subtract(ray.getHead());
+
+        double s1 = alignZero(pVector.dotProduct(n1));
+        double s2 = alignZero(pVector.dotProduct(n2));
+        double s3 = alignZero(pVector.dotProduct(n3));
+
+        if ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) {
+            return List.of(p);
+        }
+
+        return null; // The intersection point is outside the triangle
+    }
+
 }

@@ -5,13 +5,14 @@ import java.util.List;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import static primitives.Util.*;
 
 /**
  * Plane class which includes a point in space and a vertical vector
  */
 public class Plane implements Geometry {
 	/**
-	 * p1: The reference point on the plane.
+	 * p: The reference point on the plane.
 	 */
 
 	@SuppressWarnings("unused") // TODO remove after it's used
@@ -66,9 +67,48 @@ public class Plane implements Geometry {
 	public Vector getNormal() {
 		return normalVector;
 	}
+	 /**
+     * Find the intersection points of the given ray with the plane.
+     * 
+     * @param ray the ray to check for intersections
+     * @return list of intersection points or null if there are no intersections
+     */
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        Point p0 = ray.getHead();
+        Vector v = ray.getDirection();
 
-	public List<Point> findIntersections(Ray ray) {
-		return null;
-	}
+        // n ∙ (Q - P0)
+        double numerator = normalVector.dotProduct(p.subtract(p0));
+
+        // n ∙ v
+        double denominator = normalVector.dotProduct(v);
+
+        // Check if denominator is zero (ray is parallel to the plane)
+        if (isZero(denominator)) {
+            return null;
+        }
+
+        // Calculate t
+        double t = alignZero(numerator / denominator);
+
+        // If t <= 0, the intersection point is behind the ray's origin or at the origin
+        if (t <= 0) {
+            return null;
+        }
+
+        // Calculate intersection point
+        Point intersectionPoint = p0.add(v.scale(t));
+        
+        // If the intersection point is the same as the plane's reference point,
+        // return null to avoid creating a zero vector
+    //    if (intersectionPoint.equals(p)) {
+     //       return null;
+   //     }
+
+        return List.of(intersectionPoint);
+  
+    }
+
 
 }

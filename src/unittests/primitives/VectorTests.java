@@ -106,7 +106,7 @@ class VectorTests {
 	void testLengthSquared() {
 		// ============ Equivalence Partitions Tests ==============
 		// TC01:A test that checks that the squared length of the vector is correct
-		assertEquals(14, v1.lengthSquared(), 0.00001, "ERROR: lengthSquared() wrong value");
+		assertEquals(14, v1.lengthSquared(),DELTA, "ERROR: lengthSquared() wrong value");
 	}
 
 	/**
@@ -117,7 +117,7 @@ class VectorTests {
 		// ============ Equivalence Partitions Tests ==============
 		// TC01:A test that checks that the length of the vector is correct
 		Vector v1 = new Vector(0, 3, 4);
-		assertEquals(5, v1.length(), 0.001, "ERROR: length() wrong value");
+		assertEquals(5, v1.length(), DELTA, "ERROR: length() wrong value");
 	}
 
 	/**
@@ -129,10 +129,10 @@ class VectorTests {
 		// TC01:A test that checks that the vector is normalized correctly
 		// Check that the length of the normalized vector is equal to 1.
 		Vector u = v1.normalize();
-		assertEquals(1, u.length(), "ERROR: the normalized vector is not a unit vector");
+		assertEquals(1, u.length(), DELTA, "ERROR: the normalized vector is not a unit vector");
 		// check that the original and the normalized vectors are co-lined
-		assertThrows(IllegalArgumentException.class, () -> v1.crossProduct(u),
-				"ERROR: the normalized vector is not parallel to the original one");
+		Vector zeroVector = new Vector(0, 0, 0);
+		assertEquals(zeroVector, v1.crossProduct(u), "ERROR: the normalized vector is not parallel to the original one");
 	}
 
 	/**

@@ -57,17 +57,20 @@ class PlaneTests {
 		Plane plane = new Plane(new Point(0, 0, 1), new Vector(0, 0, 1));
 
 		// ========== Equivalence Partitions tests ==========
+
 		// TC01: Ray that starts outside the plane, is not parallel to the plane,
 		// is not makes a non-right angle with the plane, and cuts the plane (1 points)
 		Ray ray1 = new Ray(new Point(0, 0, 2), new Vector(0, 0, -1));
 		List<Point> result1 = plane.findIntersections(ray1);
+		assertNotNull(result1, "The result should not be null");
 		assertEquals(1, result1.size(), "Wrong number of points");
 		assertEquals(new Point(0, 0, 1), result1.get(0), "Ray cuts the plane");
-
+		
 		// TC02: Ray that starts outside the plane, not parallel to the plane, makes a
 		// non-right angle with the plane, and does not cut the plane (0 points)
 		Ray ray2 = new Ray(new Point(0, 0, 2), new Vector(0, 0, 1));
 		assertNull(plane.findIntersections(ray2), "Ray does not cut the plane");
+
 
 		// =========== Boundary Values Tests ===========
 		// **** Group: Ray parallel to the plane
@@ -100,7 +103,7 @@ class PlaneTests {
 		Ray ray8 = new Ray(new Point(0, 0, 1), new Vector(1, 1, 0));
 		assertNull(plane.findIntersections(ray8), "Ray starts inside the plane");
 
-		// TC09: Ray starts at the reference point of the plane
+		// TC09: Ray starts at the representation point of the plane
 		Ray ray9 = new Ray(new Point(0, 0, 1), new Vector(1, 1, 1));
 		List<Point> result3 = plane.findIntersections(ray9);
 		assertEquals(1, result3.size(), "Wrong number of points");
