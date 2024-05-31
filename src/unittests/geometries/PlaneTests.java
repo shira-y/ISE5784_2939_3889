@@ -52,6 +52,9 @@ class PlaneTests {
 		assertTrue(expectedNormal.equals(normal) || expectedNormal.equals(normal.scale(-1)), "bad normal to plane");
 	}
 
+	/**
+	 * Test method for {@link geometries.Plane#findIntersections(primitives.Ray)}.
+	 */
 	@Test
 	public void testFindIntersections() {
 		Plane plane = new Plane(new Point(0, 0, 1), new Vector(0, 0, 1));
@@ -108,6 +111,5 @@ class PlaneTests {
 		List<Point> result3 = plane.findIntersections(ray9);
 		assertEquals(1, result3.size(), "Wrong number of points");
 		assertEquals(new Point(1, 1, 2), result3.get(0), "Ray starts at the reference point of the plane");
-
 	}
 }

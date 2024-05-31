@@ -39,48 +39,60 @@ public class Sphere extends RadialGeometry {
 		return point.subtract(center).normalize();
 	}
 
+	/**
+	 * Find the intersection points of the given ray with the sphere.
+	 * 
+	 * @param ray- the ray to check for intersections
+	 * @return list of intersection points or null if there are no intersections
+	 */
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		Point p0 = ray.getHead();
+		Vector v = ray.getDirection();
 
-    @Override
-    public List<Point> findIntersections(Ray ray) {
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
+		// Vector from the ray's origin to the sphere's center
+		Vector u = center.subtract(p0);
 
-        // Vector from the ray's origin to the sphere's center
-        Vector u = center.subtract(p0);
+		// If the ray starts inside the sphere
+		if (u.length() <= radius) {
+			double t = Math.sqrt(radius * radius - u.lengthSquared()) + v.dotProduct(u);
+			Point intersectionPoint = p0.add(v.scale(t));
+			return List.of(intersectionPoint);
+		}
 
-        // tm = v · u
-        double tm = alignZero(v.dotProduct(u));
+		// tm = v · u
+		double tm = v.dotProduct(u);
 
-        // d = sqrt(|u|^2 - tm^2)
-        double dSquared = u.lengthSquared() - tm * tm;
-        double rSquared = radius * radius;
+		// d = sqrt(|u|^2 - tm^2)
+		double dSquared = u.lengthSquared() - tm * tm;
+		double rSquared = radius * radius;
 
-        // If d^2 >= r^2, no intersections
-        if (alignZero(dSquared - rSquared) >= 0) {
-            return null;
-        }
+		// If d^2 >= r^2, no intersections
+		if (dSquared >= rSquared) {
+			return null;
+		}
 
-        // th = sqrt(r^2 - d^2)
-        double th = Math.sqrt(rSquared - dSquared);
+		// th = sqrt(r^2 - d^2)
+		double th = Math.sqrt(rSquared - dSquared);
 
-        // t1 = tm - th
-        double t1 = alignZero(tm - th);
-        // t2 = tm + th
-        double t2 = alignZero(tm + th);
+		// t1 = tm - th
+		double t1 = tm - th;
+		// t2 = tm + th
+		double t2 = tm + th;
 
-        // Only consider t > 0
-        if (t1 > 0 && t2 > 0) {
-            Point p1 = p0.add(v.scale(t1));
-            Point p2 = p0.add(v.scale(t2));
-            return List.of(p1, p2);
-        } else if (t1 > 0) {
-            Point p1 = p0.add(v.scale(t1));
-            return List.of(p1);
-        } else if (t2 > 0) {
-            Point p2 = p0.add(v.scale(t2));
-            return List.of(p2);
-        }
+		// Only consider t > 0
+		if (t1 > 0 && t2 > 0) {
+			Point p1 = p0.add(v.scale(t1));
+			Point p2 = p0.add(v.scale(t2));
+			return List.of(p1, p2);
+		} else if (t1 > 0) {
+			Point p1 = p0.add(v.scale(t1));
+			return List.of(p1);
+		} else if (t2 > 0) {
+			Point p2 = p0.add(v.scale(t2));
+			return List.of(p2);
+		}
 
-        return null;
-    }
+		return null;
+	}
 }

@@ -73,7 +73,7 @@ public class Plane implements Geometry {
      * @param ray the ray to check for intersections
      * @return list of intersection points or null if there are no intersections
      */
-    @Override
+	@Override
     public List<Point> findIntersections(Ray ray) {
         Point p0 = ray.getHead();
         Vector v = ray.getDirection();

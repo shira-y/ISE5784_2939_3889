@@ -40,6 +40,9 @@ class TriangleTests {
                 "getNormal did not return the expected normal vector");
 	}
 
+	/**
+	 * Test method for {@link geometries.Triangle#findIntersections(primitives.Ray)}.
+	 */
 	@Test
 	public void testFindIntersections() {
 		Triangle triangle = new Triangle(new Point(0, 0, 1), new Point(1, 0, 1), new Point(0, 1, 1));
