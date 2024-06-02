@@ -1,6 +1,6 @@
 package geometries;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import primitives.Point;
@@ -90,7 +90,7 @@ public class Sphere extends RadialGeometry {
 		double t2 = tm + th;
 
 		// Create a list to store the intersection points
-		List<Point> intersections = new ArrayList<>();
+		List<Point> intersections = new LinkedList<>();
 
 		// Check if t1 is valid (t1 > 0 and the ray starts outside the sphere)
 		if (t1 > 0 && alignZero(u.length() - radius) != 0) {

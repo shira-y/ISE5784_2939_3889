@@ -5,21 +5,35 @@ import java.util.List;
 
 import primitives.*;
 
+/**
+ * A class for a collection of geometric bodies
+ */
 public class Geometries implements Intersectable {
-	// Private immutable field for the list of geometries
+	/**
+	 * Private immutable field for the list of geometries
+	 */
 	private final List<Intersectable> geometries = new LinkedList<>();
 
-	// Default constructor
+	/**
+	 * Default constructor
+	 */
 	public Geometries() {
-		// No code needed in the body of the constructor
 	}
 
-	// Constructor with the following signature
+	/**
+	 * Constructor with the following signature
+	 * 
+	 * @param geometries- the list of geometries
+	 */
 	public Geometries(Intersectable... geometries) {
 		add(geometries);
 	}
 
-	// Method to add geometries
+	/**
+	 * Method to add geometries
+	 * 
+	 * @param geometries- the list of geometries
+	 */
 	public void add(Intersectable... geometries) {
 		for (Intersectable geo : geometries) {
 			this.geometries.add(geo);
@@ -37,11 +51,9 @@ public class Geometries implements Intersectable {
 	public List<Point> findIntersections(Ray ray) {
 		List<Point> intersections = null;
 
-		// Iterate over all geometries in the collection
 		for (Intersectable geometry : geometries) {
 			List<Point> tempIntersections = geometry.findIntersections(ray);
 
-			// If intersections are found, add them to the list
 			if (tempIntersections != null) {
 				if (intersections == null) {
 					intersections = new LinkedList<>();
