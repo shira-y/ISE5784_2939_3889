@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import primitives.Point;
@@ -50,49 +51,58 @@ public class Sphere extends RadialGeometry {
 		Point p0 = ray.getHead();
 		Vector v = ray.getDirection();
 
+		// If the ray's starting point is the same as the sphere's center point,
+		// the intersection point is along the direction of the ray at a distance equal
+		// to the radius of the sphere.
+		if (p0.equals(center)) {
+			Point intersection = ray.getPoint(radius);
+			return List.of(intersection);
+		}
+
 		// Vector from the ray's origin to the sphere's center
 		Vector u = center.subtract(p0);
 
-		// If the ray starts inside the sphere
-		if (u.length() <= radius) {
-			double t = Math.sqrt(radius * radius - u.lengthSquared()) + v.dotProduct(u);
-			Point intersectionPoint = p0.add(v.scale(t));
-			return List.of(intersectionPoint);
-		}
-
-		// tm = v · u
+		// Calculate tm (distance from the ray's origin to the sphere's center along the
+		// ray's direction)
 		double tm = v.dotProduct(u);
 
-		// d = sqrt(|u|^2 - tm^2)
-		double dSquared = u.lengthSquared() - tm * tm;
-		double rSquared = radius * radius;
-
-		// If d^2 >= r^2, no intersections
-		if (dSquared >= rSquared) {
+		// If tm is negative and the ray starts outside the sphere, there are no
+		// intersections
+		if (tm < 0 && alignZero(u.length() - radius) != 0) {
 			return null;
 		}
 
-		// th = sqrt(r^2 - d^2)
-		double th = Math.sqrt(rSquared - dSquared);
+		// Calculate dSquared (squared distance from the sphere's center to the ray)
+		double dSquared = u.lengthSquared() - tm * tm;
 
-		// t1 = tm - th
-		double t1 = tm - th;
-		// t2 = tm + th
-		double t2 = tm + th;
-
-		// Only consider t > 0
-		if (t1 > 0 && t2 > 0) {
-			Point p1 = p0.add(v.scale(t1));
-			Point p2 = p0.add(v.scale(t2));
-			return List.of(p1, p2);
-		} else if (t1 > 0) {
-			Point p1 = p0.add(v.scale(t1));
-			return List.of(p1);
-		} else if (t2 > 0) {
-			Point p2 = p0.add(v.scale(t2));
-			return List.of(p2);
+		// If d^2 > r^2, the ray misses the sphere
+		if (dSquared > radius * radius) {
+			return null;
 		}
 
-		return null;
+		// Calculate th (distance from the intersection point to the point closest to
+		// the sphere's center)
+		double th = Math.sqrt(radius * radius - dSquared);
+
+		// Calculate t1 (distance to the first intersection point) and t2 (distance to
+		// the second intersection point)
+		double t1 = tm - th;
+		double t2 = tm + th;
+
+		// Create a list to store the intersection points
+		List<Point> intersections = new ArrayList<>();
+
+		// Check if t1 is valid (t1 > 0 and the ray starts outside the sphere)
+		if (t1 > 0 && alignZero(u.length() - radius) != 0) {
+			intersections.add(ray.getPoint(t1));
+		}
+
+		// Check if t2 is valid (t2 > 0)
+		if (t2 > 0) {
+			intersections.add(ray.getPoint(t2));
+		}
+
+		// Return the list of intersection points
+		return intersections.isEmpty() ? null : intersections;
 	}
 }

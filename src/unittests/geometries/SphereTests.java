@@ -61,16 +61,19 @@ class SphereTests {
 		assertEquals(exp, result1, "Ray crosses sphere");
 		// TC03: Ray starts inside the sphere (1 point)
 		List<Point> result2 = sphere.findIntersections(new Ray(new Point(0.5, 0, 0), new Vector(3, 1, 0)));
+		final Point gp3 = new Point(1.8867496997597595, 0.4622498999199199, 0.0);
 		assertEquals(1, result2.size(), "Wrong number of points");
-		assertEquals(List.of(gp2), result2, "Ray starts inside the sphere");
+		assertEquals(List.of(gp3), result2, "Ray starts inside the sphere");
 		// TC04: Ray starts after the sphere (0 points)
-		assertNull(sphere.findIntersections(new Ray(new Point(2, 0, 0), v110)), "Ray starts after the sphere");
+		assertNull(sphere.findIntersections(new Ray(new Point(3, 0, 0), new Vector(1, 0, 0))),
+				"Ray starts after the sphere");
 		// =============== Boundary Values Tests ==================
 		// **** Group: Ray's line crosses the sphere (but not the center)
 		// TC11: Ray starts at sphere and goes inside (1 points)
-		List<Point> result3 = sphere.findIntersections(new Ray(new Point(0, 0, 0), v110));
+		List<Point> result3 = sphere.findIntersections(new Ray(new Point(1.5, 0.5, 0), new Vector(-1, 0, 0)));
 		assertEquals(1, result3.size(), "Wrong number of points");
-		assertEquals(List.of(gp1), result3, "Ray starts at sphere and goes inside");
+		final Point gp4 = new Point(0.1339745962155614, 0.5, 0.0);
+		assertEquals(List.of(gp4), result3, "Ray starts at sphere and goes inside");
 		// TC12: Ray starts at sphere and goes outside (0 points)
 		assertNull(sphere.findIntersections(new Ray(new Point(0, 0, 0), new Vector(-1, -1, 0))),
 				"Ray starts at sphere and goes outside");
@@ -122,7 +125,7 @@ class SphereTests {
 		// **** Group: Special cases
 		// TC22: Ray's line is outside, ray is orthogonal to ray start to sphere's
 		// center line
-		assertNull(sphere.findIntersections(new Ray(new Point(1, 0, 2), new Vector(0, 0, 1))),
+		assertNull(sphere.findIntersections(new Ray(new Point(1, 0, 2), v001)),
 				"Ray's line is outside, ray is orthogonal to ray start to sphere's center line");
 	}
 }

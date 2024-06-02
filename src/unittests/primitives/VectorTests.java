@@ -77,7 +77,7 @@ class VectorTests {
 		// =============== Boundary Values Tests ==================
 		// TC11:A test that checks whether a scalar product between 2 perpendicular
 		// vectors is equal to zero
-		assertEquals(0, v1.dotProduct(v3),DELTA, "ERROR: dotProduct() for orthogonal vectors is not zero");
+		assertEquals(0, v1.dotProduct(v3), DELTA, "ERROR: dotProduct() for orthogonal vectors is not zero");
 	}
 
 	/**
@@ -106,7 +106,7 @@ class VectorTests {
 	void testLengthSquared() {
 		// ============ Equivalence Partitions Tests ==============
 		// TC01:A test that checks that the squared length of the vector is correct
-		assertEquals(14, v1.lengthSquared(),DELTA, "ERROR: lengthSquared() wrong value");
+		assertEquals(14, v1.lengthSquared(), DELTA, "ERROR: lengthSquared() wrong value");
 	}
 
 	/**
@@ -132,7 +132,8 @@ class VectorTests {
 		assertEquals(1, u.length(), DELTA, "ERROR: the normalized vector is not a unit vector");
 		// check that the original and the normalized vectors are co-lined
 		Vector zeroVector = new Vector(0, 0, 0);
-		assertEquals(zeroVector, v1.crossProduct(u), "ERROR: the normalized vector is not parallel to the original one");
+		assertEquals(zeroVector, v1.crossProduct(u),
+				"ERROR: the normalized vector is not parallel to the original one");
 	}
 
 	/**

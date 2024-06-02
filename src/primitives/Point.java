@@ -37,6 +37,33 @@ public class Point {
 	}
 
 	/**
+	 * Getter for the x coordinate
+	 * 
+	 * @return the x coordinate value
+	 */
+	public double getX() {
+		return xyz.d1;
+	}
+
+	/**
+	 * Getter for the y coordinate
+	 * 
+	 * @return the y coordinate value
+	 */
+	public double getY() {
+		return xyz.d2;
+	}
+
+	/**
+	 * Getter for the z coordinate
+	 * 
+	 * @return the z coordinate value
+	 */
+	public double getZ() {
+		return xyz.d3;
+	}
+
+	/**
 	 * A function that performs vector subtraction
 	 * 
 	 * @param newPoint -receives a second point in the parameter

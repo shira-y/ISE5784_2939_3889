@@ -30,11 +30,11 @@ class PointTests {
 	 */
 	@Test
 	void testSubtract() {
-		Point p1=new Point(1,2,3);
-		Point p2=new Point(4,5,6);
+		Point p1 = new Point(1, 2, 3);
+		Point p2 = new Point(4, 5, 6);
 		// ============ Equivalence Partitions Tests ==============
 		// TC01: A test that checks that the subtraction of the points is correct
-		assertEquals(new Vector(-3,-3,-3), p1.subtract(p2) , "ERROR: Point - Point does not work correctly");
+		assertEquals(new Vector(-3, -3, -3), p1.subtract(p2), "ERROR: Point - Point does not work correctly");
 
 		// =============== Boundary Values Tests ==================
 		// TC11:A test that tests subtraction from the same point
@@ -62,7 +62,8 @@ class PointTests {
 		// TC01: A test that checks that the squared distance between the points is
 		// correct
 		Point p1 = new Point(1, 2, 3);
-		assertEquals(2, p1.distanceSquared(new Point(1, 3, 4)), "Error: The squared distance between the points is incorrect");
+		assertEquals(2, p1.distanceSquared(new Point(1, 3, 4)),
+				"Error: The squared distance between the points is incorrect");
 
 		// ============ Equivalence Partitions Tests ==============
 		// TC11: Test distanceSquared with the same point

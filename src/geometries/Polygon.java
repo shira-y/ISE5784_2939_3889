@@ -88,7 +88,7 @@ public class Polygon implements Geometry {
 	}
 
 	public List<Point> findIntersections(Ray ray) {
-		return null;//bonus
+		return null;// bonus
 	}
 
 }

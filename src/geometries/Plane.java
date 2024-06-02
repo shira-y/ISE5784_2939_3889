@@ -67,48 +67,47 @@ public class Plane implements Geometry {
 	public Vector getNormal() {
 		return normalVector;
 	}
-	 /**
-     * Find the intersection points of the given ray with the plane.
-     * 
-     * @param ray the ray to check for intersections
-     * @return list of intersection points or null if there are no intersections
-     */
+
+	/**
+	 * Find the intersection points of the given ray with the plane.
+	 * 
+	 * @param ray the ray to check for intersections
+	 * @return list of intersection points or null if there are no intersections
+	 */
 	@Override
-    public List<Point> findIntersections(Ray ray) {
-        Point p0 = ray.getHead();
-        Vector v = ray.getDirection();
+	public List<Point> findIntersections(Ray ray) {
+		Point p0 = ray.getHead();
+		Vector v = ray.getDirection();
 
-        // n ∙ (Q - P0)
-        double numerator = normalVector.dotProduct(p.subtract(p0));
+		// If the intersection point is the same as the plane's reference point,
+		if (p0.equals(p)) {
+			return List.of(p);
+		}
 
-        // n ∙ v
-        double denominator = normalVector.dotProduct(v);
+		// n ∙ (Q - P0)
+		double numerator = normalVector.dotProduct(p.subtract(p0));
 
-        // Check if denominator is zero (ray is parallel to the plane)
-        if (isZero(denominator)) {
-            return null;
-        }
+		// n ∙ v
+		double denominator = normalVector.dotProduct(v);
 
-        // Calculate t
-        double t = alignZero(numerator / denominator);
+		// Check if denominator is zero (ray is parallel to the plane)
+		if (isZero(denominator)) {
+			return null;
+		}
 
-        // If t <= 0, the intersection point is behind the ray's origin or at the origin
-        if (t <= 0) {
-            return null;
-        }
+		// Calculate t
+		double t = alignZero(numerator / denominator);
 
-        // Calculate intersection point
-        Point intersectionPoint = p0.add(v.scale(t));
-        
-        // If the intersection point is the same as the plane's reference point,
-        // return null to avoid creating a zero vector
-    //    if (intersectionPoint.equals(p)) {
-     //       return null;
-   //     }
+		// If t <= 0, the intersection point is behind the ray's origin or at the origin
+		if (t <= 0) {
+			return null;
+		}
 
-        return List.of(intersectionPoint);
-  
-    }
+		// Calculate intersection point
+		Point intersectionPoint = ray.getPoint(t);
 
+		return List.of(intersectionPoint);
+
+	}
 
 }

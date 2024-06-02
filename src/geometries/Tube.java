@@ -39,14 +39,13 @@ public class Tube extends RadialGeometry {
 		// Calculate the projection of the point onto the axis ray
 		Vector p0ToPoint = point.subtract(p0);
 		double scalar = direction.dotProduct(p0ToPoint); // The scalar projection of p0ToPoint on direction
-		Point projection = isZero(scalar) ? p0 : p0.add(direction.scale(scalar));
-
+		Point projection = ray.getPoint(scalar);
 		// Calculate the normal vector as the vector from the projection point to the
 		// given point
 		return point.subtract(projection).normalize();
 	}
 
 	public List<Point> findIntersections(Ray ray) {
-		return null;//bonus
+		return null;// bonus
 	}
 }
