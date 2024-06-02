@@ -76,36 +76,36 @@ class PlaneTests {
 
 		// =========== Boundary Values Tests ===========
 		// **** Group: Ray parallel to the plane
-		// TC03: Ray is parallel and outside the plane
+		// TC03: Ray is parallel and outside the plane (0 points)
 		Ray ray3 = new Ray(new Point(0, 0, 2), new Vector(1, 0, 0));
 		assertNull(plane.findIntersections(ray3), "Ray is parallel and outside the plane");
 
-		// TC04: Ray is parallel and inside the plane
+		// TC04: Ray is parallel and inside the plane (0 points)
 		Ray ray4 = new Ray(new Point(1, 1, 1), new Vector(0, 1, 0));
 		assertNull(plane.findIntersections(ray4), "Ray is parallel and inside the plane");
 
 		// **** Group: Ray perpendicular to the plane
-		// TC05: Ray is perpendicular and starts before the plane
+		// TC05: Ray is perpendicular and starts before the plane (1 points)
 		Ray ray5 = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
 		List<Point> result2 = plane.findIntersections(ray5);
 		assertEquals(1, result2.size(), "Wrong number of points");
 		assertEquals(new Point(0, 0, 1), result2.get(0), "Ray is perpendicular and starts before the plane");
 
-		// TC06: Ray is perpendicular and starts inside the plane
+		// TC06: Ray is perpendicular and starts inside the plane (0 points)
 		Ray ray6 = new Ray(new Point(1, 2, 1), new Vector(0, 0, 1));
 		assertNull(plane.findIntersections(ray6), "Ray is perpendicular and starts inside the plane");
 
-		// TC07: Ray is perpendicular and starts after the plane
+		// TC07: Ray is perpendicular and starts after the plane (0 points)
 		Ray ray7 = new Ray(new Point(0, 0, 2), new Vector(0, 0, 1));
 		assertNull(plane.findIntersections(ray7), "Ray is perpendicular and starts after the plane");
 
 		// **** Group: Ray that is neither parallel nor perpendicular to the plane but
 		// starts inside the plane
-		// TC08: Ray starts inside the plane
+		// TC08: Ray starts inside the plane (0 points)
 		Ray ray8 = new Ray(new Point(1, 1, 1), new Vector(1, 1, 1));
 		assertNull(plane.findIntersections(ray8), "Ray starts inside the plane");
 
-		// TC09: Ray starts at the representation point of the plane
+		// TC09: Ray starts at the representation point of the plane (1 points)
 		Ray ray9 = new Ray(new Point(0, 0, 1), new Vector(1, 1, 1));
 		List<Point> result3 = plane.findIntersections(ray9);
 		assertEquals(1, result3.size(), "Wrong number of points");
