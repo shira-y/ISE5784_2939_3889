@@ -10,10 +10,19 @@ import geometries.*;
 import primitives.*;
 import renderer.Camera;
 
+/**
+ * Integration tests for the Camera class and geometries.
+ */
 public class IntegrationTests {
 
     /**
      * Helper method to create rays from the camera and count intersections with a given geometry.
+     *
+     * @param camera the camera from which rays are constructed
+     * @param geometry the geometric object to test intersections with
+     * @param nX the number of horizontal pixels in the view plane
+     * @param nY the number of vertical pixels in the view plane
+     * @return the number of intersection points between the rays and the geometry
      */
     private int countIntersections(Camera camera, Intersectable geometry, int nX, int nY) {
         int count = 0;
@@ -29,6 +38,11 @@ public class IntegrationTests {
         return count;
     }
 
+    /**
+     * Test integration of Camera with a Sphere.
+     * Creates a camera and a sphere and counts the number of intersections.
+     * Expected result: 2 intersections.
+     */
     @Test
     public void testSphereIntegration() {
         Camera camera = Camera.getBuilder()
@@ -44,6 +58,11 @@ public class IntegrationTests {
         assertEquals("Wrong number of intersections with sphere", 2, intersections);
     }
 
+    /**
+     * Test integration of Camera with a Plane.
+     * Creates a camera and a plane and counts the number of intersections.
+     * Expected result: 9 intersections.
+     */
     @Test
     public void testPlaneIntegration() {
         Camera camera = Camera.getBuilder()
@@ -59,6 +78,11 @@ public class IntegrationTests {
         assertEquals("Wrong number of intersections with plane", 9, intersections);
     }
 
+    /**
+     * Test integration of Camera with a Triangle.
+     * Creates a camera and a triangle and counts the number of intersections.
+     * Expected result: 1 intersection.
+     */
     @Test
     public void testTriangleIntegration() {
         Camera camera = Camera.getBuilder()
