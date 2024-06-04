@@ -14,8 +14,6 @@ public class Plane implements Geometry {
 	/**
 	 * p: The reference point on the plane.
 	 */
-
-	@SuppressWarnings("unused") // TODO remove after it's used
 	private final Point p;
 	/**
 	 * normalVector: The normal vector perpendicular to the plane.
@@ -80,9 +78,8 @@ public class Plane implements Geometry {
 		Vector v = ray.getDirection();
 
 		// If the intersection point is the same as the plane's reference point,
-		if (p0.equals(p)) {
-			return List.of(p);
-		}
+		if (p0.equals(p))
+			return null;
 
 		// n ∙ (Q - P0)
 		double numerator = normalVector.dotProduct(p.subtract(p0));
@@ -91,23 +88,14 @@ public class Plane implements Geometry {
 		double denominator = normalVector.dotProduct(v);
 
 		// Check if denominator is zero (ray is parallel to the plane)
-		if (isZero(denominator)) {
+		if (isZero(denominator))
 			return null;
-		}
 
 		// Calculate t
 		double t = alignZero(numerator / denominator);
 
 		// If t <= 0, the intersection point is behind the ray's origin or at the origin
-		if (t <= 0) {
-			return null;
-		}
-
-		// Calculate intersection point
-		Point intersectionPoint = ray.getPoint(t);
-
-		return List.of(intersectionPoint);
-
+		return t <= 0 ? null : List.of(ray.getPoint(t));
 	}
 
 }

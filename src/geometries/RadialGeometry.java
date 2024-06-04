@@ -8,6 +8,10 @@ public abstract class RadialGeometry implements Geometry {
 	 * The radius of the radial geometry.
 	 */
 	protected final double radius;
+	/**
+	 * The squared radius of the radial geometry.
+	 */
+	protected final double radiusSquared;
 
 	/**
 	 * A constructor that initializes the field.
@@ -16,6 +20,7 @@ public abstract class RadialGeometry implements Geometry {
 	 */
 	public RadialGeometry(double newRadius) {
 		this.radius = newRadius;
+		this.radiusSquared = newRadius * newRadius;
 	}
 
 }

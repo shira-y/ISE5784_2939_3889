@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import geometries.*;
 import primitives.*;
@@ -85,49 +85,50 @@ public class PolygonTests {
 					"Polygon's normal is not orthogonal to one of the edges");
 	}
 
-//	 /**
-//     * Test method for {@link geometries.Polygon#findIntersections(primitives.Ray)}.
-//     */
-//    @Test
-//    public void testFindIntersections() {
-//        // Create a convex polygon
-//        Polygon polygon = new Polygon(
-//                new Point(1, 1, 1), 
-//                new Point(2, 1, 1), 
-//                new Point(2, 2, 1), 
-//                new Point(1, 2, 1)
-//        );
-//
-//        // ============ Equivalence Partitions Tests ==============
-//        // TC01: Ray intersects inside the polygon (1 point)
-//        Point p1 = new Point(2, 1, 1);
-//        List<Point> result1 = polygon.findIntersections(new Ray(new Point(1.5, 1.5, 1), new Vector(1, 0, 0)));
-//        assertEquals(1, result1.size(), "Wrong number of points");
-//        assertEquals(List.of(p1), result1, "Ray intersects inside the polygon");
-//
-//        // TC02: Ray intersects outside the polygon (opposite one of the sides) (0 points)
-//        assertNull(polygon.findIntersections(new Ray(new Point(3, 1.5, 0), new Vector(0, 0, 1))), 
-//                "Ray intersects outside the polygon (opposite one of the sides)");
-//
-//        // TC03: Ray intersects outside the polygon (opposite one of the vertices) (0 points)
-//        assertNull(polygon.findIntersections(new Ray(new Point(0.5, 0.5, 0), new Vector(0, 0, 1))),
-//                "Ray intersects outside the polygon (opposite one of the vertices)");
-//
-//        // =============== Boundary Values Tests ==================
-//        // TC11: Ray intersects on one of the sides (1 point)
-//        Point p2 = new Point(1.5, 1, 1);
-//        List<Point> result2 = polygon.findIntersections(new Ray(new Point(1.5, 1, 0), new Vector(0, 0, 1)));
-//        assertEquals(1, result2.size(), "Wrong number of points");
-//        assertEquals(List.of(p2), result2, "Ray intersects on one of the sides");
-//
-//        // TC12: Ray intersects at one of the vertices (1 point)
-//        Point p3 = new Point(1, 1, 1);
-//        List<Point> result3 = polygon.findIntersections(new Ray(new Point(1, 1, 0), new Vector(0, 0, 1)));
-//        assertEquals(1, result3.size(), "Wrong number of points");
-//        assertEquals(List.of(p3), result3, "Ray intersects at one of the vertices");
-//
-//        // TC13: Ray intersects on the continuation of one of the sides (0 points)
-//        assertNull(polygon.findIntersections(new Ray(new Point(3, 2, 0), new Vector(0, 0, 1))),
-//                "Ray intersects on the continuation of one of the sides");
-//    }
+	 /**
+     * Test method for {@link geometries.Polygon#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    @Disabled
+    public void testFindIntersections() {
+        // Create a convex polygon
+        Polygon polygon = new Polygon(
+                new Point(1, 1, 1), 
+                new Point(2, 1, 1), 
+                new Point(2, 2, 1), 
+                new Point(1, 2, 1)
+        );
+
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Ray intersects inside the polygon (1 point)
+        Point p1 = new Point(2, 1, 1);
+        List<Point> result1 = polygon.findIntersections(new Ray(new Point(1.5, 1.5, 1), new Vector(1, 0, 0)));
+        assertEquals(1, result1.size(), "Wrong number of points");
+        assertEquals(List.of(p1), result1, "Ray intersects inside the polygon");
+
+        // TC02: Ray intersects outside the polygon (opposite one of the sides) (0 points)
+        assertNull(polygon.findIntersections(new Ray(new Point(3, 1.5, 0), new Vector(0, 0, 1))), 
+                "Ray intersects outside the polygon (opposite one of the sides)");
+
+        // TC03: Ray intersects outside the polygon (opposite one of the vertices) (0 points)
+        assertNull(polygon.findIntersections(new Ray(new Point(0.5, 0.5, 0), new Vector(0, 0, 1))),
+                "Ray intersects outside the polygon (opposite one of the vertices)");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Ray intersects on one of the sides (1 point)
+        Point p2 = new Point(1.5, 1, 1);
+        List<Point> result2 = polygon.findIntersections(new Ray(new Point(1.5, 1, 0), new Vector(0, 0, 1)));
+        assertEquals(1, result2.size(), "Wrong number of points");
+        assertEquals(List.of(p2), result2, "Ray intersects on one of the sides");
+
+        // TC12: Ray intersects at one of the vertices (1 point)
+        Point p3 = new Point(1, 1, 1);
+        List<Point> result3 = polygon.findIntersections(new Ray(new Point(1, 1, 0), new Vector(0, 0, 1)));
+        assertEquals(1, result3.size(), "Wrong number of points");
+        assertEquals(List.of(p3), result3, "Ray intersects at one of the vertices");
+
+        // TC13: Ray intersects on the continuation of one of the sides (0 points)
+        assertNull(polygon.findIntersections(new Ray(new Point(3, 2, 0), new Vector(0, 0, 1))),
+                "Ray intersects on the continuation of one of the sides");
+    }
 }

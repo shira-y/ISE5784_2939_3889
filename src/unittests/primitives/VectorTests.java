@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import primitives.Vector;
-import static primitives.Util.isZero;
 
 /**
  * The VectorTests class contains JUnit tests for the methods of the Vector

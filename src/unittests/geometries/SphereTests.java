@@ -17,10 +17,6 @@ class SphereTests {
 	/**
 	 * Define point for testing
 	 */
-	private static final Point p001 = new Point(0, 0, 1);
-	/**
-	 * Define point for testing
-	 */
 	private static final Point p100 = new Point(1, 0, 0);
 	/**
 	 * Define point for testing

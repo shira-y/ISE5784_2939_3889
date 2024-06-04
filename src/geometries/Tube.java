@@ -3,7 +3,6 @@ package geometries;
 import java.util.List;
 
 import primitives.*;
-import static primitives.Util.*;
 
 /**
  * A Tube class that includes a radius and a beam

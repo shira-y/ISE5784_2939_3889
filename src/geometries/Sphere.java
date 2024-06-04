@@ -1,6 +1,5 @@
 package geometries;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import primitives.Point;
@@ -54,10 +53,8 @@ public class Sphere extends RadialGeometry {
 		// If the ray's starting point is the same as the sphere's center point,
 		// the intersection point is along the direction of the ray at a distance equal
 		// to the radius of the sphere.
-		if (p0.equals(center)) {
-			Point intersection = ray.getPoint(radius);
-			return List.of(intersection);
-		}
+		if (p0.equals(center))
+			return List.of(ray.getPoint(radius));
 
 		// Vector from the ray's origin to the sphere's center
 		Vector u = center.subtract(p0);
@@ -66,43 +63,26 @@ public class Sphere extends RadialGeometry {
 		// ray's direction)
 		double tm = v.dotProduct(u);
 
-		// If tm is negative and the ray starts outside the sphere, there are no
-		// intersections
-		if (tm < 0 && alignZero(u.length() - radius) != 0) {
-			return null;
-		}
-
 		// Calculate dSquared (squared distance from the sphere's center to the ray)
 		double dSquared = u.lengthSquared() - tm * tm;
-
+		double thSquared = radiusSquared - dSquared;
 		// If d^2 > r^2, the ray misses the sphere
-		if (dSquared > radius * radius) {
+		if (alignZero(thSquared) <= 0)
 			return null;
-		}
 
 		// Calculate th (distance from the intersection point to the point closest to
 		// the sphere's center)
-		double th = Math.sqrt(radius * radius - dSquared);
+		double th = Math.sqrt(thSquared);
 
 		// Calculate t1 (distance to the first intersection point) and t2 (distance to
 		// the second intersection point)
+		double t2 = tm + th; // t2 is always greater than t1
+		if (alignZero(t2) <= 0)
+			return null;
+
 		double t1 = tm - th;
-		double t2 = tm + th;
-
-		// Create a list to store the intersection points
-		List<Point> intersections = new LinkedList<>();
-
-		// Check if t1 is valid (t1 > 0 and the ray starts outside the sphere)
-		if (t1 > 0 && alignZero(u.length() - radius) != 0) {
-			intersections.add(ray.getPoint(t1));
-		}
-
-		// Check if t2 is valid (t2 > 0)
-		if (t2 > 0) {
-			intersections.add(ray.getPoint(t2));
-		}
-
-		// Return the list of intersection points
-		return intersections.isEmpty() ? null : intersections;
+		return alignZero(t1) <= 0 //
+				? List.of(ray.getPoint(t2))
+				: List.of(ray.getPoint(t1), ray.getPoint(t2));
 	}
 }

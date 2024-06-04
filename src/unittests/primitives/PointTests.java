@@ -20,10 +20,6 @@ class PointTests {
 	 * Define vector for testing
 	 */
 	private static final Vector v1 = new Vector(1, 2, 3);
-	/**
-	 * Define vector for testing
-	 */
-	private static final Vector v2 = new Vector(-2, -4, -6);
 
 	/**
 	 * Test method for {@link primitives.Point#subtract(primitives.Point)}.

@@ -1,5 +1,7 @@
 package primitives;
 
+import static primitives.Util.*;
+
 /**
  * Ray class is used for the set of points on a line that are on one side of a
  * given point on the line called the head of the fund. Defined by point and
@@ -65,9 +67,6 @@ public class Ray {
 	 * @return the point on the ray at the given distance
 	 */
 	public Point getPoint(double t) {
-		if (Util.isZero(t)) {
-			return head;
-		}
-		return head.add(direction.scale(t));
+		return isZero(t) ? head : head.add(direction.scale(t));
 	}
 }
