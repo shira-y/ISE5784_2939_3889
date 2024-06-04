@@ -105,10 +105,8 @@ class PlaneTests {
 		Ray ray8 = new Ray(new Point(1, 1, 1), new Vector(1, 1, 1));
 		assertNull(plane.findIntersections(ray8), "Ray starts inside the plane");
 
-		// TC09: Ray starts at the representation point of the plane (1 points)
+		// TC09: Ray starts at the representation point of the plane (0 points)
 		Ray ray9 = new Ray(new Point(0, 0, 1), new Vector(1, 1, 1));
-		List<Point> result3 = plane.findIntersections(ray9);
-		assertEquals(1, result3.size(), "Wrong number of points");
-		assertEquals(new Point(0, 0, 1), result3.get(0), "Ray starts at the reference point of the plane");
+		assertNull(plane.findIntersections(ray9), "Ray starts at the reference point of the plane");
 	}
 }

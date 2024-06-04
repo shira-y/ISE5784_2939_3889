@@ -8,12 +8,39 @@ import primitives.*;
  * Represents a camera in 3D space.
  */
 public class Camera implements Cloneable {
+	 /**
+     * The position of the camera.
+     */
     private Point p0;
+
+    /**
+     * The vector pointing in the direction the camera is looking.
+     */
     private Vector vTo;
+
+    /**
+     * The vector pointing upwards from the camera's perspective.
+     */
     private Vector vUp;
+
+    /**
+     * The vector pointing to the right from the camera's perspective.
+     */
     private Vector vRight;
+
+    /**
+     * The width of the view plane.
+     */
     private double width = 0.0;
+
+    /**
+     * The height of the view plane.
+     */
     private double height = 0.0;
+
+    /**
+     * The distance from the camera to the view plane.
+     */
     private double distance = 0.0;
 
     /**
@@ -23,6 +50,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of p0
      * @return the location of the camera
      */
     public Point getP0() {
@@ -30,6 +58,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of vUp
      * @return the upward vector of the camera
      */
     public Vector getVUp() {
@@ -37,6 +66,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of vTo
      * @return the forward vector of the camera
      */
     public Vector getVTo() {
@@ -44,6 +74,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of vRight
      * @return the rightward vector of the camera
      */
     public Vector getVRight() {
@@ -51,6 +82,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of width
      * @return the width of the view plane
      */
     public double getWidth() {
@@ -58,6 +90,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of height
      * @return the height of the view plane
      */
     public double getHeight() {
@@ -65,6 +98,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of distance
      * @return the distance from the camera to the view plane
      */
     public double getDistance() {
@@ -103,6 +137,7 @@ public class Camera implements Cloneable {
     }
 
     /**
+     * getter of Builder
      * @return a new Builder instance for constructing a Camera
      */
     public static Builder getBuilder() {
@@ -113,15 +148,46 @@ public class Camera implements Cloneable {
      * Static nested Builder class for constructing Camera instances.
      */
     public static class Builder {
+    	/**
+         * The Camera instance being built.
+         */
         private final Camera camera = new Camera();
 
+        /**
+         * Error message for missing rendering data.
+         */
         private static final String MISSING_RENDERING_DATA = "Missing rendering data";
+
+        /**
+         * The name of the Camera class.
+         */
         private static final String CAMERA_CLASS_NAME = Camera.class.getName();
+
+        /**
+         * Field name for the camera's location (p0).
+         */
         private static final String LOCATION_FIELD = "Location (p0)";
+
+        /**
+         * Field name for the camera's direction vectors (vTo and vUp).
+         */
         private static final String DIRECTION_FIELD = "Direction vectors (vTo and vUp)";
+
+        /**
+         * Field name for the camera's right vector (vRight).
+         */
         private static final String VRIGHT_FIELD = "Right vector (vRight)";
+
+        /**
+         * Field name for the view plane size (width and height).
+         */
         private static final String VP_SIZE_FIELD = "View plane size (width and height)";
+
+        /**
+         * Field name for the view plane distance (distance).
+         */
         private static final String VP_DISTANCE_FIELD = "View plane distance (distance)";
+        
 
         /**
          * Sets the location of the camera.

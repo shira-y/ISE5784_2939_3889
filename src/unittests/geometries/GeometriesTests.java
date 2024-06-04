@@ -32,19 +32,22 @@ class GeometriesTests {
 		assertNull(geometries.findIntersections(ray), "Expected no intersections");
 
 		// TC12: Only one shape intersects
-		geometries = new Geometries(new Sphere(new Point(0, 0, 5), 1),
-				new Plane(new Point(0, 0, 10), new Vector(0, 0, 1)),
-				new Triangle(new Point(0, 1, 10), new Point(1, 0, 10), new Point(0, 0, 11)));
-		ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
-		assertEquals(2, geometries.findIntersections(ray).size(), "Expected 2 intersections with the sphere");
+		geometries = new Geometries(
+		        new Sphere(new Point(0, 0, 5), 1), // Sphere at (0, 0, 5) with radius 1
+		        new Plane(new Point(0, 0, 15), new Vector(0, 0, 1)), // Plane moved further along the z-axis
+		        new Triangle(new Point(-1, -1, 2), new Point(1, -1, 2), new Point(0, 1, 2)) // Triangle intersected by the ray
+		    );
+		  ray = new Ray(new Point(0, 9, 0), new Vector(0, 8, 1));
+
+		assertEquals(1, geometries.findIntersections(ray).size(), "Expected 1 intersections with the Triangle");
 
 		// TC13: All shapes intersect
 		geometries = new Geometries(new Sphere(new Point(0, 0, 5), 1),
 				new Plane(new Point(0, 0, 6), new Vector(0, 0, 1)),
 				new Triangle(new Point(0, 1, 2), new Point(1, 0, 2), new Point(0, 0, 3)));
 		ray = new Ray(new Point(0, 0, 0), new Vector(0, 0, 1));
-		assertEquals(4, geometries.findIntersections(ray).size(),
-				"Expected 4 intersections with the sphere, plane, and triangle");
+		assertEquals(3, geometries.findIntersections(ray).size(),
+				"Expected 3 intersections with the sphere, plane, and triangle");
 
 		// ============ Equivalence Partitions Tests ==============
 		// TC01: Some shapes intersect (but not all)

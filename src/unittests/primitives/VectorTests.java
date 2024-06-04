@@ -130,9 +130,9 @@ class VectorTests {
 		Vector u = v1.normalize();
 		assertEquals(1, u.length(), DELTA, "ERROR: the normalized vector is not a unit vector");
 		// check that the original and the normalized vectors are co-lined
-		Vector zeroVector = new Vector(0, 0, 0);
-		assertEquals(zeroVector, v1.crossProduct(u),
-				"ERROR: the normalized vector is not parallel to the original one");
+		
+	    assertEquals( Math.abs(v1.dotProduct(u)) ,v1.length(), "ERROR: the original and the normalized vectors are not co-lined");
+	
 	}
 
 	/**
