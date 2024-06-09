@@ -123,17 +123,12 @@ public class Camera implements Cloneable {
         
         Point pIJ = pc;
 
-        if (xJ != 0) {
+        if (xJ != 0)
             pIJ = pIJ.add(vRight.scale(xJ));
-        }
-
-        if (yI != 0) {
+        if (yI != 0)
             pIJ = pIJ.add(vUp.scale(yI));
-        }
 
-        Vector vIJ = pIJ.subtract(p0).normalize();
-
-        return new Ray(p0, vIJ);
+        return new Ray(p0, pIJ.subtract(p0).normalize());
     }
 
     /**
@@ -172,11 +167,6 @@ public class Camera implements Cloneable {
          * Field name for the camera's direction vectors (vTo and vUp).
          */
         private static final String DIRECTION_FIELD = "Direction vectors (vTo and vUp)";
-
-        /**
-         * Field name for the camera's right vector (vRight).
-         */
-        private static final String VRIGHT_FIELD = "Right vector (vRight)";
 
         /**
          * Field name for the view plane size (width and height).
@@ -267,18 +257,35 @@ public class Camera implements Cloneable {
          * @throws MissingResourceException if any required field is missing
          */
         public Camera build() {
-            if (camera.p0 == null) {
+            if (camera.p0 == null) 
                 throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, LOCATION_FIELD);
-            }
-            if (camera.vTo == null || camera.vUp == null) {
+            
+            if (camera.vTo == null || camera.vUp == null) 
                 throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, DIRECTION_FIELD);
-            }
-            if (camera.width == 0.0 || camera.height == 0.0) {
+            
+            if (camera.width == 0.0 || camera.height == 0.0) 
                 throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_SIZE_FIELD);
-            }
-            if (camera.distance == 0.0) {
+            
+            if (camera.distance == 0.0) 
                 throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_DISTANCE_FIELD);
-            }
+            
+            
+         // Validate the values of the fields
+            if (camera.width <= 0) 
+                throw new IllegalStateException("Width must be positive");
+  
+            if (camera.height <= 0) 
+                throw new IllegalStateException("Height must be positive");
+            
+            if (camera.distance <= 0) 
+                throw new IllegalStateException("Distance must be positive");
+            
+            if (camera.vTo.equals(camera.vUp)) 
+                throw new IllegalArgumentException("Direction vectors cannot be the same");
+            
+            if (camera.vTo.dotProduct(camera.vUp) != 0)
+                throw new IllegalArgumentException("Direction vectors must be perpendicular");
+            
 
             // Calculate and set the vRight vector if not already set
             if (camera.vRight == null) {
