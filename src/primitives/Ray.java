@@ -75,7 +75,7 @@ public class Ray {
 	/**
      * Finds the closest point to the ray's origin from a list of points.
      *
-     * @param points the list of points
+     * @param points- the list of points
      * @return the closest point to the ray's origin, or null if the list is empty
      */
 	 public Point findClosestPoint(List<Point> points) {

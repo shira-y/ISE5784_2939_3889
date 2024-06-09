@@ -24,57 +24,58 @@ class RayTests {
 		Vector v = new Vector(1, 0, 0);
 		Ray ray = new Ray(p0, v);
 		// ============ Equivalence Partitions Tests ==============
-		// Positive distance
+		// TC01: Positive distance
 		assertEquals(new Point(6, 2, 3), ray.getPoint(5), "ERROR: getPoint() wrong result for positive distance");
 
 		// Negative distance
 		assertEquals(new Point(-4, 2, 3), ray.getPoint(-5), "ERROR: getPoint() wrong result for negative distance");
 		// =============== Boundary Values Tests ==================
-		// Zero distance
+		// TC10: Zero distance
 		assertEquals(new Point(1, 2, 3), ray.getPoint(0), "ERROR: getPoint() wrong result for zero distance");
 	}
 	
-	 @Test
-	    void testFindClosestPointMiddle() {
-	        Ray ray = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
-	        List<Point> points = Arrays.asList(
-	                new Point(2, 2, 0),
-	                new Point(1, 1, 0),
-	                new Point(3, 3, 0)
-	        );
-	        Point closest = ray.findClosestPoint(points);
-	        assertEquals(new Point(1, 1, 0), closest, "The closest point should be the middle point in the list.");
-	    }
+	/**
+     * Test method for {@link primitives.Ray#findClosestPoint(java.util.List)}.
+     */
+    @Test
+    void testFindClosestPoint() {
+        // ============ Equivalence Partitions Tests ==============
+        
+        // TC01: Test case for middle point
+        Ray ray = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
+        //we create a list of points where one of the points is positioned between two other points. 
+        List<Point> points = Arrays.asList(
+            new Point(2, 2, 0),
+            new Point(1, 1, 0),
+            new Point(3, 3, 0)
+        );
+        Point closest = ray.findClosestPoint(points);
+        assertEquals(new Point(1, 1, 0), closest, "The closest point should be the middle point in the list.");
+        
+     // =============== Boundary Values Tests ==================
 
-	    @Test
-	    void testFindClosestPointEmptyList() {
-	        Ray ray = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
-	        List<Point> points = Arrays.asList();
-	        Point closest = ray.findClosestPoint(points);
-	        assertNull(closest, "The closest point should be null for an empty list.");
-	    }
+        // TC10: Test case for empty list
+        points = Arrays.asList();
+        closest = ray.findClosestPoint(points);
+        assertNull(closest, "The closest point should be null for an empty list.");
+        
 
-	    @Test
-	    void testFindClosestPointFirst() {
-	        Ray ray = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
-	        List<Point> points = Arrays.asList(
-	                new Point(1, 1, 0),
-	                new Point(2, 2, 0),
-	                new Point(3, 3, 0)
-	        );
-	        Point closest = ray.findClosestPoint(points);
-	        assertEquals(new Point(1, 1, 0), closest, "The closest point should be the first point in the list.");
-	    }
+        // TC11: Test case for first point
+        points = Arrays.asList(
+            new Point(1, 1, 0),
+            new Point(2, 2, 0),
+            new Point(3, 3, 0)
+        );
+        closest = ray.findClosestPoint(points);
+        assertEquals(new Point(1, 1, 0), closest, "The closest point should be the first point in the list.");
 
-	    @Test
-	    void testFindClosestPointLast() {
-	        Ray ray = new Ray(new Point(0, 0, 0), new Vector(1, 0, 0));
-	        List<Point> points = Arrays.asList(
-	                new Point(3, 3, 0),
-	                new Point(2, 2, 0),
-	                new Point(1, 1, 0)
-	        );
-	        Point closest = ray.findClosestPoint(points);
-	        assertEquals(new Point(1, 1, 0), closest, "The closest point should be the last point in the list.");
-	    }
+        // TC12: Test case for last point
+        points = Arrays.asList(
+            new Point(3, 3, 0),
+            new Point(2, 2, 0),
+            new Point(1, 1, 0)
+        );
+        closest = ray.findClosestPoint(points);
+        assertEquals(new Point(1, 1, 0), closest, "The closest point should be the last point in the list.");
+    }
 }

@@ -4,6 +4,7 @@ import java.util.MissingResourceException;
 
 import primitives.*;
 
+
 /**
  * Represents a camera in 3D space.
  */
@@ -42,6 +43,16 @@ public class Camera implements Cloneable {
      * The distance from the camera to the view plane.
      */
     private double distance = 0.0;
+    
+    /**
+     * Image writer for rendering the image
+     */
+    private ImageWriter imageWriter; 
+    
+    /**
+     * Ray tracer for generating rays and tracing them in the scene
+     */
+    private RayTracerBase rayTracer; 
 
     /**
      * Private constructor to prevent direct instantiation.
@@ -178,6 +189,16 @@ public class Camera implements Cloneable {
          */
         private static final String VP_DISTANCE_FIELD = "View plane distance (distance)";
         
+        /**
+         * Field name for the image writer.
+         */
+        private static final String IMAGE_WRITER_FIELD = "Image writer (imageWriter)";
+        
+        /**
+         * Field name for the ray tracer.
+         */
+        private static final String RAY_TRACER_FIELD = "ray tracer (rayTracer)";
+        
 
         /**
          * Sets the location of the camera.
@@ -249,6 +270,28 @@ public class Camera implements Cloneable {
             camera.distance = distance;
             return this;
         }
+        
+        /**
+         * Setter for the image writer.
+         * 
+         * @param imageWriter The image writer to be set.
+         * @return The Camera object for chaining method calls.
+         */
+        public Builder setImageWriter(ImageWriter imageWriter) {
+            camera.imageWriter = imageWriter;
+            return this;
+        }
+
+        /**
+         * Setter for the ray tracer.
+         * 
+         * @param rayTracer The ray tracer to be set.
+         * @return The Camera object for chaining method calls.
+         */
+        public Builder setRayTracer(RayTracerBase rayTracer) {
+            camera.rayTracer = rayTracer;
+            return this;
+        }
 
         /**
          * Builds and returns the Camera instance.
@@ -269,6 +312,12 @@ public class Camera implements Cloneable {
             if (camera.distance == 0.0) 
                 throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_DISTANCE_FIELD);
             
+            if (camera.imageWriter == null) 
+                throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
+            
+            if (camera.rayTracer==null) 
+                throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
+            
             
          // Validate the values of the fields
             if (camera.width <= 0) 
@@ -285,6 +334,7 @@ public class Camera implements Cloneable {
             
             if (camera.vTo.dotProduct(camera.vUp) != 0)
                 throw new IllegalArgumentException("Direction vectors must be perpendicular");
+ 
             
 
             // Calculate and set the vRight vector if not already set
@@ -295,6 +345,50 @@ public class Camera implements Cloneable {
             return (Camera) camera.clone();
         }
 
+    }
+    
+    /**
+     * Method for rendering image 
+     */
+    public void renderImage() {
+        throw new UnsupportedOperationException("Rendering image is not supported yet");
+    }
+    
+    /**
+     * Method for creating grid lines and print grid
+     * @param color    The color of the grid lines.
+     * @param interval The spacing between grid lines.
+     * @throws IllegalArgumentException if the interval is not positive.
+     */
+    public void printGrid(Color color, int interval) {
+        if (interval <= 0)
+            throw new IllegalArgumentException("Interval must be positive");
+        
+        int width = imageWriter.getNx();
+        int height = imageWriter.getNy();
+        
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x % interval == 0 || y % interval == 0) 
+                    imageWriter.writePixel(x, y, color);
+            }
+        }
+    }
+    
+    /**
+     * Writes the image data to the image file using the appropriate method from the image writer.
+     * This method should be invoked with caution as it directly interacts with the underlying image writer.
+     * 
+     * @throws IllegalStateException if the image writer is not initialized.
+     */
+    public void writeToImage() {
+        // Check if the image writer is initialized
+        if (imageWriter == null) {
+            throw new IllegalStateException("Image writer is not initialized");
+        }
+        
+        // Delegate the image writing process to the appropriate method of the image writer
+        imageWriter.writeToImage();
     }
 
     @Override
