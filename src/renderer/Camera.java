@@ -319,11 +319,11 @@ public class Camera implements Cloneable {
 			if (camera.distance == 0.0)
 				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_DISTANCE_FIELD);
 
-			if (camera.imageWriter == null)
-				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
-
-			if (camera.rayTracer == null)
-				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
+//			if (camera.imageWriter == null)
+//				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
+//
+//			if (camera.rayTracer == null)
+//				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
 
 			// Validate the values of the fields
 			if (Util.alignZero(camera.width) <= 0)
