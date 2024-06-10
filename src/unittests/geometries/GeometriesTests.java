@@ -32,12 +32,12 @@ class GeometriesTests {
 		assertNull(geometries.findIntersections(ray), "Expected no intersections");
 
 		// TC12: Only one shape intersects
-		geometries = new Geometries(
-		        new Sphere(new Point(0, 0, 5), 1), // Sphere at (0, 0, 5) with radius 1
-		        new Plane(new Point(0, 0, 15), new Vector(0, 0, 1)), // Plane moved further along the z-axis
-		        new Triangle(new Point(-1, -1, 2), new Point(1, -1, 2), new Point(0, 1, 2)) // Triangle intersected by the ray
-		    );
-		  ray = new Ray(new Point(0, 9, 0), new Vector(0, 8, 1));
+		geometries = new Geometries(new Sphere(new Point(0, 0, 5), 1), // Sphere at (0, 0, 5) with radius 1
+				new Plane(new Point(0, 0, 15), new Vector(0, 0, 1)), // Plane moved further along the z-axis
+				new Triangle(new Point(-1, -1, 2), new Point(1, -1, 2), new Point(0, 1, 2)) // Triangle intersected by
+																							// the ray
+		);
+		ray = new Ray(new Point(0, 9, 0), new Vector(0, 8, 1));
 
 		assertEquals(1, geometries.findIntersections(ray).size(), "Expected 1 intersections with the Triangle");
 

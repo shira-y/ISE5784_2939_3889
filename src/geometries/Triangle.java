@@ -51,16 +51,19 @@ public class Triangle extends Polygon {
 		// Calculate the dot product of each normal vector with the vector from the
 		// ray's origin to the intersection point
 		double s1 = alignZero(pVector.dotProduct(n1));
-		if (s1 == 0) return null;
-		
+		if (s1 == 0)
+			return null;
+
 		Vector v3 = vertices.get(2).subtract(ray.getHead());
 		Vector n2 = v2.crossProduct(v3).normalize();
 		double s2 = alignZero(pVector.dotProduct(n2));
-		if (s1 * s2 <= 0) return null;
-		
+		if (s1 * s2 <= 0)
+			return null;
+
 		Vector n3 = v3.crossProduct(v1).normalize();
 		double s3 = alignZero(pVector.dotProduct(n3));
-		if (s1 * s3 <= 0) return null;
+		if (s1 * s3 <= 0)
+			return null;
 
 		// If all dot products have the same sign, the intersection point is inside the
 		// triangle

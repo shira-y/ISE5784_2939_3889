@@ -71,27 +71,25 @@ public class Ray {
 	public Point getPoint(double t) {
 		return isZero(t) ? head : head.add(direction.scale(t));
 	}
-	
-	/**
-     * Finds the closest point to the ray's origin from a list of points.
-     *
-     * @param points- the list of points
-     * @return the closest point to the ray's origin, or null if the list is empty
-     */
-	 public Point findClosestPoint(List<Point> points) {
-	        if (points == null || points.isEmpty()) {
-	            return null;
-	        }
 
-	        Point closest = points.get(0);
-	        double closestDistance = head.distance(closest);
-	        for (Point point : points) {
-	            double distance = head.distance(point);
-	            if (distance < closestDistance) {
-	                closest = point;
-	                closestDistance = distance;
-	            }
-	        }
-	        return closest;
-	    }
+	/**
+	 * Finds the closest point to the ray's origin from a list of points.
+	 *
+	 * @param points- the list of points
+	 * @return the closest point to the ray's origin, or null if the list is empty
+	 */
+	public Point findClosestPoint(List<Point> points) {
+		if (points == null || points.isEmpty())
+			return null;
+		Point closest = points.get(0);
+		double closestDistance = head.distance(closest);
+		for (Point point : points) {
+			double distance = head.distance(point);
+			if (distance < closestDistance) {
+				closest = point;
+				closestDistance = distance;
+			}
+		}
+		return closest;
+	}
 }
