@@ -351,7 +351,36 @@ public class Camera implements Cloneable {
      * Method for rendering image 
      */
     public void renderImage() {
-        throw new UnsupportedOperationException("Rendering image is not supported yet");
+        if (imageWriter == null) {
+            throw new IllegalStateException("ImageWriter is not initialized");
+        }
+        if (rayTracer == null) {
+            throw new IllegalStateException("RayTracer is not initialized");
+        }
+
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                castRay(nX, nY, j, i);
+            }
+        }
+    }
+    
+    /**
+     * Casts a ray through the center of a given pixel, computes the color by tracing the ray,
+     * and writes the color to the ImageWriter.
+     *
+     * @param nX number of pixels in the x direction
+     * @param nY number of pixels in the y direction
+     * @param j  x coordinate of the pixel
+     * @param i  y coordinate of the pixel
+     */
+    private void castRay(int nX, int nY, int j, int i) {
+        Ray ray = constructRay(nX, nY, j, i);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, color);
     }
     
     /**
