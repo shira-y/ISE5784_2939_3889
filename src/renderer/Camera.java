@@ -319,11 +319,11 @@ public class Camera implements Cloneable {
 			if (camera.distance == 0.0)
 				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_DISTANCE_FIELD);
 
-//			if (camera.imageWriter == null)
-//				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
-//
-//			if (camera.rayTracer == null)
-//				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
+			if (camera.imageWriter == null)
+				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
+
+			if (camera.rayTracer == null)
+				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
 
 			// Validate the values of the fields
 			if (Util.alignZero(camera.width) <= 0)
@@ -356,22 +356,16 @@ public class Camera implements Cloneable {
 	 * Method for rendering image
 	 */
 	public void renderImage() {
-		if (imageWriter == null) {
-			throw new IllegalStateException("ImageWriter is not initialized");
-		}
-		if (rayTracer == null) {
-			throw new IllegalStateException("RayTracer is not initialized");
-		}
 
-		int nX = imageWriter.getNx();
-		int nY = imageWriter.getNy();
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
 
-		for (int i = 0; i < nY; i++) {
-			for (int j = 0; j < nX; j++) {
-				castRay(nX, nY, j, i);
-			}
-		}
-	}
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                castRay(nX, nY, j, i);
+            }
+        }
+    }
 
 	/**
 	 * Casts a ray through the center of a given pixel, computes the color by
@@ -383,32 +377,34 @@ public class Camera implements Cloneable {
 	 * @param i  y coordinate of the pixel
 	 */
 	private void castRay(int nX, int nY, int j, int i) {
-		Ray ray = constructRay(nX, nY, j, i);
-		Color color = rayTracer.traceRay(ray);
-		imageWriter.writePixel(j, i, color);
-	}
+        Ray ray = constructRay(nX, nY, j, i);
+        Color color = rayTracer.traceRay(ray);
+        imageWriter.writePixel(j, i, color);
+    }
 
 	/**
 	 * Method for creating grid lines and print grid
 	 * 
 	 * @param color    The color of the grid lines.
 	 * @param interval The spacing between grid lines.
+	 * @return the grid
 	 * @throws IllegalArgumentException if the interval is not positive.
 	 */
-	public void printGrid(Color color, int interval) {
-		if (interval <= 0)
-			throw new IllegalArgumentException("Interval must be positive");
+	public Camera printGrid( int interval, Color color) {
+        if (interval <= 0)
+            throw new IllegalArgumentException("Interval must be positive");
 
-		int width = imageWriter.getNx();
-		int height = imageWriter.getNy();
+        int width = imageWriter.getNx();
+        int height = imageWriter.getNy();
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (x % interval == 0 || y % interval == 0)
-					imageWriter.writePixel(x, y, color);
-			}
-		}
-	}
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x % interval == 0 || y % interval == 0)
+                    imageWriter.writePixel(x, y, color);
+            }
+        }
+        return this;
+    }
 
 	/**
 	 * Writes the image data to the image file using the appropriate method from the
@@ -417,23 +413,20 @@ public class Camera implements Cloneable {
 	 * 
 	 * @throws IllegalStateException if the image writer is not initialized.
 	 */
-	public void writeToImage() {
-		// Check if the image writer is initialized
-		if (imageWriter == null) {
-			throw new IllegalStateException("Image writer is not initialized");
-		}
+public Camera writeToImage() {
+    if (imageWriter == null) {
+        throw new IllegalStateException("Image writer is not initialized");
+    }
 
-		// Delegate the image writing process to the appropriate method of the image
-		// writer
-		imageWriter.writeToImage();
-	}
-
+    imageWriter.writeToImage();
+    return this;
+}
 	@Override
-	protected Camera clone() {
-		try {
-			return (Camera) super.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new AssertionError(); // Can't happen
-		}
-	}
+	 protected Camera clone() {
+        try {
+            return (Camera) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Can't happen
+        }
+    }
 }

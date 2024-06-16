@@ -9,6 +9,9 @@ import org.junit.Test;
 import geometries.*;
 import primitives.*;
 import renderer.Camera;
+import renderer.ImageWriter;
+import renderer.SimpleRayTracer;
+import scene.Scene;
 
 /**
  * Integration tests for the Camera class and geometries.
@@ -45,7 +48,8 @@ public class IntegrationTests {
 	 */
 	@Test
 	public void testSphereIntegration() {
-		Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0))
+		Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0)).setRayTracer(new SimpleRayTracer(new Scene("Test")))
+	    	      .setImageWriter(new ImageWriter("Test", 1, 1))
 				.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0)).setVpSize(3, 3).setVpDistance(1).build();
 
 		Sphere sphere = new Sphere(new Point(0, 0, -3), 1);
@@ -60,7 +64,8 @@ public class IntegrationTests {
 	 */
 	@Test
 	public void testPlaneIntegration() {
-		Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0))
+		Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0)).setRayTracer(new SimpleRayTracer(new Scene("Test")))
+	    	      .setImageWriter(new ImageWriter("Test", 1, 1))
 				.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0)).setVpSize(3, 3).setVpDistance(1).build();
 
 		Plane plane = new Plane(new Point(0, 0, -5), new Vector(0, 0, 1));
@@ -75,7 +80,8 @@ public class IntegrationTests {
 	 */
 	@Test
 	public void testTriangleIntegration() {
-		Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0))
+		Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0)).setRayTracer(new SimpleRayTracer(new Scene("Test")))
+	    	      .setImageWriter(new ImageWriter("Test", 1, 1))
 				.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0)).setVpSize(3, 3).setVpDistance(1).build();
 
 		Triangle triangle = new Triangle(new Point(0, 1, -2), new Point(1, -1, -2), new Point(-1, -1, -2));
