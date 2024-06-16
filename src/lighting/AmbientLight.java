@@ -16,21 +16,21 @@ public class AmbientLight {
 	/**
 	 * Constructor for AmbientLight
 	 * 
-	 * @param Ia the original light color intensity
-	 * @param Ka the attenuation factor
+	 * @param iA the original light color intensity
+	 * @param kA the attenuation factor
 	 */
-	public AmbientLight(Color Ia, Double3 Ka) {
-		this.intensity = Ia.scale(Ka);
+	public AmbientLight(Color iA, Double3 kA) {
+		this.intensity = iA.scale(kA);
 	}
 
 	/**
 	 * Constructor that accepts the light color and attenuation factor as double
 	 * 
-	 * @param Ia the original light color intensity
-	 * @param Ka the attenuation factor
+	 * @param iA the original light color intensity
+	 * @param kA the attenuation factor
 	 */
-	public AmbientLight(Color Ia, double Ka) {
-		this.intensity = Ia.scale(Ka);
+	public AmbientLight(Color iA, double kA) {
+		this.intensity = iA.scale(kA);
 	}
 
 	/**

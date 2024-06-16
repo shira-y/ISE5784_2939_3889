@@ -13,7 +13,7 @@ public class Scene {
 	/**
 	 * The name of the scene. This is a unique identifier for the scene.
 	 */
-	public String name;
+	public final String name;
 
 	/**
 	 * The background color of the scene. Default value is black.
