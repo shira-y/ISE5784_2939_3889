@@ -5,6 +5,7 @@ import java.util.List;
 import primitives.*;
 
 import scene.Scene;
+import geometries.Intersectable.GeoPoint;
 
 /**
  * SimpleRayTracer class extends the abstract base class RayTracerBase. This
@@ -23,18 +24,18 @@ public class SimpleRayTracer extends RayTracerBase {
 
 	@Override
 	public Color traceRay(Ray ray) {
-		List<Point> intersection = scene.geometries.findIntersections(ray);
-		return intersection == null ? scene.background //
-				: calcColor(ray.findClosestPoint(intersection));
+		var intersections = scene.geometries.findGeoIntersections(ray);
+		return intersections == null ? scene.background : calcColor(ray.findClosestGeoPoint(intersections));
+	}
+	/**
+     * Calculates the color at the given geometric point by combining the ambient light
+     * and the emission of the geometry at that point.
+     * 
+     * @param gp The geometric point where the color is to be calculated.
+     * @return The calculated color at the given geometric point.
+     */
+	private Color calcColor(GeoPoint gp) {
+		return scene.ambientLight.getIntensity().add(gp.geometry.getEmission());
 	}
 
-	/**
-	 * Calculates the color at a given intersection point.
-	 * 
-	 * @param point the intersection point
-	 * @return the color at the intersection point
-	 */
-	private Color calcColor(Point point) {
-		return scene.ambientLight.getIntensity();
-	}
 }

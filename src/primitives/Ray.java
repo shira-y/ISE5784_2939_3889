@@ -3,6 +3,7 @@ package primitives;
 import static primitives.Util.*;
 
 import java.util.List;
+import geometries.Intersectable.GeoPoint;
 
 /**
  * Ray class is used for the set of points on a line that are on one side of a
@@ -79,15 +80,25 @@ public class Ray {
 	 * @return the closest point to the ray's origin, or null if the list is empty
 	 */
 	public Point findClosestPoint(List<Point> points) {
-		if (points == null || points.isEmpty())
+		return points == null || points.isEmpty() ? null
+				: findClosestGeoPoint(points.stream().map(p -> new GeoPoint(null, p)).toList()).point;
+	}
+
+	/**
+	 * returns the closest geo point from list of GeoPoints
+	 *
+	 * @param intersections GeoPoints to check
+	 * @return closest GeoPoint
+	 */
+	public GeoPoint findClosestGeoPoint(List<GeoPoint> intersections) {
+		GeoPoint closest = null;
+		double closestDistance = Integer.MAX_VALUE;
+		if (intersections == null || intersections.isEmpty())
 			return null;
-		Point closest = points.get(0);
-		double closestDistance = head.distance(closest);
-		for (Point point : points) {
-			double distance = head.distance(point);
-			if (distance < closestDistance) {
+		for (GeoPoint point : intersections) {
+			if (point.point.distanceSquared(head) < closestDistance) {
 				closest = point;
-				closestDistance = distance;
+				closestDistance = point.point.distanceSquared(head);
 			}
 		}
 		return closest;

@@ -414,6 +414,7 @@ public class Camera implements Cloneable {
 	 * Writes the image data to the image file using the appropriate method from the
 	 * image writer. This method should be invoked with caution as it directly
 	 * interacts with the underlying image writer.
+	 * 
 	 * @return the image
 	 * @throws IllegalStateException if the image writer is not initialized.
 	 */

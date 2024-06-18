@@ -22,51 +22,92 @@ public class Triangle extends Polygon {
 		super(p1, p2, p3);
 	}
 
-	/**
-	 * Find the intersection points of the given ray with the triangle.
-	 * 
-	 * @param ray - the ray to check for intersections
-	 * @return list of intersection points or null if there are no intersections
-	 */
+//	/**
+//	 * Find the intersection points of the given ray with the triangle.
+//	 * 
+//	 * @param ray - the ray to check for intersections
+//	 * @return list of intersection points or null if there are no intersections
+//	 */
+//	@Override
+//	public List<Point> findGeoIntersectionsHelper(Ray ray) {
+//		// Step 1: Find intersection with the plane
+//		// Find intersections of the ray with the plane
+//		List<Point> planeIntersections = plane.findIntersections(ray);
+//		// If there are no intersections with the plane, return null
+//		if (planeIntersections == null)
+//			return null;
+//
+//		// Get the first intersection point with the plane
+//		Point p = planeIntersections.getFirst();
+//		Vector pVector = p.subtract(ray.getHead());
+//
+//		// Step 2: Check if the intersection point is inside the triangle
+//		// Calculate vectors from the ray's origin to each vertex of the triangle
+//		Vector v1 = vertices.get(0).subtract(ray.getHead());
+//		Vector v2 = vertices.get(1).subtract(ray.getHead());
+//		// Calculate normal vectors of each edge of the triangle using cross product and
+//		// normalize them
+//		Vector n1 = v1.crossProduct(v2).normalize();
+//		// Calculate the dot product of each normal vector with the vector from the
+//		// ray's origin to the intersection point
+//		double s1 = alignZero(pVector.dotProduct(n1));
+//		if (s1 == 0)
+//			return null;
+//
+//		Vector v3 = vertices.get(2).subtract(ray.getHead());
+//		Vector n2 = v2.crossProduct(v3).normalize();
+//		double s2 = alignZero(pVector.dotProduct(n2));
+//		if (s1 * s2 <= 0)
+//			return null;
+//
+//		Vector n3 = v3.crossProduct(v1).normalize();
+//		double s3 = alignZero(pVector.dotProduct(n3));
+//		if (s1 * s3 <= 0)
+//			return null;
+//
+//		// If all dot products have the same sign, the intersection point is inside the
+//		// triangle
+//		return List.of(p);
+//	}
+
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		// Step 1: Find intersection with the plane
-		// Find intersections of the ray with the plane
 		List<Point> planeIntersections = plane.findIntersections(ray);
+
 		// If there are no intersections with the plane, return null
-		if (planeIntersections == null)
+		if (planeIntersections == null || planeIntersections.isEmpty())
 			return null;
 
 		// Get the first intersection point with the plane
-		Point p = planeIntersections.getFirst();
-		Vector pVector = p.subtract(ray.getHead());
+		Point p = planeIntersections.get(0);
 
 		// Step 2: Check if the intersection point is inside the triangle
-		// Calculate vectors from the ray's origin to each vertex of the triangle
 		Vector v1 = vertices.get(0).subtract(ray.getHead());
 		Vector v2 = vertices.get(1).subtract(ray.getHead());
+		Vector v3 = vertices.get(2).subtract(ray.getHead());
+		Vector pVector = p.subtract(ray.getHead());
+
 		// Calculate normal vectors of each edge of the triangle using cross product and
 		// normalize them
 		Vector n1 = v1.crossProduct(v2).normalize();
+		Vector n2 = v2.crossProduct(v3).normalize();
+		Vector n3 = v3.crossProduct(v1).normalize();
+
 		// Calculate the dot product of each normal vector with the vector from the
 		// ray's origin to the intersection point
 		double s1 = alignZero(pVector.dotProduct(n1));
-		if (s1 == 0)
-			return null;
-
-		Vector v3 = vertices.get(2).subtract(ray.getHead());
-		Vector n2 = v2.crossProduct(v3).normalize();
 		double s2 = alignZero(pVector.dotProduct(n2));
-		if (s1 * s2 <= 0)
-			return null;
-
-		Vector n3 = v3.crossProduct(v1).normalize();
 		double s3 = alignZero(pVector.dotProduct(n3));
-		if (s1 * s3 <= 0)
-			return null;
 
 		// If all dot products have the same sign, the intersection point is inside the
 		// triangle
-		return List.of(p);
+		if ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) {
+			return List.of(new GeoPoint(this, p));
+		}
+
+		// If the intersection point is outside the triangle, return null
+		return null;
 	}
+
 }

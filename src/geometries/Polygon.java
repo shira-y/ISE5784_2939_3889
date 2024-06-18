@@ -2,6 +2,8 @@ package geometries;
 
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
+
 import static primitives.Util.isZero;
 
 import primitives.Point;
@@ -14,7 +16,7 @@ import primitives.Vector;
  * 
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
 	/** List of polygon's vertices */
 	protected final List<Point> vertices;
 	/** Associated plane in which the polygon lays */
@@ -87,7 +89,8 @@ public class Polygon implements Geometry {
 		return plane.getNormal();
 	}
 
-	public List<Point> findIntersections(Ray ray) {
+	@Override
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		return null;// bonus
 	}
 

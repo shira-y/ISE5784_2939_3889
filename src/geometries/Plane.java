@@ -1,7 +1,9 @@
 package geometries;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import geometries.Intersectable.GeoPoint;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -10,7 +12,7 @@ import static primitives.Util.*;
 /**
  * Plane class which includes a point in space and a vertical vector
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 	/**
 	 * p: The reference point on the plane.
 	 */
@@ -72,19 +74,44 @@ public class Plane implements Geometry {
 	 * @param ray the ray to check for intersections
 	 * @return list of intersection points or null if there are no intersections
 	 */
+//	@Override
+//	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+//		Point p0 = ray.getHead();
+//		Vector v = ray.getDirection();
+//
+//		// If the intersection point is the same as the plane's reference point,
+//		if (p0.equals(p))
+//			return null;
+//
+//		// n ∙ (Q - P0)
+//		double numerator = normalVector.dotProduct(p.subtract(p0));
+//
+//		// n ∙ v
+//		double denominator = normalVector.dotProduct(v);
+//
+//		// Check if denominator is zero (ray is parallel to the plane)
+//		if (isZero(denominator))
+//			return null;
+//
+//		// Calculate t
+//		double t = alignZero(numerator / denominator);
+//
+//		// If t <= 0, the intersection point is behind the ray's origin or at the origin
+//		return t <= 0 ? null : List.of(ray.getPoint(t));
+//	}
+
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		Point p0 = ray.getHead();
 		Vector v = ray.getDirection();
 
-		// If the intersection point is the same as the plane's reference point,
+		// If the intersection point is the same as the plane's reference point, return
+		// null
 		if (p0.equals(p))
 			return null;
 
-		// n ∙ (Q - P0)
+		// Calculate the numerator and denominator
 		double numerator = normalVector.dotProduct(p.subtract(p0));
-
-		// n ∙ v
 		double denominator = normalVector.dotProduct(v);
 
 		// Check if denominator is zero (ray is parallel to the plane)
@@ -95,7 +122,14 @@ public class Plane implements Geometry {
 		double t = alignZero(numerator / denominator);
 
 		// If t <= 0, the intersection point is behind the ray's origin or at the origin
-		return t <= 0 ? null : List.of(ray.getPoint(t));
+		if (t <= 0)
+			return null;
+
+		// Calculate the intersection point
+		Point intersectionPoint = ray.getPoint(t);
+
+		// Return a list containing the GeoPoint
+		return List.of(new GeoPoint(this, intersectionPoint));
 	}
 
 }
