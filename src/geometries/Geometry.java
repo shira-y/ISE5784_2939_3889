@@ -7,8 +7,8 @@ import primitives.*;
  */
 public abstract class Geometry extends Intersectable {
 	/**
-     * The emission color of the geometry
-     */
+	 * The emission color of the geometry
+	 */
 	protected Color emission = Color.BLACK;
 
 	/**
@@ -19,22 +19,37 @@ public abstract class Geometry extends Intersectable {
 	 * @return the normal vector to the body at this point.
 	 */
 	public abstract Vector getNormal(Point p);
-	
-    /**
-     * Gets the emission color of the geometry.
-     *
-     * @return the emission color of the geometry
-     */
+
+	private Material material = new Material();
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	/**
+	 *
+	 * @param material
+	 */
+	public Geometry setMaterial(Material material) {
+		this.material = material;
+		return this;
+	}
+
+	/**
+	 * Gets the emission color of the geometry.
+	 *
+	 * @return the emission color of the geometry
+	 */
 	public Color getEmission() {
 		return emission;
 	}
-	
+
 	/**
-     * Sets the emission color of the geometry.
-     *
-     * @param emission - the emission color to set
-     * @return the geometry itself 
-     */
+	 * Sets the emission color of the geometry.
+	 *
+	 * @param emission - the emission color to set
+	 * @return the geometry itself
+	 */
 	public Geometry setEmission(Color emission) {
 		this.emission = emission;
 		return this;
