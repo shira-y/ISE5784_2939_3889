@@ -22,22 +22,23 @@ public abstract class Intersectable {
 		var geoList = findGeoIntersections(ray);
 		return geoList == null ? null : geoList.stream().map(gp -> gp.point).toList();
 	}
-	
-	/**
-     * Helper method to find all geometric intersection points between the given ray and the geometry.
-     *
-     * @param ray - the ray to intersect with the geometry
-     * @return a list of  GeoPoint
-     */
-	protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
-	
 
-    /**
-     * Finds all geometric intersection points between the given ray and the geometry.
-     *
-     * @param ray - the ray to intersect with the geometry
-     * @return a list of GeoPoint 
-     */
+	/**
+	 * Helper method to find all geometric intersection points between the given ray
+	 * and the geometry.
+	 *
+	 * @param ray - the ray to intersect with the geometry
+	 * @return a list of GeoPoint
+	 */
+	protected abstract List<GeoPoint> findGeoIntersectionsHelper(Ray ray);
+
+	/**
+	 * Finds all geometric intersection points between the given ray and the
+	 * geometry.
+	 *
+	 * @param ray - the ray to intersect with the geometry
+	 * @return a list of GeoPoint
+	 */
 	public List<GeoPoint> findGeoIntersections(Ray ray) {
 		return findGeoIntersectionsHelper(ray);
 	}
@@ -47,12 +48,12 @@ public abstract class Intersectable {
 	 */
 	public static class GeoPoint {
 		/**
-         * The geometry involved in the intersection.
-         */
+		 * The geometry involved in the intersection.
+		 */
 		public Geometry geometry;
 		/**
-         * The point of intersection.
-         */
+		 * The point of intersection.
+		 */
 		public Point point;
 
 		/**

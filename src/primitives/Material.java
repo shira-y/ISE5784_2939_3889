@@ -1,27 +1,41 @@
 package primitives;
 
+/**
+ * The Material class represents the material properties of a geometry in a scene,
+ * including diffusive and specular attenuation coefficients, and shininess level.
+ */
 public class Material {
-	/**
-     * kD = diffusive attenuation coefficient
-     * kS = specular attenuation coefficient
-     * kT = transparency coefficient
-     * kR = reflection coefficient
+    /**
+     * Diffusive attenuation coefficient.
      */
     public Double3 kD = Double3.ZERO;
-    public Double3 kS = Double3.ZERO;
-    public int nShininess = 0;
-    
+
     /**
-     * Sets diffusive attenuation factor.
-     * @param kD double
+     * Specular attenuation coefficient.
+     */
+    public Double3 kS = Double3.ZERO;
+
+    /**
+     * Shininess level.
+     */
+    public int nShininess = 0;
+
+    /**
+     * Sets the diffusive attenuation factor.
+     * 
+     * @param kD The diffusive attenuation coefficient as a double.
+     * @return The Material object itself.
      */
     public Material setKd(double kD) {
         this.kD = new Double3(kD);
         return this;
     }
+
     /**
-     * Sets diffusive attenuation factor.
-     * @param kD Double3
+     * Sets the diffusive attenuation factor.
+     * 
+     * @param kD The diffusive attenuation coefficient as a Double3 object.
+     * @return The Material object itself.
      */
     public Material setKd(Double3 kD) {
         this.kD = kD;
@@ -29,16 +43,21 @@ public class Material {
     }
 
     /**
-     * Sets specular attenuation factor.
-     * @param kS double.
+     * Sets the specular attenuation factor.
+     * 
+     * @param kS The specular attenuation coefficient as a double.
+     * @return The Material object itself.
      */
     public Material setKs(double kS) {
         this.kS = new Double3(kS);
         return this;
     }
+
     /**
-     * Sets specular attenuation factor.
-     * @param kS Double3
+     * Sets the specular attenuation factor.
+     * 
+     * @param kS The specular attenuation coefficient as a Double3 object.
+     * @return The Material object itself.
      */
     public Material setKs(Double3 kS) {
         this.kS = kS;
@@ -46,8 +65,10 @@ public class Material {
     }
 
     /**
-     * Sets the level of shininess.
-     * @param nShininess int
+     * Sets the shininess level of the material.
+     * 
+     * @param nShininess The shininess level as an integer.
+     * @return The Material object itself.
      */
     public Material setShininess(int nShininess) {
         this.nShininess = nShininess;

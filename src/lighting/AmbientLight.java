@@ -6,12 +6,11 @@ import primitives.Double3;
 /**
  * Class representing ambient light in a scene.
  */
-public class AmbientLight extends Light{
+public class AmbientLight extends Light {
 	/**
 	 * field for ambient light with no light
 	 */
 	public static final AmbientLight NONE = new AmbientLight(Color.BLACK, Double3.ZERO);
-
 
 	/**
 	 * Constructor for AmbientLight
@@ -32,7 +31,5 @@ public class AmbientLight extends Light{
 	public AmbientLight(Color iA, double kA) {
 		super(iA.scale(kA));
 	}
-
-	
 
 }

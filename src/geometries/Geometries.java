@@ -66,12 +66,13 @@ public class Geometries extends Intersectable {
 //	}
 //	
 //	
-	  /**
-     * Helper method to find all geometric intersection points between the given ray and all geometries in the collection.
-     *
-     * @param ray the ray to intersect with the geometries
-     * @return a list of GeoPoint
-     */
+	/**
+	 * Helper method to find all geometric intersection points between the given ray
+	 * and all geometries in the collection.
+	 *
+	 * @param ray the ray to intersect with the geometries
+	 * @return a list of GeoPoint
+	 */
 	@Override
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		List<GeoPoint> intersections = null;
