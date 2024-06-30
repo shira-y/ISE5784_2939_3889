@@ -1,9 +1,6 @@
 package renderer;
 
-import java.util.List;
-
 import primitives.*;
-import geometries.*;
 import scene.Scene;
 import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
