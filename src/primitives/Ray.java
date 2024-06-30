@@ -91,10 +91,11 @@ public class Ray {
 	 * @return closest GeoPoint
 	 */
 	public GeoPoint findClosestGeoPoint(List<GeoPoint> intersections) {
-		GeoPoint closest = null;
-		double closestDistance = Integer.MAX_VALUE;
 		if (intersections == null || intersections.isEmpty())
 			return null;
+
+		GeoPoint closest = null;
+		double closestDistance = Double.POSITIVE_INFINITY;
 		for (GeoPoint point : intersections) {
 			if (point.point.distanceSquared(head) < closestDistance) {
 				closest = point;

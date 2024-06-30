@@ -313,38 +313,30 @@ public class Camera implements Cloneable {
 
 			if (camera.vTo == null || camera.vUp == null)
 				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, DIRECTION_FIELD);
-
-			if (camera.width == 0.0 || camera.height == 0.0)
-				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_SIZE_FIELD);
-
-			if (camera.distance == 0.0)
-				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_DISTANCE_FIELD);
-
-			if (camera.imageWriter == null)
-				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
-
-			if (camera.rayTracer == null)
-				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
-
-			// Validate the values of the fields
-			if (alignZero(camera.width) <= 0)
-				throw new IllegalStateException("Width must be positive");
-
-			if (alignZero(camera.height) <= 0)
-				throw new IllegalStateException("Height must be positive");
-
-			if (alignZero(camera.distance) <= 0)
-				throw new IllegalStateException("Distance must be positive");
-
 			if (camera.vTo.equals(camera.vUp))
 				throw new IllegalArgumentException("Direction vectors cannot be the same");
-
 			if (!isZero(camera.vTo.dotProduct(camera.vUp)))
 				throw new IllegalArgumentException("Direction vectors must be perpendicular");
-
 			// Calculate and set the vRight vector if not already set
 			if (camera.vRight == null)
 				camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+
+			if (camera.width == 0.0 || camera.height == 0.0)
+				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_SIZE_FIELD);
+			// Validate the values of the fields
+			if (alignZero(camera.width) <= 0)
+				throw new IllegalStateException("Width must be positive");
+			if (alignZero(camera.height) <= 0)
+				throw new IllegalStateException("Height must be positive");
+			if (camera.distance == 0.0)
+				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, VP_DISTANCE_FIELD);
+			if (alignZero(camera.distance) <= 0)
+				throw new IllegalStateException("Distance must be positive");
+
+			if (camera.imageWriter == null)
+				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, IMAGE_WRITER_FIELD);
+			if (camera.rayTracer == null)
+				throw new MissingResourceException(MISSING_RENDERING_DATA, CAMERA_CLASS_NAME, RAY_TRACER_FIELD);
 
 			// Return a clone of the camera
 			try {
@@ -360,7 +352,6 @@ public class Camera implements Cloneable {
 	 * Method for rendering image
 	 */
 	public void renderImage() {
-
 		int nX = imageWriter.getNx();
 		int nY = imageWriter.getNy();
 
@@ -419,10 +410,6 @@ public class Camera implements Cloneable {
 	 * @throws IllegalStateException if the image writer is not initialized.
 	 */
 	public Camera writeToImage() {
-		if (imageWriter == null) {
-			throw new IllegalStateException("Image writer is not initialized");
-		}
-
 		imageWriter.writeToImage();
 		return this;
 	}
