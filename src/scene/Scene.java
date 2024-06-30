@@ -34,10 +34,10 @@ public class Scene {
 	 * contained within the scene.
 	 */
 	public Geometries geometries = new Geometries();
-	
-	 /**
-     * List of light sources in the scene.
-     */
+
+	/**
+	 * List of light sources in the scene.
+	 */
 	public List<LightSource> lights = new LinkedList<>();
 
 	/**

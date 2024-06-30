@@ -17,7 +17,8 @@ public abstract class Geometry extends Intersectable {
 	private Material material = new Material();
 
 	/**
-	 * A function that receives a point on the surface of the geometric body and returns the normal vector to the body at this point.
+	 * A function that receives a point on the surface of the geometric body and
+	 * returns the normal vector to the body at this point.
 	 * 
 	 * @param p the point on the surface of the Geometry
 	 * @return the normal vector to the body at this point

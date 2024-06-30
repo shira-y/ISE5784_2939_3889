@@ -7,8 +7,8 @@ import primitives.*;
  */
 public abstract class Light {
 	/**
-     * The intensity (color) of the light.
-     */
+	 * The intensity (color) of the light.
+	 */
 	protected Color intensity;
 
 	/**

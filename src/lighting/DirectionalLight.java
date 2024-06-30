@@ -3,9 +3,9 @@ package lighting;
 import primitives.*;
 
 /**
- * DirectionalLight class represents a light source with a specific direction, 
- * which is considered to be at an infinite distance, meaning its direction 
- * does not change over the scene.
+ * DirectionalLight class represents a light source with a specific direction,
+ * which is considered to be at an infinite distance, meaning its direction does
+ * not change over the scene.
  */
 public class DirectionalLight extends Light implements LightSource {
 	/**
