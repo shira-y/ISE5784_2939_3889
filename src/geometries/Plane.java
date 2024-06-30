@@ -71,31 +71,7 @@ public class Plane extends Geometry {
 	 * @param ray the ray to check for intersections
 	 * @return list of intersection points or null if there are no intersections
 	 */
-//	@Override
-//	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
-//		Point p0 = ray.getHead();
-//		Vector v = ray.getDirection();
-//
-//		// If the intersection point is the same as the plane's reference point,
-//		if (p0.equals(p))
-//			return null;
-//
-//		// n ∙ (Q - P0)
-//		double numerator = normalVector.dotProduct(p.subtract(p0));
-//
-//		// n ∙ v
-//		double denominator = normalVector.dotProduct(v);
-//
-//		// Check if denominator is zero (ray is parallel to the plane)
-//		if (isZero(denominator))
-//			return null;
-//
-//		// Calculate t
-//		double t = alignZero(numerator / denominator);
-//
-//		// If t <= 0, the intersection point is behind the ray's origin or at the origin
-//		return t <= 0 ? null : List.of(ray.getPoint(t));
-//	}
+
 
 	@Override
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {

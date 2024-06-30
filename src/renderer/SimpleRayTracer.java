@@ -92,9 +92,25 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @param v   The view vector (opposite of the ray direction).
 	 * @return The specular reflection component.
 	 */
-	private Double3 calcSpecular(Material mat, Vector n, Vector l, double nl, Vector v) {
-		// Calculate the specular coefficient raised to the power of the shininess
-		// factor.
-		return mat.kS.scale(Math.pow(-alignZero(v.dotProduct(l.subtract(n.scale(nl * 2)))), mat.nShininess));
+	public Double3 calcSpecular(Material mat, Vector n, Vector l, double nl, Vector v) {
+	    // Calculate the reflection vector r
+	    Vector r = l.subtract(n.scale(2 * nl));
+	    
+	    // Calculate the dot product of view vector v and reflection vector r
+	    double vr = -v.dotProduct(r);
+	    
+	    // Calculate the specular component using a manual power calculation
+	    double specularFactor = 1.0;
+	    if (vr > 0) {
+	        for (int i = 0; i < mat.nShininess; i++) {
+	            specularFactor *= vr;
+	        }
+	    } else {
+	        specularFactor = 0;
+	    }
+	    
+	    // Return the specular color scaled by the specular factor and the specular coefficient
+	    return mat.kS.scale(specularFactor);
 	}
+
 }

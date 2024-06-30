@@ -9,7 +9,7 @@ public abstract class Light {
 	/**
 	 * The intensity (color) of the light.
 	 */
-	protected Color intensity;
+	protected final Color intensity;
 
 	/**
 	 * Constructor for the light
