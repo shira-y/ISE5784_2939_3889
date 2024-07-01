@@ -7,7 +7,9 @@ import primitives.*;
  * provide intensity and direction information at a given point.
  */
 public interface LightSource {
-
+	/**
+	 * The 
+	 */
 	double getDistance(Point point);
 
 	/**
