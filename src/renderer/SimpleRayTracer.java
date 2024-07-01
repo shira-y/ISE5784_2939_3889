@@ -6,11 +6,15 @@ import geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import static primitives.Util.alignZero;
 
+import java.util.List;
+
 /**
  * SimpleRayTracer class extends the abstract base class RayTracerBase. This
  * class provides basic ray tracing functionality.
  */
 public class SimpleRayTracer extends RayTracerBase {
+
+	private static final double DELTA = 0.1;
 
 	/**
 	 * Constructs a SimpleRayTracer object with the given scene.
@@ -61,15 +65,30 @@ public class SimpleRayTracer extends RayTracerBase {
 			Vector l = lightSource.getL(gp.point);
 			double nl = alignZero(n.dotProduct(l)); // dot product of the vector's normal and vector's light source
 			// check light source and view are on the same side of surface
-			if ((nl * nv > 0)) {
+			if ((nl * nv > 0) && unshaded(gp, lightSource, l, n, nl)) {
 				Color iL = lightSource.getIntensity(gp.point);
-				color = color
-						.add(iL.scale(calcDiffusive(material, nl).add(calcSpecular(material, n, l, nl, v))));
+				color = color.add(iL.scale(calcDiffusive(material, nl).add(calcSpecular(material, n, l, nl, v))));
 			}
 		}
 
 		return color;
 	}
+
+	private boolean unshaded(GeoPoint gp, LightSource light, Vector l, Vector n, double nl) {
+		Vector lightDirection = l.scale(-1);
+		Vector delta = n.scale(nl < 0 ? DELTA : -DELTA);
+		Point point = gp.point.add(delta);
+		Ray shadowRay = new Ray(point, lightDirection);
+		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(shadowRay);
+		if (intersections == null) return true;
+		double lightDistance = light.getDistance(point);
+		for(GeoPoint intersection : intersections) {
+			double intersectionDistance = intersection.point.distance(point);
+			if(intersectionDistance < lightDistance) return false;
+			
+		}
+		return true;
+	 }
 
 	/**
 	 * Calculates the diffusive component of the light reflection.
@@ -93,24 +112,25 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @return The specular reflection component.
 	 */
 	public Double3 calcSpecular(Material mat, Vector n, Vector l, double nl, Vector v) {
-	    // Calculate the reflection vector r
-	    Vector r = l.subtract(n.scale(2 * nl));
-	    
-	    // Calculate the dot product of view vector v and reflection vector r
-	    double vr = -v.dotProduct(r);
-	    
-	    // Calculate the specular component using a manual power calculation
-	    double specularFactor = 1.0;
-	    if (vr > 0) {
-	        for (int i = 0; i < mat.nShininess; i++) {
-	            specularFactor *= vr;
-	        }
-	    } else {
-	        specularFactor = 0;
-	    }
-	    
-	    // Return the specular color scaled by the specular factor and the specular coefficient
-	    return mat.kS.scale(specularFactor);
+		// Calculate the reflection vector r
+		Vector r = l.subtract(n.scale(2 * nl));
+
+		// Calculate the dot product of view vector v and reflection vector r
+		double vr = -v.dotProduct(r);
+
+		// Calculate the specular component using a manual power calculation
+		double specularFactor = 1.0;
+		if (vr > 0) {
+			for (int i = 0; i < mat.nShininess; i++) {
+				specularFactor *= vr;
+			}
+		} else {
+			specularFactor = 0;
+		}
+
+		// Return the specular color scaled by the specular factor and the specular
+		// coefficient
+		return mat.kS.scale(specularFactor);
 	}
 
 }

@@ -54,7 +54,7 @@ public class Sphere extends RadialGeometry {
 		// the intersection point is along the direction of the ray at a distance equal
 		// to the radius of the sphere.
 		if (p0.equals(center))
-			return List.of(new GeoPoint(this,ray.getPoint(radius)));
+			return List.of(new GeoPoint(this, ray.getPoint(radius)));
 
 		// Vector from the ray's origin to the sphere's center
 		Vector u = center.subtract(p0);
@@ -82,9 +82,8 @@ public class Sphere extends RadialGeometry {
 
 		double t1 = tm - th;
 		return alignZero(t1) <= 0 //
-				? List.of(new GeoPoint(this,ray.getPoint(t2)))
-				: List.of(new GeoPoint(this,ray.getPoint(t1)), new GeoPoint(this,ray.getPoint(t2)));
+				? List.of(new GeoPoint(this, ray.getPoint(t2)))
+				: List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
 	}
-
 
 }

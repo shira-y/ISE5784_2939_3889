@@ -70,5 +70,4 @@ public class Triangle extends Polygon {
 		return List.of(new GeoPoint(this, p));
 	}
 
-
 }

@@ -72,7 +72,6 @@ public class Plane extends Geometry {
 	 * @return list of intersection points or null if there are no intersections
 	 */
 
-
 	@Override
 	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		Point p0 = ray.getHead();

@@ -60,6 +60,7 @@ public class SpotLight extends PointLight {
 		super.setKq(d);
 		return this;
 	}
+
 	/**
 	 * Returns the intensity of the light at a specified point in the scene, taking
 	 * into account the distance attenuation factors.
@@ -69,8 +70,7 @@ public class SpotLight extends PointLight {
 	 */
 	@Override
 	public Color getIntensity(Point p) {
-		 return super.getIntensity(p).scale(Math.max(0, direction.dotProduct(getL(p))));
+		return super.getIntensity(p).scale(Math.max(0, direction.dotProduct(getL(p))));
 	}
-
 
 }
