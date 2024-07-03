@@ -89,41 +89,9 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @param ray The ray that intersects the geometric point.
 	 * @return The color resulting from the local lighting effects.
 	 */
-//	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
-//		Color color = gp.geometry.getEmission();
-//		Vector v = ray.getDirection();
-//		Vector n = gp.geometry.getNormal(gp.point);
-//		double nv = alignZero(n.dotProduct(v));
-//		// if direction is perpendicular to the surface, return emission color
-//		if (nv == 0)
-//			return color;
-//
-//		Material material = gp.geometry.getMaterial();
-//		// iterate through all the light sources in the scene
-//		for (LightSource lightSource : scene.lights) {
-//			Vector l = lightSource.getL(gp.point);
-//			double nl = alignZero(n.dotProduct(l)); // dot product of the vector's normal and vector's light source
-//			// check light source and view are on the same side of surface
-//
-////			if ((nl * nv > 0)) {
-////				Double3 ktr = transparency(gp, lightSource, l, n);
-////				if (ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-////					Color iL = lightSource.getIntensity(gp.point).scale(ktr);
-////					color = color.add(iL.scale(calcDiffusive(material, nl)),
-////							iL.scale(calcSpecular(material, n, l, nl, v)));
-////				}
-//
-//			if ((nl * nv > 0) && unshaded(gp, lightSource, l, n)) {
-//				Color iL = lightSource.getIntensity(gp.point);
-//				color = color.add(iL.scale(calcDiffusive(material, nl).add(calcSpecular(material, n, l, nl, v))));
-//			}
-//			
-//		}
-//		return color;
-//
-//	}
+
 	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
-	    Color color = Color.BLACK;
+		Color color = gp.geometry.getEmission();
 	    Vector v = ray.getDirection();
 	    Vector n = gp.geometry.getNormal(gp.point);
 	    double nv = alignZero(n.dotProduct(v));
@@ -135,7 +103,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	        double nl = alignZero(n.dotProduct(l));
 	        if (nl * nv > 0) {
 	            Double3 ktr = transparency(gp, lightSource, l, n, nv);
-	            if (ktr.product(k).greaterThan(MIN_CALC_COLOR_K)) {
+	            if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
 	                Color iL = lightSource.getIntensity(gp.point).scale(ktr);
 	                color = color.add(
 	                    iL.scale(calcDiffusive(mat, nl)),
@@ -160,95 +128,14 @@ public class SimpleRayTracer extends RayTracerBase {
 	        double intersectionDistance = intersection.point.distance(gp.point);
 	        if (intersectionDistance < lightDistance) {
 	            ktr = ktr.product(intersection.geometry.getMaterial().kT); // Multiply by the transparency coefficient
+	            if (ktr.lowerThan(MIN_CALC_COLOR_K)) return Double3.ZERO;
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
 	        }
 	    }
 	    return ktr;
 	}
 
-//	private boolean unshaded(GeoPoint gp, LightSource light, Vector l, Vector n) {
-//	    Vector lightDirection = l.scale(-1);
-//	    Ray shadowRay = new Ray(gp.point, lightDirection,n);
-//	    List<GeoPoint> intersections = scene.geometries.findGeoIntersections(shadowRay);
-//	    if (intersections == null) return true;
-//	    double lightDistance = light.getDistance(gp.point);
-//
-//	    for (GeoPoint intersection : intersections) {
-//	        double intersectionDistance = intersection.point.distance(gp.point);
-//	        if (intersectionDistance < lightDistance) {
-//	            if (intersection.geometry.getMaterial().kT.equals(Double3.ZERO)) {
-//	                return false;
-//	            }
-//	        }
-//	    }
-//	    return true;
-//	}
 
-//	private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
-//		// Create a shadow ray in the direction opposite to the light source
-//		Vector lightDirection = l.scale(-1);
-//		
-//		Ray shadowRay = new Ray(gp.point, lightDirection);
-//
-//		// Find all intersections of the shadow ray with geometries in the scene
-//		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(shadowRay);
-//		// If there are no intersections, return full transparency
-//		if (intersections == null)
-//			return Double3.ONE;
-//		// Initialize the transparency factor to 1 (full transparency)
-//		Double3 ktr = Double3.ONE;
-//		// Iterate through all the intersections
-//		double lightDistance = light.getDistance(gp.point);
-//		for (GeoPoint intersection : intersections) {
-//			double intersectionDistance = intersection.point.distance(gp.point);
-//			// Only consider intersections closer to the point than the light source
-//			if (intersectionDistance < lightDistance) {
-//				ktr = ktr.product(intersection.geometry.getMaterial().kT);
-//				// If the transparency factor is very small, return zero transparency
-//				if (ktr.lowerThan(MIN_CALC_COLOR_K))
-//					return Double3.ZERO;
-//			}
-//		}
-//
-//		return ktr;
-//	}
-
-//	private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n) {
-//
-//		// make a new light ray in the opposite direction
-//		Vector lightDir = l.scale(-1);
-//		Ray lightRay = new Ray(gp.point, lightDir, n);
-//
-//		// find the intersections with this new light ray
-//		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
-//		Double3 ktr = new Double3(1.0); // full transparency
-//
-//		if (intersections == null)
-//			return ktr;
-//
-//		// loop over intersections and for each intersection which is closer to the
-//		// point than the light source,
-//		// multiply ktr by kT of its geometry
-//
-//		// Compute the maximum distance to the light source
-//		double maxDistance = light.getDistance(gp.point);
-//
-//		for (GeoPoint geopoint : intersections) {
-//			if (gp.point.distance(geopoint.point) <= maxDistance) {
-//				// Multiply the transparency coefficient by the transparency factor of the
-//				// intersected geometry's material
-//				ktr = ktr.product(geopoint.geometry.getMaterial().kT);
-//
-//				// If the transparency coefficient falls below the minimum calculation
-//				// threshold, return a fully opaque value (0 transparency)
-//				if (ktr.lowerThan(MIN_CALC_COLOR_K)) {
-//					return Double3.ZERO;
-//				}
-//			}
-//
-//		}
-//		return ktr;
-//
-//	}
 
 	/**
 	 * Calculates the diffusive component of the light reflection.
