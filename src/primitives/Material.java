@@ -20,6 +20,28 @@ public class Material {
 	 * Shininess level.
 	 */
 	public int nShininess = 0;
+	public Double3 kT = Double3.ZERO;
+	public Double3 kR = Double3.ZERO;
+
+	public Material setKt(double kT) {
+		this.kT = new Double3(kT);
+		return this;
+	}
+
+	public Material setKr(double kR) {
+		this.kR = new Double3(kR);
+		return this;
+	}
+
+	public Material setKt(Double3 kT) {
+		this.kT = kT;
+		return this;
+	}
+
+	public Material setKr(Double3 kR) {
+		this.kR = kR;
+		return this;
+	}
 
 	/**
 	 * Sets the diffusive attenuation factor.

@@ -8,7 +8,7 @@ import primitives.*;
  */
 public interface LightSource {
 	/**
-	 * The 
+	 * The
 	 */
 	double getDistance(Point point);
 
