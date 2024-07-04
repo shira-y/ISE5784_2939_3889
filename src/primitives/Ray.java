@@ -19,7 +19,11 @@ public class Ray {
 	 * direction- the direction vector of the ray
 	 */
 	private final Vector direction;
-	 private static final double DELTA = 0.1;
+	/**
+	 * Small offset to move the ray's origin to avoid self-intersection.
+	 */
+	private static final double DELTA = 0.1;
+
 	/**
 	 * A constructor with a point and a direction vector
 	 * 
@@ -33,9 +37,9 @@ public class Ray {
 	/**
      * Constructor to initialize ray
      *
-     * @param p0  point of the ray
+     * @param head  point of the ray
      * @param n   normal vector
-     * @param dir direction vector of the ray
+     * @param direction direction vector of the ray
      */
     public Ray(Point head, Vector direction, Vector n) {
         double delta = direction.dotProduct(n) >= 0 ? DELTA : -DELTA;
