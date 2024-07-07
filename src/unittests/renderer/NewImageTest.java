@@ -11,7 +11,7 @@ import renderer.*;
 import scene.Scene;
 
 /**
- * Test class for creating an our image with 3 objects and new effects
+ * Test class for creating our image with 3 objects and new effects
  * 
  */
 public class NewImageTest {
@@ -43,6 +43,7 @@ public class NewImageTest {
 		Camera camera = cameraBuilder.setLocation(new Point(0, 0, 1000)).setVpDistance(1000).setVpSize(200, 200)
 				.setImageWriter(new ImageWriter("our image", 500, 500)).build();
 
+		
 		camera.renderImage();
 		camera.writeToImage();
 	}
