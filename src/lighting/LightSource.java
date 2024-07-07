@@ -8,9 +8,9 @@ import primitives.*;
  */
 public interface LightSource {
 	/**
-	 * Calculates the distance from the light source to a given point.
-	 * This method is useful for determining the attenuation of light 
-	 * based on the distance from the light source.
+	 * Calculates the distance from the light source to a given point. This method
+	 * is useful for determining the attenuation of light based on the distance from
+	 * the light source.
 	 *
 	 * @param point The point to which the distance is calculated.
 	 * @return The distance from the light source to the specified point.
