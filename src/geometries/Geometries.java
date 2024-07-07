@@ -1,6 +1,5 @@
 package geometries;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,7 +51,7 @@ public class Geometries extends Intersectable {
 		List<GeoPoint> intersections = null;
 
 		for (Intersectable geometry : geometries) {
-			List<GeoPoint> tempIntersections = geometry.findGeoIntersections(ray);
+			var tempIntersections = geometry.findGeoIntersections(ray);
 
 			if (tempIntersections != null) {
 				if (intersections == null)

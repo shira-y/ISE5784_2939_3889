@@ -1,6 +1,7 @@
 package lighting;
 
 import primitives.*;
+import static primitives.Util.*;
 
 /**
  * SpotLight class represents a spotlight in a scene, which is a type of point
@@ -70,7 +71,8 @@ public class SpotLight extends PointLight {
 	 */
 	@Override
 	public Color getIntensity(Point p) {
-		return super.getIntensity(p).scale(Math.max(0, direction.dotProduct(getL(p))));
+		double dirL = alignZero(direction.dotProduct(getL(p)));
+		return dirL <= 0 ? Color.BLACK : super.getIntensity(p).scale(dirL);
 	}
 
 }
