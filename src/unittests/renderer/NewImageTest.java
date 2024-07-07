@@ -38,7 +38,7 @@ public class NewImageTest {
 
      	
 		scene.lights.add(new SpotLight(new Color(700, 400, 400), new Point(60, 50, 0), new Vector(-1, -1, -4))
-		    	.setKl(4E-5).setKq(2E-7));
+		    	.setKl(0.00004).setKq(0.0000002));
 		scene.lights.add(new PointLight(new Color(0, 0, 800), new Point(-80, 80, 0)).setKl(0.00001).setKq(0.000005));
 		Camera camera = cameraBuilder.setLocation(new Point(0, 0, 1000)).setVpDistance(1000).setVpSize(200, 200)
 				.setImageWriter(new ImageWriter("our image", 500, 500)).build();
