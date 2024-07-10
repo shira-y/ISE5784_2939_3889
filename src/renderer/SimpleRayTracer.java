@@ -25,7 +25,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * The minimum attenuation factor for color calculation. Used to terminate
 	 * recursion when the color contribution is negligible.
 	 */
-	private static final double MIN_CALC_COLOR_K = 0.001;
+	protected static final double MIN_CALC_COLOR_K = 0.001;
 
 	/**
 	 * The initial attenuation factor for color calculation. Represents no
@@ -196,7 +196,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	 *              vector.
 	 * @return The transparency attenuation factor as a {@link Double3}.
 	 */
-	private Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n, double nv) {
+	protected Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n, double nv) {
 		Vector lightDirection = l.scale(-1);
 		Ray shadowRay = new Ray(gp.point, lightDirection, n);
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(shadowRay);
@@ -223,7 +223,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @param nl  The dot product of the normal vector and the light vector.
 	 * @return The diffusive reflection component.
 	 */
-	private Double3 calcDiffusive(Material mat, double nl) {
+	protected Double3 calcDiffusive(Material mat, double nl) {
 		return mat.kD.scale(Math.abs(nl));
 	}
 

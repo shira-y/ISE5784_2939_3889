@@ -1,5 +1,8 @@
 package lighting;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import primitives.*;
 
 /**
@@ -38,4 +41,6 @@ public class DirectionalLight extends Light implements LightSource {
 	public double getDistance(Point point) {
 		return Double.POSITIVE_INFINITY;
 	}
+	
+
 }

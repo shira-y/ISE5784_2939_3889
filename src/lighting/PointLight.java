@@ -1,5 +1,8 @@
 package lighting;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import primitives.*;
 
 /**
@@ -10,7 +13,7 @@ public class PointLight extends Light implements LightSource {
 	/**
 	 * The position of the point light source in 3D space.
 	 */
-	private final Point position;
+	protected final Point position;
 
 	/**
 	 * Constant attenuation coefficient for the point light. Controls how much the
@@ -101,4 +104,6 @@ public class PointLight extends Light implements LightSource {
 	public double getDistance(Point point) {
 		return position.distance(point);
 	}
+	
+
 }
