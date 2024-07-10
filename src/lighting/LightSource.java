@@ -37,5 +37,7 @@ public interface LightSource {
 	 */
 	public Vector getL(Point p);
 	
+	List<Vector> getListL(Point p);
+	
 
 }

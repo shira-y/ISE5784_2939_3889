@@ -2,6 +2,7 @@ package lighting;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import primitives.*;
 
@@ -32,6 +33,13 @@ public class PointLight extends Light implements LightSource {
 	 * light diminishes quadratically with distance.
 	 */
 	private double kQ = 0;
+	private Double radius = 100d;
+
+	 public PointLight(Color intensity, Point position, Double radius) {
+	        super(intensity);
+	        this.position = position;
+	        this.radius = radius;
+	    }
 
 	/**
 	 * Constructs a PointLight object with the given intensity and position.
@@ -42,7 +50,12 @@ public class PointLight extends Light implements LightSource {
 	public PointLight(Color intensity, Point position) {
 		super(intensity);
 		this.position = position;
+		
 	}
+	 public PointLight setRadius(Double radius) {
+	        this.radius = radius;
+	        return this;
+	    }
 
 	/**
 	 * Sets the constant attenuation coefficient of the light.
@@ -104,6 +117,32 @@ public class PointLight extends Light implements LightSource {
 	public double getDistance(Point point) {
 		return position.distance(point);
 	}
-	
+	 @Override
+	public List<Vector> getListL(Point p) {
+		Random r = new Random();
+		List<Vector> vectors = new LinkedList();
+		for (double i = -radius; i < radius; i += radius / 10) {
+			for (double j = -radius; j < radius; j += radius / 10) {
+				if (i != 0 && j != 0) {
+					Point point = position.add(new Vector(i, j, 0.1d));
+					if (point.equals(position)) {
+						vectors.add(p.subtract(point).normalize());
+					} else {
+						try {
+							if (point.subtract(position).dotProduct(point.subtract(position)) <= radius * radius) {
+								vectors.add(p.subtract(point).normalize());
+							}
+						} catch (Exception e) {
+							vectors.add(p.subtract(point).normalize());
+						}
+
+					}
+				}
+
+			}
+		}
+		vectors.add(getL(p));
+		return vectors;
+	}
 
 }

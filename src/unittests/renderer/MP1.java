@@ -102,7 +102,7 @@ public class MP1 {
         ImageWriter imageWriter = new ImageWriter("chessboard", 1000, 1000);
 
         // Set up the camera with the image writer and ray tracer
-        Camera camera1 = camera.setImageWriter(imageWriter).setRayTracer(new SimpleRayTracer(scene)).build();
+        Camera camera1 = camera.setImageWriter(imageWriter).setRayTracer(new SimpleRayTracer(scene).setSoftShadow(true)).build();
 
         // Render the image
         camera1.renderImage();

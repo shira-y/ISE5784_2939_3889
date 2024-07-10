@@ -20,7 +20,7 @@ public class NewImageTest {
 
 	/** Camera builder for the test */
 	private final Camera.Builder cameraBuilder = Camera.getBuilder()
-			.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0)).setRayTracer(new SimpleRayTracer(scene));
+			.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0)).setRayTracer(new SimpleRayTracer(scene).setSoftShadow(true));
 
 	@Test
 	public void trianglesTransparentSphere() {

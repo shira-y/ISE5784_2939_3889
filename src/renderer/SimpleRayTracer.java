@@ -8,6 +8,7 @@ import static primitives.Util.*;
 
 import java.util.List;
 import static java.lang.Math.*;
+import static primitives.Util.alignZero;
 
 /**
  * SimpleRayTracer class extends the abstract base class RayTracerBase. This
@@ -33,6 +34,8 @@ public class SimpleRayTracer extends RayTracerBase {
 	 */
 	private static final Double3 INITIAL_K = Double3.ONE;
 
+	private boolean softShadow = false;
+
 	/**
 	 * Constructs a SimpleRayTracer object with the given scene.
 	 * 
@@ -40,6 +43,15 @@ public class SimpleRayTracer extends RayTracerBase {
 	 */
 	public SimpleRayTracer(Scene scene) {
 		super(scene);
+	}
+
+	public boolean isSoftShadow() {
+		return softShadow;
+	}
+
+	public SimpleRayTracer setSoftShadow(boolean softShadow) {
+		this.softShadow = softShadow;
+		return this;
 	}
 
 	@Override
@@ -151,6 +163,84 @@ public class SimpleRayTracer extends RayTracerBase {
 		return intersections == null ? null : ray.findClosestGeoPoint(intersections);
 	}
 
+	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
+		Color color = gp.geometry.getEmission();
+
+		// v
+		Vector v = ray.getDirection();
+		// n
+		Vector n = gp.geometry.getNormal(gp.point);
+		double nv = alignZero(n.dotProduct(v));
+		// nv =
+		if (nv == 0)
+			return color;
+		// nShininess
+		// int nShininess = gp.geometry.getMaterial().getShininess();
+		// Kd
+		// Double3 kD = gp.geometry.getMaterial().getKd();
+		// Ks
+		// Double3 kS = gp.geometry.getMaterial().getKs();
+		// loop through all light sources in scene
+
+		// var lights = scene.getLights();
+		Material mat = gp.geometry.getMaterial();
+		if (softShadow) {
+			for (var lightSource : scene.lights) {
+				Color colorBeam = Color.BLACK;
+				var vectors = lightSource.getListL(gp.point);
+				for (var l : vectors) {
+
+					// l.dorProduct(n)
+					double nl = alignZero(n.dotProduct(l));
+					// check that light direction is towards shape and not behind
+					if (nl * nv > 0) { // sign(nl) == sing(nv)
+						Double3 ktr = transparency(gp, lightSource, l, n, nv);
+						if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+							Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
+							// (Kd * |l.dorProduct(n)|) * Il
+							colorBeam = colorBeam.add(lightIntensity.scale(calcDiffusive(mat, nl)),
+									lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
+						}
+					}
+				}
+				color = color.add(colorBeam.reduce(vectors.size()));
+			}
+
+		} else {
+			for (var lightSource : scene.lights) {
+				// l
+				Vector l = lightSource.getL(gp.point);
+				// l.dorProduct(n)
+				double nl = alignZero(n.dotProduct(l));
+				// check that light direction is towards shape and not behind
+				if (nl * nv > 0) { // sign(nl) == sing(nv)
+
+					Double3 ktr = transparency(gp, lightSource, l, n, nv);
+					if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+						Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
+						color = color.add(lightIntensity.scale(calcDiffusive(mat, nl)),
+								lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
+					}
+				}
+			}
+		}
+		return color;
+	}
+
+	/**
+	 * a func that get list of rays and sum the average color of all of them
+	 *
+	 * @param rays the given list of rays to trace
+	 * @return The average color of the rays
+	 */
+	public Color calcAverageColor(List<Ray> rays) {
+		Color totalColor = Color.BLACK;
+		for (Ray ray : rays) {
+			totalColor = totalColor.add(traceRay(ray));
+		}
+		return totalColor.scale((1 / (Double.valueOf(rays.size())))); // Calculates the average color
+	}
+
 	/**
 	 * Calculates the local effects of lighting at the given geometric point.
 	 * 
@@ -159,28 +249,28 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @param k   The attenuation coefficient for the ray.
 	 * @return The color resulting from the local lighting effects.
 	 */
-	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
-		Color color = gp.geometry.getEmission();
-		Vector v = ray.getDirection();
-		Vector n = gp.geometry.getNormal(gp.point);
-		double nv = alignZero(n.dotProduct(v));
-		if (nv == 0)
-			return color; // Direction is perpendicular to the surface
-
-		Material mat = gp.geometry.getMaterial();
-		for (LightSource lightSource : scene.lights) {
-			Vector l = lightSource.getL(gp.point);
-			double nl = alignZero(n.dotProduct(l));
-			if (nl * nv > 0) {
-				Double3 ktr = transparency(gp, lightSource, l, n, nv);
-				if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-					Color iL = lightSource.getIntensity(gp.point).scale(ktr);
-					color = color.add(iL.scale(calcDiffusive(mat, nl)), iL.scale(calcSpecular(mat, n, l, nl, v)));
-				}
-			}
-		}
-		return color;
-	}
+//	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
+//		Color color = gp.geometry.getEmission();
+//		Vector v = ray.getDirection();
+//		Vector n = gp.geometry.getNormal(gp.point);
+//		double nv = alignZero(n.dotProduct(v));
+//		if (nv == 0)
+//			return color; // Direction is perpendicular to the surface
+//
+//		Material mat = gp.geometry.getMaterial();
+//		for (LightSource lightSource : scene.lights) {
+//			Vector l = lightSource.getL(gp.point);
+//			double nl = alignZero(n.dotProduct(l));
+//			if (nl * nv > 0) {
+//				Double3 ktr = transparency(gp, lightSource, l, n, nv);
+//				if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+//					Color iL = lightSource.getIntensity(gp.point).scale(ktr);
+//					color = color.add(iL.scale(calcDiffusive(mat, nl)), iL.scale(calcSpecular(mat, n, l, nl, v)));
+//				}
+//			}
+//		}
+//		return color;
+//	}
 
 	/**
 	 * Calculates the transparency attenuation factor for a given geometric point
