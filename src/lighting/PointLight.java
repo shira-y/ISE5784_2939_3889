@@ -33,13 +33,24 @@ public class PointLight extends Light implements LightSource {
 	 * light diminishes quadratically with distance.
 	 */
 	private double kQ = 0;
+	
+	/**
+	 * The radius for soft shadow sampling.
+	 */
 	private Double radius = 100d;
 
-	 public PointLight(Color intensity, Point position, Double radius) {
-	        super(intensity);
-	        this.position = position;
-	        this.radius = radius;
-	    }
+	/**
+	 * Constructs a PointLight object with the given intensity, position, and radius.
+	 * 
+	 * @param intensity the intensity (color) of the light
+	 * @param position  the position of the light source
+	 * @param radius    the radius for soft shadow sampling
+	 */
+	public PointLight(Color intensity, Point position, Double radius) {
+	    super(intensity);
+	    this.position = position;
+	    this.radius = radius;
+	}
 
 	/**
 	 * Constructs a PointLight object with the given intensity and position.
@@ -49,13 +60,19 @@ public class PointLight extends Light implements LightSource {
 	 */
 	public PointLight(Color intensity, Point position) {
 		super(intensity);
-		this.position = position;
-		
+		this.position = position;	
 	}
-	 public PointLight setRadius(Double radius) {
-	        this.radius = radius;
-	        return this;
-	    }
+	
+	/**
+	 * Sets the radius for soft shadow sampling.
+	 * 
+	 * @param radius the radius to set
+	 * @return the PointLight object itself
+	 */
+	public PointLight setRadius(Double radius) {
+	    this.radius = radius;
+	    return this;
+	}
 
 	/**
 	 * Sets the constant attenuation coefficient of the light.
@@ -117,10 +134,19 @@ public class PointLight extends Light implements LightSource {
 	public double getDistance(Point point) {
 		return position.distance(point);
 	}
-	 @Override
+
+	/**
+	 * Returns a list of direction vectors from the light source to a specified
+	 * point in the scene for soft shadow sampling.
+	 * 
+	 * @param p the point in the scene where the direction vectors are evaluated
+	 * @return a list of direction vectors from the light source to the specified
+	 *         point
+	 */
+	@Override
 	public List<Vector> getListL(Point p) {
 		Random r = new Random();
-		List<Vector> vectors = new LinkedList();
+		List<Vector> vectors = new LinkedList<>();
 		for (double i = -radius; i < radius; i += radius / 10) {
 			for (double j = -radius; j < radius; j += radius / 10) {
 				if (i != 0 && j != 0) {
@@ -135,14 +161,11 @@ public class PointLight extends Light implements LightSource {
 						} catch (Exception e) {
 							vectors.add(p.subtract(point).normalize());
 						}
-
 					}
 				}
-
 			}
 		}
 		vectors.add(getL(p));
 		return vectors;
 	}
-
 }

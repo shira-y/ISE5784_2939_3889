@@ -37,6 +37,13 @@ public interface LightSource {
 	 */
 	public Vector getL(Point p);
 	
+	/**
+     * Returns a list of direction vectors from the light source to a specified point
+     * in the scene for soft shadows implementation.
+     * 
+     * @param p The point in the scene where the direction vectors are evaluated.
+     * @return A list of direction vectors from the light source to the specified point.
+     */
 	List<Vector> getListL(Point p);
 	
 

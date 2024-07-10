@@ -100,13 +100,6 @@ public class Vector extends Point {
 	}
 
 	
-	public Vector findOrthogonalVector() {
-	    if (this.getX() == 0 && this.getY() == 0) {
-	        return new Vector(1, 0, 0);
-	    }
-	    return new Vector(-this.getY(), this.getX(), 0).normalize();
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
