@@ -3,6 +3,7 @@ package renderer;
 import primitives.*;
 import scene.Scene;
 import static geometries.Intersectable.GeoPoint;
+
 import lighting.LightSource;
 import static primitives.Util.*;
 
@@ -175,56 +176,60 @@ public class SimpleRayTracer extends RayTracerBase {
 		return intersections == null ? null : ray.findClosestGeoPoint(intersections);
 	}
 
-	/**
-	 * Calculates the local effects of lighting at the given geometric point.
-	 *
-	 * @param gp  The geometric point where the local effects are to be calculated.
-	 * @param ray The ray that intersects the geometric point.
-	 * @param k   The attenuation coefficient for the ray.
-	 * @return The color resulting from the local lighting effects.
-	 */
 	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
-		Color color = gp.geometry.getEmission();
-		Vector v = ray.getDirection();
-		Vector n = gp.geometry.getNormal(gp.point);
-		double nv = alignZero(n.dotProduct(v));
-		if (nv == 0)
-			return color; // Direction is perpendicular to the surface
+	    Color color = gp.geometry.getEmission();
+	    Vector v = ray.getDirection();
+	    Vector n = gp.geometry.getNormal(gp.point);
+	    double nv = alignZero(n.dotProduct(v));
+	    if (nv == 0) return color; // Direction is perpendicular to the surface
+	    Material mat = gp.geometry.getMaterial();
 
-		Material mat = gp.geometry.getMaterial();
-		if (softShadow) {
-			for (var lightSource : scene.lights) {
-				Color colorBeam = Color.BLACK;
-				var vectors = lightSource.getListL(gp.point);
-				for (var l : vectors) {
-					double nl = alignZero(n.dotProduct(l));
-					if (nl * nv > 0) { // sign(nl) == sign(nv)
-						Double3 ktr = transparency(gp, lightSource, l, n, nv);
-						if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-							Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
-							colorBeam = colorBeam.add(lightIntensity.scale(calcDiffusive(mat, nl)),
-									lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
-						}
-					}
-				}
-				color = color.add(colorBeam.reduce(vectors.size()));
-			}
-		} else {
-			for (var lightSource : scene.lights) {
-				Vector l = lightSource.getL(gp.point);
-				double nl = alignZero(n.dotProduct(l));
-				if (nl * nv > 0) { // sign(nl) == sign(nv)
-					Double3 ktr = transparency(gp, lightSource, l, n, nv);
-					if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-						Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
-						color = color.add(lightIntensity.scale(calcDiffusive(mat, nl)),
-								lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
-					}
-				}
-			}
-		}
-		return color;
+	    for (LightSource lightSource : scene.lights) {
+	        List<Vector> lightDirections = lightSource.getListL(gp.point);
+	        Double3 totalKtr = Double3.ZERO;
+	        Color totalColor = Color.BLACK;
+	        for (Vector l : lightDirections) {
+	            double nl = alignZero(n.dotProduct(l));
+	            if (nl * nv > 0) {
+	                Double3 ktr = transparency(gp, lightSource, l, n, nv);
+	                if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+	                    Color iL = lightSource.getIntensity(gp.point).scale(ktr);
+	                    totalColor = totalColor.add(
+	                        iL.scale(calcDiffusive(mat, nl)),
+	                        iL.scale(calcSpecular(mat, n, l, nl, v))
+	                    );
+	                    totalKtr = totalKtr.add(ktr);
+	                }
+	            }
+	        }
+	        color = color.add(totalColor.reduce(lightDirections.size()));
+	    }
+	    return color;
 	}
+	
+//	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
+//		Color color = gp.geometry.getEmission();
+//	    Vector v = ray.getDirection();
+//	    Vector n = gp.geometry.getNormal(gp.point);
+//	    double nv = alignZero(n.dotProduct(v));
+//	    if (nv == 0) return color; // Direction is perpendicular to the surface
+//	    Material mat = gp.geometry.getMaterial();
+//	    for (LightSource lightSource : scene.lights) {
+//	        Vector l = lightSource.getL(gp.point);
+//	        double nl = alignZero(n.dotProduct(l));
+//	        if (nl * nv > 0) {
+//	            Double3 ktr = transparency(gp, lightSource, l, n, nv);
+//	            if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+//	                Color iL = lightSource.getIntensity(gp.point).scale(ktr);
+//	                color = color.add(
+//	                    iL.scale(calcDiffusive(mat, nl)),
+//	                    iL.scale(calcSpecular(mat, n, l, nl, v))
+//	                );
+//	            }
+//	        }
+//	    }
+//	    return color;
+//	}
 
 	/**
 	 * Calculates the transparency attenuation factor for a given geometric point
@@ -240,24 +245,39 @@ public class SimpleRayTracer extends RayTracerBase {
 	 *              vector.
 	 * @return The transparency attenuation factor as a {@link Double3}.
 	 */
-	protected Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n, double nv) {
-		Vector lightDirection = l.scale(-1);
-		Ray shadowRay = new Ray(gp.point, lightDirection, n);
-		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(shadowRay);
-		Double3 ktr = Double3.ONE; // Start with full transparency
-		if (intersections == null)
-			return ktr; // No intersections, fully transparent
+//	protected Double3 transparency(GeoPoint gp, LightSource light, Vector l, Vector n, double nv) {
+//		Vector lightDirection = l.scale(-1);
+//		Ray shadowRay = new Ray(gp.point, lightDirection, n);
+//		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(shadowRay);
+//		Double3 ktr = Double3.ONE; // Start with full transparency
+//		if (intersections == null)
+//			return ktr; // No intersections, fully transparent
+//
+//		double lightDistance = light.getDistance(gp.point);
+//		for (GeoPoint intersection : intersections) {
+//			double intersectionDistance = intersection.point.distance(gp.point);
+//			if (intersectionDistance < lightDistance) {
+//				ktr = ktr.product(intersection.geometry.getMaterial().kT); // Multiply by the transparency coefficient
+//				if (ktr.lowerThan(MIN_CALC_COLOR_K))
+//					return Double3.ZERO;
+//			}
+//		}
+//		return ktr;
+//	}
+	
+	private Double3 transparency(GeoPoint gp, LightSource lightSource, Vector l, Vector n, double nv) {
+	    Ray lightRay = new Ray(gp.point, l, n);
+	    List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
+	    if (intersections == null) return Double3.ONE;
 
-		double lightDistance = light.getDistance(gp.point);
-		for (GeoPoint intersection : intersections) {
-			double intersectionDistance = intersection.point.distance(gp.point);
-			if (intersectionDistance < lightDistance) {
-				ktr = ktr.product(intersection.geometry.getMaterial().kT); // Multiply by the transparency coefficient
-				if (ktr.lowerThan(MIN_CALC_COLOR_K))
-					return Double3.ZERO;
-			}
-		}
-		return ktr;
+	    Double3 ktr = Double3.ONE;
+	    for (GeoPoint intersection : intersections) {
+	        if (intersection.geometry.getMaterial().kT == Double3.ZERO) {
+	            return Double3.ZERO;
+	        }
+	        ktr = ktr.product(intersection.geometry.getMaterial().kT);
+	    }
+	    return ktr;
 	}
 
 	/**
