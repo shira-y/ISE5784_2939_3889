@@ -53,7 +53,6 @@ public class Camera implements Cloneable {
 	 * Ray tracer for generating rays and tracing them in the scene
 	 */
 	private RayTracerBase rayTracer;
-	
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -401,7 +400,6 @@ public class Camera implements Cloneable {
 		}
 		return this;
 	}
-	
 
 	/**
 	 * Writes the image data to the image file using the appropriate method from the

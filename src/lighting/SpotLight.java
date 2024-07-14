@@ -3,9 +3,6 @@ package lighting;
 import primitives.*;
 import static primitives.Util.*;
 
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * SpotLight class represents a spotlight in a scene, which is a type of point
  * light source with a specific direction.
@@ -77,7 +74,5 @@ public class SpotLight extends PointLight {
 		double dirL = alignZero(direction.dotProduct(getL(p)));
 		return dirL <= 0 ? Color.BLACK : super.getIntensity(p).scale(dirL);
 	}
-	
-
 
 }

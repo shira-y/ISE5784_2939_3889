@@ -2,7 +2,6 @@ package lighting;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import primitives.*;
 
@@ -33,23 +32,24 @@ public class PointLight extends Light implements LightSource {
 	 * light diminishes quadratically with distance.
 	 */
 	private double kQ = 0;
-	
+
 	/**
 	 * The radius for soft shadow sampling.
 	 */
 	private Double radius = 100d;
 
 	/**
-	 * Constructs a PointLight object with the given intensity, position, and radius.
+	 * Constructs a PointLight object with the given intensity, position, and
+	 * radius.
 	 * 
 	 * @param intensity the intensity (color) of the light
 	 * @param position  the position of the light source
 	 * @param radius    the radius for soft shadow sampling
 	 */
 	public PointLight(Color intensity, Point position, Double radius) {
-	    super(intensity);
-	    this.position = position;
-	    this.radius = radius;
+		super(intensity);
+		this.position = position;
+		this.radius = radius;
 	}
 
 	/**
@@ -60,9 +60,9 @@ public class PointLight extends Light implements LightSource {
 	 */
 	public PointLight(Color intensity, Point position) {
 		super(intensity);
-		this.position = position;	
+		this.position = position;
 	}
-	
+
 	/**
 	 * Sets the radius for soft shadow sampling.
 	 * 
@@ -70,8 +70,8 @@ public class PointLight extends Light implements LightSource {
 	 * @return the PointLight object itself
 	 */
 	public PointLight setRadius(Double radius) {
-	    this.radius = radius;
-	    return this;
+		this.radius = radius;
+		return this;
 	}
 
 	/**
@@ -145,7 +145,6 @@ public class PointLight extends Light implements LightSource {
 	 */
 	@Override
 	public List<Vector> getListL(Point p) {
-		Random r = new Random();
 		List<Vector> vectors = new LinkedList<>();
 		for (double i = -radius; i < radius; i += radius / 10) {
 			for (double j = -radius; j < radius; j += radius / 10) {
