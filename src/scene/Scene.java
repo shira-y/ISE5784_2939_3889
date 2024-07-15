@@ -40,6 +40,7 @@ public class Scene {
 	 */
 	public List<LightSource> lights = new LinkedList<>();
 
+
 	/**
 	 * Constructor that initializes the scene with a name
 	 * 
@@ -93,4 +94,5 @@ public class Scene {
 		this.geometries = geometries;
 		return this;
 	}
+
 }

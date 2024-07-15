@@ -106,7 +106,7 @@ public class Point {
 	public double distance(Point newPoint) {
 		return (Math.sqrt(distanceSquared(newPoint)));
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

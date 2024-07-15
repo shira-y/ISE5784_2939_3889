@@ -2,14 +2,18 @@ package lighting;
 
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.Random;
+import static primitives.Util.isZero;
+import static java.lang.Math.sqrt;
 import primitives.*;
+
 
 /**
  * PointLight class represents a light source that emits light uniformly in all
  * directions from a specific point in space.
  */
 public class PointLight extends Light implements LightSource {
+	 
 	/**
 	 * The position of the point light source in 3D space.
 	 */
@@ -33,10 +37,6 @@ public class PointLight extends Light implements LightSource {
 	 */
 	private double kQ = 0;
 
-	/**
-	 * The radius for soft shadow sampling.
-	 */
-	private Double radius = 100d;
 
 	/**
 	 * Constructs a PointLight object with the given intensity, position, and
@@ -49,7 +49,7 @@ public class PointLight extends Light implements LightSource {
 	public PointLight(Color intensity, Point position, Double radius) {
 		super(intensity);
 		this.position = position;
-		this.radius = radius;
+		
 	}
 
 	/**
@@ -63,16 +63,7 @@ public class PointLight extends Light implements LightSource {
 		this.position = position;
 	}
 
-	/**
-	 * Sets the radius for soft shadow sampling.
-	 * 
-	 * @param radius the radius to set
-	 * @return the PointLight object itself
-	 */
-	public PointLight setRadius(Double radius) {
-		this.radius = radius;
-		return this;
-	}
+
 
 	/**
 	 * Sets the constant attenuation coefficient of the light.
@@ -129,42 +120,81 @@ public class PointLight extends Light implements LightSource {
 	public Vector getL(Point p) {
 		return p.subtract(position).normalize();
 	}
-
+	 /**
+     * Calculates the distance between the shape and a given point.
+     *
+     * @param point the point to calculate the distance from
+     * @return the distance between the shape and the point
+     */
 	@Override
 	public double getDistance(Point point) {
 		return position.distance(point);
 	}
+	   //for random number of rays to create for soft shadows
+    private static final Random RND = new Random();
+    @Override
+    public List<Vector> getLCircle(Point p, double r, int amount) {
+        if (p.equals(position))
+            return null;
 
-	/**
-	 * Returns a list of direction vectors from the light source to a specified
-	 * point in the scene for soft shadow sampling.
-	 * 
-	 * @param p the point in the scene where the direction vectors are evaluated
-	 * @return a list of direction vectors from the light source to the specified
-	 *         point
-	 */
-	@Override
-	public List<Vector> getListL(Point p) {
-		List<Vector> vectors = new LinkedList<>();
-		for (double i = -radius; i < radius; i += radius / 10) {
-			for (double j = -radius; j < radius; j += radius / 10) {
-				if (i != 0 && j != 0) {
-					Point point = position.add(new Vector(i, j, 0.1d));
-					if (point.equals(position)) {
-						vectors.add(p.subtract(point).normalize());
-					} else {
-						try {
-							if (point.subtract(position).dotProduct(point.subtract(position)) <= radius * radius) {
-								vectors.add(p.subtract(point).normalize());
-							}
-						} catch (Exception e) {
-							vectors.add(p.subtract(point).normalize());
-						}
-					}
-				}
-			}
-		}
-		vectors.add(getL(p));
-		return vectors;
-	}
+        List<Vector> result = new LinkedList<>();
+
+        Vector l = getL(p); //vector to the center of the point light
+        result.add(l);
+
+        if (amount < 2) {
+            return result;
+        }
+
+        Vector vAcross;
+        //if l is parallel to z axis, then the normal is across z on x-axis
+        if (isZero(l.getX()) && isZero(l.getY())) {
+            //switch z and x places
+            vAcross = new Vector(0, 0, -1 * l.getZ()).normalize();
+            //otherwise get the normal using x and y
+        } else {//switched x and y places
+            vAcross = new Vector(l.getX(),-1 * l.getY(),  0).normalize();
+        }
+
+        //the vector to the other direction
+        Vector vForward = vAcross.crossProduct(l).normalize();
+
+        double cosAngle, sinAngle, moveX, moveY, d;
+
+        for (int i = 0; i < amount; i++) {
+            Point movedPoint = this.position;
+
+            //random cosine of angle between (-1,1)
+            cosAngle = 2 * RND.nextDouble() - 1;
+
+            //sin(angle)=1-cos^2(angle)
+            sinAngle = sqrt(1 - cosAngle * cosAngle);
+
+            //d is between (-r,r)
+            d = r * (2 * RND.nextDouble() - 1);
+            //if we got 0 then try again, because it will just be the same as the center
+            if (isZero(d)) {
+                i--;
+                continue;
+            }
+
+            //says how much to move across and down
+            moveX = d * cosAngle;
+            moveY = d * sinAngle;
+
+            //moving the point according to the value
+            if (!isZero(moveX)) {
+                movedPoint = movedPoint.add(vAcross.scale(moveX));
+            }
+            if (!isZero(moveY)) {
+                movedPoint = movedPoint.add(vForward.scale(moveY));
+            }
+
+            //adding the vector from the new point to the light position
+            result.add(p.subtract(movedPoint).normalize());
+        }
+        return result;
+    }
+
+	
 }

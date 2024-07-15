@@ -4,6 +4,7 @@ import java.util.List;
 
 import primitives.*;
 
+
 /**
  * DirectionalLight class represents a light source with a specific direction,
  * which is considered to be at an infinite distance, meaning its direction does
@@ -41,9 +42,12 @@ public class DirectionalLight extends Light implements LightSource {
 		return Double.POSITIVE_INFINITY;
 	}
 
-	@Override
-	public List<Vector> getListL(Point p) {
-		return List.of(getL(p));
-	}
+	  @Override
+	    public List<Vector> getLCircle(Point p, double r, int amount) {
+	        //list of rays for soft shadows
+	        List<Vector> list = List.of(getL(p));
+	        return list;
+	    }
+   
 
 }

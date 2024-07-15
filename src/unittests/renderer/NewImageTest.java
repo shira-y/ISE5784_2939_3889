@@ -19,7 +19,8 @@ public class NewImageTest {
 	/** Camera builder for the test */
 	private final Camera.Builder cameraBuilder = Camera.getBuilder()
 			.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
-			.setRayTracer(new SimpleRayTracer(scene).setSoftShadow(true));
+			.setRayTracer(new SimpleRayTracer(scene).useSoftShadow(true)
+	                .setNumOfSSRays(98).setRadiusBeamSS(10d));
 
 	/**
 	 * Test method for creating a scene with two triangles and a transparent sphere.

@@ -98,6 +98,18 @@ public class Vector extends Point {
 	public Vector normalize() {
 		return new Vector(xyz.reduce(this.length()));
 	}
+	  /**
+     * min d = 0, the other d -> replace and one of them scale -1.
+     * @return vector vertical for this.
+     */
+    public Vector verticalVector(){
+        if (xyz.d1 < xyz.d2 && xyz.d1 < xyz.d3)
+            return new Vector(0, xyz.d3, -xyz.d2);
+        if (xyz.d2 < xyz.d1 && xyz.d2 < xyz.d3)
+            return new Vector(xyz.d3, 0, -xyz.d1);
+        return new Vector(xyz.d2, -xyz.d1, 0);
+
+    }
 
 	@Override
 	public boolean equals(Object obj) {

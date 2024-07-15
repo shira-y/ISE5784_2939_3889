@@ -15,6 +15,17 @@ import lighting.*;
  * Test class for creating a scene with a chessboard and pawns.
  */
 public class MP1 {
+	
+	private final Scene scene = new Scene("Chessboard Scene");
+	// camera
+	Vector towardsBoard = new Vector(1, -0.25, 1).normalize();
+	Vector upVector = new Vector(0, 1, 0);
+	Vector rightVector = towardsBoard.crossProduct(upVector).normalize();
+	Vector trueUpVector = rightVector.crossProduct(towardsBoard).normalize();
+	private final Camera.Builder cameraBuilder = Camera.getBuilder()
+			.setDirection(towardsBoard, trueUpVector).setRayTracer(new SimpleRayTracer(scene).useSoftShadow(true)
+	                .setNumOfSSRays(98).setRadiusBeamSS(10d));
+
 
 	/**
 	 * Test method for rendering a chessboard scene with pawns and various light
@@ -22,16 +33,8 @@ public class MP1 {
 	 */
 	@Test
 	public void ChessboardTest() {
-		Scene scene = new Scene("Chessboard Scene");
-
-		// camera
-		Vector towardsBoard = new Vector(1, -0.25, 1).normalize();
-		Vector upVector = new Vector(0, 1, 0);
-		Vector rightVector = towardsBoard.crossProduct(upVector).normalize();
-		Vector trueUpVector = rightVector.crossProduct(towardsBoard).normalize();
-		Camera.Builder camera = Camera.getBuilder().setLocation(new Point(-55, 8, -55))
-				.setDirection(towardsBoard, trueUpVector).setVpDistance(150).setVpSize(80, 80);
-
+		
+		
 		Material shinyMaterial = new Material().setKd(0.5).setKs(0.5).setShininess(100);
 
 		// chessboard
@@ -77,11 +80,12 @@ public class MP1 {
 		scene.lights.add(new SpotLight(new Color(0, 0, 255), new Point(-30, 30, -35), new Vector(1, -1, 0))
 				.setKl(0.00001).setKq(0.000005));
 
-		ImageWriter imageWriter = new ImageWriter("chessboard", 1000, 1000);
+	
 
-		Camera camera1 = camera.setImageWriter(imageWriter).setRayTracer(new SimpleRayTracer(scene).setSoftShadow(true))
-				.build();
-
+		Camera camera1 = cameraBuilder.setLocation(new Point(-55, 8, -55)).setVpDistance(150).setVpSize(80, 80).setImageWriter(new ImageWriter("chessboard", 1000, 1000)).build();
+		
+		camera1.setMultithreading(3) 
+		.setDebugPrint(0.1);
 		camera1.renderImage();
 		camera1.writeToImage();
 	}
