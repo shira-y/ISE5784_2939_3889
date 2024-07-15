@@ -10,80 +10,161 @@ import primitives.*;
  * directions from a specific point in space.
  */
 public class PointLight extends Light implements LightSource {
-    protected final Point position;
+	/**
+	 * The position of the point light source in 3D space.
+	 */
+	protected final Point position;
 
-    private double kC = 1;
-    private double kL = 0;
-    private double kQ = 0;
-    private double radius = 100d;
+	/**
+	 * Constant attenuation coefficient for the point light. Controls how much the
+	 * light diminishes with distance.
+	 */
+	private double kC = 1;
 
-    public PointLight(Color intensity, Point position, double radius) {
-        super(intensity);
-        this.position = position;
-        this.radius = radius;
-    }
+	/**
+	 * Linear attenuation coefficient for the point light. Controls how much the
+	 * light diminishes linearly with distance.
+	 */
+	private double kL = 0;
 
-    public PointLight(Color intensity, Point position) {
-        super(intensity);
-        this.position = position;
-    }
+	/**
+	 * Quadratic attenuation coefficient for the point light. Controls how much the
+	 * light diminishes quadratically with distance.
+	 */
+	private double kQ = 0;
 
-    public PointLight setRadius(double radius) {
-        this.radius = radius;
-        return this;
-    }
+	/**
+	 * The radius for soft shadow sampling.
+	 */
+	private Double radius = 100d;
 
-    public PointLight setKc(double kC) {
-        this.kC = kC;
-        return this;
-    }
+	/**
+	 * Constructs a PointLight object with the given intensity, position, and
+	 * radius.
+	 * 
+	 * @param intensity the intensity (color) of the light
+	 * @param position  the position of the light source
+	 * @param radius    the radius for soft shadow sampling
+	 */
+	public PointLight(Color intensity, Point position, Double radius) {
+		super(intensity);
+		this.position = position;
+		this.radius = radius;
+	}
 
-    public PointLight setKl(double kL) {
-        this.kL = kL;
-        return this;
-    }
+	/**
+	 * Constructs a PointLight object with the given intensity and position.
+	 * 
+	 * @param intensity the intensity (color) of the light
+	 * @param position  the position of the light source
+	 */
+	public PointLight(Color intensity, Point position) {
+		super(intensity);
+		this.position = position;
+	}
 
-    public PointLight setKq(double kQ) {
-        this.kQ = kQ;
-        return this;
-    }
+	/**
+	 * Sets the radius for soft shadow sampling.
+	 * 
+	 * @param radius the radius to set
+	 * @return the PointLight object itself
+	 */
+	public PointLight setRadius(Double radius) {
+		this.radius = radius;
+		return this;
+	}
 
-    @Override
-    public Color getIntensity(Point p) {
-        double dist = position.distance(p);
-        return intensity.scale(1 / (kC + kL * dist + kQ * dist * dist));
-    }
+	/**
+	 * Sets the constant attenuation coefficient of the light.
+	 * 
+	 * @param kC the constant attenuation coefficient to set
+	 * @return the PointLight object itself
+	 */
+	public PointLight setKc(double kC) {
+		this.kC = kC;
+		return this;
+	}
 
-    @Override
-    public Vector getL(Point p) {
-        return p.subtract(position).normalize();
-    }
+	/**
+	 * Sets the linear attenuation coefficient of the light.
+	 * 
+	 * @param kL the linear attenuation coefficient to set
+	 * @return the PointLight object itself
+	 */
+	public PointLight setKl(double kL) {
+		this.kL = kL;
+		return this;
+	}
 
-    @Override
-    public double getDistance(Point point) {
-        return position.distance(point);
-    }
+	/**
+	 * Sets the quadratic attenuation coefficient of the light.
+	 * 
+	 * @param kQ the quadratic attenuation coefficient to set
+	 * @return the PointLight object itself
+	 */
+	public PointLight setKq(double kQ) {
+		this.kQ = kQ;
+		return this;
+	}
 
-    @Override
-    public List<Vector> getListL(Point p) {
-        List<Vector> vectors = new LinkedList<>();
-        int numSamples = 10; // Number of samples per axis, change this value to adjust the quality
+	/**
+	 * Returns the intensity of the light at a specified point in the scene, taking
+	 * into account the distance attenuation factors.
+	 * 
+	 * @param p the point in the scene where the intensity is evaluated
+	 * @return the intensity of the light at the specified point
+	 */
+	public Color getIntensity(Point p) {
+		double dist = position.distance(p);
+		return intensity.scale(1 / (kC + kL * dist + kQ * dist * dist));
+	}
 
-        for (int i = 0; i < numSamples; i++) {
-            for (int j = 0; j < numSamples; j++) {
-                double offsetX = (Math.random() - 0.5) * 2 * radius;
-                double offsetY = (Math.random() - 0.5) * 2 * radius;
-                double offsetZ = (Math.random() - 0.5) * 2 * radius;
-                Point samplePoint = position.add(new Vector(offsetX, offsetY, offsetZ));
-                vectors.add(p.subtract(samplePoint).normalize());
-            }
-        }
-        return vectors;
-    }
+	/**
+	 * Returns the direction vector from the light source to a specified point in
+	 * the scene.
+	 * 
+	 * @param p the point in the scene where the direction vector is evaluated
+	 * @return the direction vector from the light source to the specified point
+	 */
+	public Vector getL(Point p) {
+		return p.subtract(position).normalize();
+	}
 
 	@Override
-	public List<Ray> getAreaLightRays(Point p, int numRays) {
-		// TODO Auto-generated method stub
-		return null;
+	public double getDistance(Point point) {
+		return position.distance(point);
+	}
+
+	/**
+	 * Returns a list of direction vectors from the light source to a specified
+	 * point in the scene for soft shadow sampling.
+	 * 
+	 * @param p the point in the scene where the direction vectors are evaluated
+	 * @return a list of direction vectors from the light source to the specified
+	 *         point
+	 */
+	@Override
+	public List<Vector> getListL(Point p) {
+		List<Vector> vectors = new LinkedList<>();
+		for (double i = -radius; i < radius; i += radius / 10) {
+			for (double j = -radius; j < radius; j += radius / 10) {
+				if (i != 0 && j != 0) {
+					Point point = position.add(new Vector(i, j, 0.1d));
+					if (point.equals(position)) {
+						vectors.add(p.subtract(point).normalize());
+					} else {
+						try {
+							if (point.subtract(position).dotProduct(point.subtract(position)) <= radius * radius) {
+								vectors.add(p.subtract(point).normalize());
+							}
+						} catch (Exception e) {
+							vectors.add(p.subtract(point).normalize());
+						}
+					}
+				}
+			}
+		}
+		vectors.add(getL(p));
+		return vectors;
 	}
 }
