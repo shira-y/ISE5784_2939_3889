@@ -2,9 +2,11 @@ package lighting;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-import static primitives.Util.isZero;
-import static java.lang.Math.sqrt;
+
+
+import geometries.Plane;
+import static primitives.Util.*;
+
 import primitives.*;
 
 
@@ -36,6 +38,42 @@ public class PointLight extends Light implements LightSource {
 	 * light diminishes quadratically with distance.
 	 */
 	private double kQ = 0;
+
+	 /**
+     * square edge size parameter
+     */
+    private int lengthOfTheSide = 9;
+
+    /**
+     * The amount of rays of the soft shadow.
+     */
+    public static int softShadowsRays = 36;
+
+    /**
+     * Setter of the square edge size parameter
+     *
+     * @param lengthOfTheSide square edge size
+     * @return the updated point light
+     */
+    public PointLight setLengthOfTheSide(int lengthOfTheSide) {
+        if (lengthOfTheSide < 0)
+            throw new IllegalArgumentException("LengthOfTheSide must be greater then 0");
+        this.lengthOfTheSide = lengthOfTheSide;
+        return this;
+    }
+
+    /**
+     * Set the number of `soft shadows` rays
+     *
+     * @param numOfRays the number of `soft shadows` rays
+     * @return the updated camera object
+     */
+    public PointLight setSoftShadowsRays(int numOfRays) {
+        if (numOfRays < 0)
+            throw new IllegalArgumentException("numOfRays must be greater then 0!");
+        softShadowsRays = numOfRays;
+        return this;
+    }
 
 
 	/**
@@ -130,71 +168,38 @@ public class PointLight extends Light implements LightSource {
 	public double getDistance(Point point) {
 		return position.distance(point);
 	}
-	   //for random number of rays to create for soft shadows
-    private static final Random RND = new Random();
-    @Override
-    public List<Vector> getLCircle(Point p, double r, int amount) {
-        if (p.equals(position))
-            return null;
-
-        List<Vector> result = new LinkedList<>();
-
-        Vector l = getL(p); //vector to the center of the point light
-        result.add(l);
-
-        if (amount < 2) {
-            return result;
-        }
-
-        Vector vAcross;
-        //if l is parallel to z axis, then the normal is across z on x-axis
-        if (isZero(l.getX()) && isZero(l.getY())) {
-            //switch z and x places
-            vAcross = new Vector(0, 0, -1 * l.getZ()).normalize();
-            //otherwise get the normal using x and y
-        } else {//switched x and y places
-            vAcross = new Vector(l.getX(),-1 * l.getY(),  0).normalize();
-        }
-
-        //the vector to the other direction
-        Vector vForward = vAcross.crossProduct(l).normalize();
-
-        double cosAngle, sinAngle, moveX, moveY, d;
-
-        for (int i = 0; i < amount; i++) {
-            Point movedPoint = this.position;
-
-            //random cosine of angle between (-1,1)
-            cosAngle = 2 * RND.nextDouble() - 1;
-
-            //sin(angle)=1-cos^2(angle)
-            sinAngle = sqrt(1 - cosAngle * cosAngle);
-
-            //d is between (-r,r)
-            d = r * (2 * RND.nextDouble() - 1);
-            //if we got 0 then try again, because it will just be the same as the center
-            if (isZero(d)) {
-                i--;
-                continue;
-            }
-
-            //says how much to move across and down
-            moveX = d * cosAngle;
-            moveY = d * sinAngle;
-
-            //moving the point according to the value
-            if (!isZero(moveX)) {
-                movedPoint = movedPoint.add(vAcross.scale(moveX));
-            }
-            if (!isZero(moveY)) {
-                movedPoint = movedPoint.add(vForward.scale(moveY));
-            }
-
-            //adding the vector from the new point to the light position
-            result.add(p.subtract(movedPoint).normalize());
-        }
-        return result;
-    }
-
 	
+    @Override
+    public List<Vector> getLBeam(Point p) {
+        if (lengthOfTheSide == 0) return List.of(getL(p));
+
+        List<Vector> vectors = new LinkedList<>();
+        // help vectors
+        Vector v0, v1;
+
+        // A variable that tells how many divide each side
+        double divided = Math.sqrt(softShadowsRays);
+
+        // plane of the light
+        Plane plane = new Plane(position, getL(p));
+
+        // vectors of the plane
+        List<Vector> vectorsOfThePlane = plane.findVectorsOfPlane();
+
+        // Starting point of the square around the lighting
+        Point startPoint = position.add(vectorsOfThePlane.get(0).normalize().scale(-lengthOfTheSide / 2.0))
+                .add(vectorsOfThePlane.get(1).normalize().scale(-lengthOfTheSide / 2.0));
+
+        // A loop that runs as the number of vectors and in each of its runs it brings a vector around the lamp
+        for (double i = 0; i < lengthOfTheSide; i += lengthOfTheSide / divided) {
+            for (double j = 0; j < lengthOfTheSide; j += lengthOfTheSide / divided) {
+                v0 = vectorsOfThePlane.get(0).normalize()
+                        .scale(random(i, i + lengthOfTheSide / divided));
+                v1 = vectorsOfThePlane.get(1).normalize()
+                        .scale(random(j, j + lengthOfTheSide / divided));
+                vectors.add(p.subtract(startPoint.add(v0).add(v1)).normalize());
+            }
+        }
+        return vectors;
+    }
 }

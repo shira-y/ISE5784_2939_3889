@@ -23,8 +23,8 @@ public class MP1 {
 	Vector rightVector = towardsBoard.crossProduct(upVector).normalize();
 	Vector trueUpVector = rightVector.crossProduct(towardsBoard).normalize();
 	private final Camera.Builder cameraBuilder = Camera.getBuilder()
-			.setDirection(towardsBoard, trueUpVector).setRayTracer(new SimpleRayTracer(scene).useSoftShadow(true)
-	                .setNumOfSSRays(98).setRadiusBeamSS(10d));
+			.setDirection(towardsBoard, trueUpVector).setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(true));
+	            
 
 
 	/**
@@ -73,6 +73,7 @@ public class MP1 {
 
 		// Ambient light with reduced intensity
 		// scene.setAmbientLight(new AmbientLight(new Color(255, 255, 255), 0.02));
+      
 
 		// Three light sources
 		scene.lights.add(new DirectionalLight(new Color(200, 200, 200), new Vector(1, -1, 0)));

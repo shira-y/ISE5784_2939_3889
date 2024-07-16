@@ -1,5 +1,6 @@
 package geometries;
 
+import java.util.LinkedList;
 import java.util.List;
 import primitives.Point;
 import primitives.Ray;
@@ -64,6 +65,37 @@ public class Plane extends Geometry {
 	public Vector getNormal() {
 		return normalVector;
 	}
+	public List<Vector> findVectorsOfPlane() {
+        List<Vector> vectors = new LinkedList<>();
+
+        double nX = normalVector.getX(),
+               nY = normalVector.getY(),
+               nZ = normalVector.getZ();
+
+        double pX = p.getX(),
+               pY = p.getY(),
+               pZ = p.getZ();
+
+        double d = -(nX * pX + nY * pY + nZ * pZ);
+
+        int amount = 0;
+        // we calculate a point on the plane, and then we create a vector with the point
+        if (nX != 0) {
+            double x1 = (d / nX);
+            vectors.add((new Point(x1, 0, 0)).subtract(p));
+            amount++;
+        }
+        if (nY != 0) {
+            double y2 = (d / nY);
+            vectors.add((new Point(0, y2, 0)).subtract(p));
+            amount++;
+        }
+        if (nZ != 0 && amount < 2) {
+            double z3 = (d / nZ);
+            vectors.add((new Point(0, 0, z3)).subtract(p));
+        }
+        return vectors;
+    }
 
 	/**
 	 * Find the intersection points of the given ray with the plane.

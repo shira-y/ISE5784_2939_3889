@@ -65,8 +65,10 @@ public class MP2 {
         long startTime = System.currentTimeMillis();
         Camera camera = cameraBuilder
                 .setImageWriter(new ImageWriter("complexScene_noSoftShadows", 1000, 1000))
-                .setRayTracer(new SimpleRayTracer(scene).useSoftShadow(false))
+                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(false))
                 .build();
+        camera.setMultithreading(3) 
+		.setDebugPrint(0.1);
         camera.renderImage();
         camera.writeToImage();
         long endTime = System.currentTimeMillis();
@@ -76,8 +78,10 @@ public class MP2 {
         startTime = System.currentTimeMillis();
         camera = cameraBuilder
                 .setImageWriter(new ImageWriter("complexScene_withSoftShadows", 1000, 1000))
-                .setRayTracer(new SimpleRayTracer(scene).useSoftShadow(true).setNumOfSSRays(100).setRadiusBeamSS(10))
+                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(true))
                 .build();
+        camera.setMultithreading(3) 
+		.setDebugPrint(0.1);
         camera.renderImage();
         camera.writeToImage();
         endTime = System.currentTimeMillis();   

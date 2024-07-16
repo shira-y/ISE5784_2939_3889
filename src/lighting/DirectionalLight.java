@@ -42,12 +42,16 @@ public class DirectionalLight extends Light implements LightSource {
 		return Double.POSITIVE_INFINITY;
 	}
 
-	  @Override
-	    public List<Vector> getLCircle(Point p, double r, int amount) {
-	        //list of rays for soft shadows
-	        List<Vector> list = List.of(getL(p));
-	        return list;
-	    }
+	  /**
+     * Gets vectors from the given point to the light source
+     *
+     * @param p the point
+     * @return all vectors who created
+     */
+    public List<Vector> getLBeam(Point p) {
+        return List.of(getL(p));
+    }
+
    
 
 }
