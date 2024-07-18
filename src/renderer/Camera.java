@@ -76,13 +76,14 @@ public class Camera implements Cloneable {
 	 */
 	private int threadsCount = 0;
 	/**
-	 *  Spare threads if trying to use all the cores
+	 * Spare threads if trying to use all the cores
 	 */
-	private final int SPARE_THREADS = 2; 
+	private final int SPARE_THREADS = 2;
+
 	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
-	
+
 	private Camera() {
 	}
 
@@ -390,35 +391,44 @@ public class Camera implements Cloneable {
 					castRay(nX, nY, j, i);
 				}
 			}
-		}
-		else {
+		} else {
 			var threads = new LinkedList<Thread>(); // list of threads
-			 while (threadsCount-- > 0) // add appropriate number of threads
-			 threads.add(new Thread(() -> { // add a thread with its code
-			 Pixel pixel; // current pixel(row,col)
-			 // allocate pixel(row,col) in loop until there are no more pixels
-			 while ((pixel = pixelManager.nextPixel()) != null)
-			 // cast ray through pixel (and color it – inside castRay)
-			 castRay(nX, nY, pixel.col(), pixel.row());
-			 }));
-			 // start all the threads
-			 for (var thread : threads) thread.start();
-			 // wait until all the threads have finished
-			 try { for (var thread : threads) thread.join(); } catch (InterruptedException ignore) {}
+			while (threadsCount-- > 0) // add appropriate number of threads
+				threads.add(new Thread(() -> { // add a thread with its code
+					Pixel pixel; // current pixel(row,col)
+					// allocate pixel(row,col) in loop until there are no more pixels
+					while ((pixel = pixelManager.nextPixel()) != null)
+						// cast ray through pixel (and color it – inside castRay)
+						castRay(nX, nY, pixel.col(), pixel.row());
+				}));
+			// start all the threads
+			for (var thread : threads)
+				thread.start();
+			// wait until all the threads have finished
+			try {
+				for (var thread : threads)
+					thread.join();
+			} catch (InterruptedException ignore) {
+			}
 		}
 	}
+
 	public Camera setMultithreading(int threads) {
-		if (threads < -2) throw new IllegalArgumentException("Multithreading must be -2 or higher");if (threads >= -1) threadsCount = threads;
+		if (threads < -2)
+			throw new IllegalArgumentException("Multithreading must be -2 or higher");
+		if (threads >= -1)
+			threadsCount = threads;
 		else { // == -2
-		int cores = Runtime.getRuntime().availableProcessors() - SPARE_THREADS;
-		threadsCount = cores <= 2 ? 1 : cores;
+			int cores = Runtime.getRuntime().availableProcessors() - SPARE_THREADS;
+			threadsCount = cores <= 2 ? 1 : cores;
 		}
 		return this;
-		}
-		public Camera setDebugPrint(double interval) {
+	}
+
+	public Camera setDebugPrint(double interval) {
 		printInterval = interval;
 		return this;
-		}
+	}
 
 	/**
 	 * Casts a ray through the center of a given pixel, computes the color by
@@ -434,17 +444,20 @@ public class Camera implements Cloneable {
 //		Color color = rayTracer.traceRay(ray);
 //		imageWriter.writePixel(j, i, color);
 //	}
-	/** Cast ray from camera and color a pixel
-	 * @param nX resolution on X axis (number of pixels in row)
-	 * @param nY resolution on Y axis (number of pixels in column)
+	/**
+	 * Cast ray from camera and color a pixel
+	 * 
+	 * @param nX  resolution on X axis (number of pixels in row)
+	 * @param nY  resolution on Y axis (number of pixels in column)
 	 * @param col pixel's column number (pixel index in row)
 	 * @p
-	 * */
-	 
-	 private void castRay(int nX, int nY, int col, int row) {
-		 imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
-		 pixelManager.pixelDone();
-	 }
+	 */
+
+	private void castRay(int nX, int nY, int col, int row) {
+		imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
+		pixelManager.pixelDone();
+	}
+
 	/**
 	 * Method for creating grid lines and print grid
 	 * 
@@ -481,5 +494,6 @@ public class Camera implements Cloneable {
 		imageWriter.writeToImage();
 		return this;
 	}
+
 
 }

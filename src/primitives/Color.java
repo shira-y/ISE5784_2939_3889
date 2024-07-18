@@ -124,7 +124,21 @@ public class Color {
 			throw new IllegalArgumentException("Can't scale a color by a by a number lower than 1");
 		return new Color(rgb.reduce(k));
 	}
-
+    /**
+     * This function compares colors and returns a boolean variable whether they are equal or not
+     * @param color the color to compare
+     * @return true if the colors equals, otherwise false
+     */
+    public boolean isColorsEqual(Color color) {
+        
+        Point p1 = new Point(rgb);
+        Point p2 = new Point(color.rgb);
+        double c1 = Math.sqrt((this.rgb.d1) * (this.rgb.d1) + (this.rgb.d2) * (this.rgb.d2) + (this.rgb.d3) * (this.rgb.d3));
+        double c2 = Math.sqrt((color.rgb.d1) * (color.rgb.d1) + (color.rgb.d2) * (color.rgb.d2) + (color.rgb.d3) * (color.rgb.d3));
+        double avg = (c1 + c2) / 2d;
+        return !(p1.distance(p2) > 0.25 * avg);
+    }
+  
 	@Override
 	public String toString() {
 		return "rgb:" + rgb;

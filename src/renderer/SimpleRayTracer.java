@@ -6,6 +6,7 @@ import static geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import static primitives.Util.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -40,6 +41,8 @@ public class SimpleRayTracer extends RayTracerBase {
 		this.useSoftShadow = useSoftShadow;
 		return this;
 	}
+
+	
 
 	/**
 	 * Constructs a SimpleRayTracer object with the given scene.
@@ -156,6 +159,7 @@ public class SimpleRayTracer extends RayTracerBase {
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(ray);
 		return intersections == null ? null : ray.findClosestGeoPoint(intersections);
 	}
+
 	/**
 	 * Calculates the local effects of lighting at the given geometric point.
 	 *
@@ -236,7 +240,7 @@ public class SimpleRayTracer extends RayTracerBase {
 		}
 		return ktr;
 	}
-	
+
 	/**
 	 * Calculates the diffusive component of the light reflection.
 	 *
