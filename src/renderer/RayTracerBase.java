@@ -1,6 +1,6 @@
 package renderer;
 
-import java.util.List;
+
 
 import primitives.*;
 import scene.Scene;

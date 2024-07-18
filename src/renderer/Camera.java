@@ -3,7 +3,7 @@ package renderer;
 import java.util.LinkedList;
 import java.util.MissingResourceException;
 
-import javax.swing.Renderer;
+
 
 import primitives.*;
 import renderer.PixelManager.Pixel;

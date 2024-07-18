@@ -6,7 +6,7 @@ import static geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import static primitives.Util.*;
 
-import java.util.LinkedList;
+
 import java.util.List;
 
 import static primitives.Util.alignZero;
