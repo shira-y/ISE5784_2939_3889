@@ -169,49 +169,91 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @return The color resulting from the local lighting effects.
 	 */
 
+//	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
+//		Color color = gp.geometry.getEmission();
+//		Vector v = ray.getDirection();
+//		Vector n = gp.geometry.getNormal(gp.point);
+//		double nv = alignZero(n.dotProduct(v));
+//		if (nv == 0)
+//			return color; // Direction is perpendicular to the surface
+//
+//		Material mat = gp.geometry.getMaterial();
+//		if (useSoftShadow) {
+//			for (var lightSource : scene.lights) {
+//				Color colorBeam = Color.BLACK;
+//				var vectors = lightSource.getLBeam(gp.point);
+//				for (var l : vectors) {
+//					double nl = alignZero(n.dotProduct(l));
+//					if (nl * nv > 0) { // sign(nl) == sign(nv)
+//						Double3 ktr = transparency(gp, lightSource, l, n, nv);
+//						if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+//							Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
+//							colorBeam = colorBeam.add(lightIntensity.scale(calcDiffusive(mat, nl)),
+//									lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
+//						}
+//					}
+//				}
+//				color = color.add(colorBeam.reduce(vectors.size()));
+//			}
+//		} else {
+//			for (var lightSource : scene.lights) {
+//				Vector l = lightSource.getL(gp.point);
+//				double nl = alignZero(n.dotProduct(l));
+//				if (nl * nv > 0) { // sign(nl) == sign(nv)
+//					Double3 ktr = transparency(gp, lightSource, l, n, nv);
+//					if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+//						Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
+//						color = color.add(lightIntensity.scale(calcDiffusive(mat, nl)),
+//								lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
+//					}
+//				}
+//			}
+//		}
+//		return color;
+//	}
 	private Color calcLocalEffects(GeoPoint gp, Ray ray, Double3 k) {
-		Color color = gp.geometry.getEmission();
-		Vector v = ray.getDirection();
-		Vector n = gp.geometry.getNormal(gp.point);
-		double nv = alignZero(n.dotProduct(v));
-		if (nv == 0)
-			return color; // Direction is perpendicular to the surface
+	    Color color = gp.geometry.getEmission();
+	    Vector v = ray.getDirection();
+	    Vector n = gp.geometry.getNormal(gp.point);
+	    double nv = alignZero(n.dotProduct(v));
+	    if (nv == 0)
+	        return color; // Direction is perpendicular to the surface
 
-		Material mat = gp.geometry.getMaterial();
-		if (useSoftShadow) {
-			for (var lightSource : scene.lights) {
-				Color colorBeam = Color.BLACK;
-				var vectors = lightSource.getLBeam(gp.point);
-				for (var l : vectors) {
-					double nl = alignZero(n.dotProduct(l));
-					if (nl * nv > 0) { // sign(nl) == sign(nv)
-						Double3 ktr = transparency(gp, lightSource, l, n, nv);
-						if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-							Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
-							colorBeam = colorBeam.add(lightIntensity.scale(calcDiffusive(mat, nl)),
-									lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
-						}
-					}
-				}
-				color = color.add(colorBeam.reduce(vectors.size()));
-			}
-		} else {
-			for (var lightSource : scene.lights) {
-				Vector l = lightSource.getL(gp.point);
-				double nl = alignZero(n.dotProduct(l));
-				if (nl * nv > 0) { // sign(nl) == sign(nv)
-					Double3 ktr = transparency(gp, lightSource, l, n, nv);
-					if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
-						Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
-						color = color.add(lightIntensity.scale(calcDiffusive(mat, nl)),
-								lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
-					}
-				}
-			}
-		}
-		return color;
+	    Material mat = gp.geometry.getMaterial();
+	    
+	    for (var lightSource : scene.lights) {
+	        color = color.add(calcLightContribution(gp, lightSource, n, v, nv, mat, k));
+	    }
+	    
+	    return color;
 	}
 
+	private Color calcLightContribution(GeoPoint gp, LightSource lightSource, Vector n, Vector v, double nv, Material mat, Double3 k) {
+	    if (useSoftShadow) {
+	        Color colorBeam = Color.BLACK;
+	        var vectors = lightSource.getLBeam(gp.point);
+	        for (var l : vectors) {
+	            colorBeam = colorBeam.add(calcSingleLightContribution(gp, lightSource, l, n, v, nv, mat, k));
+	        }
+	        return colorBeam.reduce(vectors.size());
+	    } else {
+	        Vector l = lightSource.getL(gp.point);
+	        return calcSingleLightContribution(gp, lightSource, l, n, v, nv, mat, k);
+	    }
+	}
+
+	private Color calcSingleLightContribution(GeoPoint gp, LightSource lightSource, Vector l, Vector n, Vector v, double nv, Material mat, Double3 k) {
+	    double nl = alignZero(n.dotProduct(l));
+	    if (nl * nv > 0) { // sign(nl) == sign(nv)
+	        Double3 ktr = transparency(gp, lightSource, l, n, nv);
+	        if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
+	            Color lightIntensity = lightSource.getIntensity(gp.point).scale(ktr);
+	            return lightIntensity.scale(calcDiffusive(mat, nl))
+	                .add(lightIntensity.scale(calcSpecular(mat, n, l, nl, v)));
+	        }
+	    }
+	    return Color.BLACK;
+	}
 	/**
 	 * The function calculates the transparency light to the point.
 	 *
