@@ -85,7 +85,7 @@ public class Camera implements Cloneable {
 
 	private boolean adaptive;
 
-    private Point centerPoint;
+
 	/**
 	 * Private constructor to prevent direct instantiation.
 	 */
@@ -311,6 +311,7 @@ public class Camera implements Cloneable {
 				throw new IllegalArgumentException("Distance must be positive");
 			}
 			camera.distance = distance;
+		
 			return this;
 		}
 
@@ -412,14 +413,13 @@ public class Camera implements Cloneable {
 		int nY = imageWriter.getNy();
 
 		pixelManager = new PixelManager(nY, nX, printInterval);
-	    int amountOfRays = superSampling == 0 ? 1 : superSampling;
 
 		if (threadsCount == 0) {
 
 			for (int i = 0; i < nY; i++) {
 				for (int j = 0; j < nX; j++) {
-					//castRay(nX, nY, j, i);mp1
-					 renderPixel(j, i, amountOfRays);
+					castRay(nX, nY, j, i);
+					
 				}
 			}
 		} else {
@@ -430,8 +430,8 @@ public class Camera implements Cloneable {
 					// allocate pixel(row,col) in loop until there are no more pixels
 					while ((pixel = pixelManager.nextPixel()) != null)
 						// cast ray through pixel (and color it – inside castRay)
-					//	castRay(nX, nY, pixel.col(), pixel.row());//mp1
-						 renderPixel(pixel.col(), pixel.row(), amountOfRays);
+						castRay(nX, nY, pixel.col(), pixel.row());
+						 
 				}));
 			// start all the threads
 			for (var thread : threads)
@@ -443,6 +443,9 @@ public class Camera implements Cloneable {
 			} catch (InterruptedException ignore) {
 			}
 		}
+		  
+
+
 	}
 
 	public Camera setMultithreading(int threads) {
@@ -461,80 +464,7 @@ public class Camera implements Cloneable {
 		printInterval = interval;
 		return this;
 	}
-	 /**
-     * Performs adaptive super-sampling by casting multiple rays through a pixel
-     * with varying sub-pixel offsets and calculates the color at that pixel.
-     *
-     * @param nX        the number of pixels along the x-axis
-     * @param nY        the number of pixels along the y-axis
-     * @param j         the pixel's x-coordinate
-     * @param i         the pixel's y-coordinate
-     * @param numOfRays the number of rays to be cast through the pixel
-     * @return the color at the pixel
-     * @throws MissingResourceException if the imageWriter or viewPlane dimensions were not set
-     */
-    private Color adaptiveSuperSampling(int nX, int nY, int j, int i, int numOfRays) {
 
-        Vector Vright = vRight;
-        Vector Vup = vUp;
-        Point cameraLocation = this.p0;
-        int numOfRaysInRowCol = (int) Math.floor(Math.sqrt(numOfRays));
-
-        // If only one ray is used, directly trace the ray through the pixel
-        if (numOfRaysInRowCol == 1) {
-            return castRay(nX, nY, j, i);
-        }
-
-        Point pIJ = getCenterOfPixel(nX, nY, j, i);
-
-        // Calculate the ratios of pixel width and height
-        double rY = alignZero(height / nY);
-        double rX = alignZero(width / nX);
-
-        double PRy = rY / numOfRaysInRowCol;
-        double PRx = rX / numOfRaysInRowCol;
-
-        // Perform recursive adaptive super sampling
-        return rayTracer.adaptiveSuperSamplingRec(pIJ, rX, rY, PRx, PRy, cameraLocation, Vright, Vup, null);
-    }
-    /**
-     * Calculates the center point of a pixel in the view plane.
-     *
-     * @param nX the number of pixels along the x-axis
-     * @param nY the number of pixels along the y-axis
-     * @param j  the pixel's x-coordinate
-     * @param i  the pixel's y-coordinate
-     * @return the center point of the pixel
-     */
-    private Point getCenterOfPixel(int nX, int nY, int j, int i) {
-
-        // calculate the ratio of the pixel by the height and by the width of the view plane
-
-        // the ratio Ry = h/Ny, the height of the pixel
-        double rY = alignZero(height / nY);
-        // the ratio Rx = w/Nx, the width of the pixel
-        double rX = alignZero(width / nX);
-
-
-        // Calculate the x-coordinate of the center point of the pixel
-        double xJ = alignZero((j - ((nX - 1d) / 2d)) * rX);
-
-        // Calculate the y-coordinate of the center point of the pixel
-        double yI = alignZero(-(i - ((nY - 1d) / 2d)) * rY);
-
-        Point pIJ = centerPoint;
-
-        // Move the center point of the pixel horizontally
-        if (!isZero(xJ)) {
-            pIJ = pIJ.add(vRight.scale(xJ));
-        }
-        // Move the center point of the pixel vertically
-        if (!isZero(yI)) {
-            pIJ = pIJ.add(vUp.scale(yI));
-        }
-
-        return pIJ;
-    }
 	/**
 	 * Casts a ray through the center of a given pixel, computes the color by
 	 * tracing the ray, and color the pixel.
@@ -557,17 +487,12 @@ public class Camera implements Cloneable {
 	 * @param col pixel's column number (pixel index in row)
 	 * @p
 	 */
-//mp1
-//	private void castRay(int nX, int nY, int col, int row) {
-//		imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
-//		pixelManager.pixelDone();
-//	}
-	private Color castRay(int nX, int nY, int j, int i) {
-		Ray ray = constructRay(nX, nY, j, i);
-		Color color = rayTracer.traceRay(ray);
-		imageWriter.writePixel(j, i, color);
-        return color;
+
+	private void castRay(int nX, int nY, int col, int row) {
+		imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
+		pixelManager.pixelDone();
 	}
+	
 	/**
 	 * Method for creating grid lines and print grid
 	 * 
@@ -591,108 +516,10 @@ public class Camera implements Cloneable {
 		}
 		return this;
 	}
-	  /**
-     * Renders a single pixel of the image.
-     *
-     * @param x            the x-coordinate of the pixel
-     * @param y            the y-coordinate of the pixel
-     * @param amountOfRays the number of rays to be cast through the pixel
-     * @throws MissingResourceException if the imageWriter or viewPlane dimensions were not set
-     */
-    private void renderPixel(int x, int y, int amountOfRays) {
-        Color color;
-        int nX = imageWriter.getNx();
-        int nY = imageWriter.getNy();
-
-        // without adaptive superSampling
-        if (!adaptive) {
-
-            // without softshadow
-            if (superSampling == 0) {
-                color = castRay(nX, nY, x, y);
-            }
-            // with softshadow
-            else {
-                color = castRayBeam(nX, nY, x, y);
-            }
-        }
-
-        // with adaptive superSampling
-        else {
-            color = adaptiveSuperSampling(nX, nY, x, y, amountOfRays);
-        }
-     
-        imageWriter.writePixel(x, y, color);
-        pixelManager.pixelDone();
-    }
-
-    /**
-     * Casts multiple rays through a pixel with anti-aliasing and calculates the color at that pixel.
-     *
-     * @param nX the number of pixels along the x-axis
-     * @param nY the number of pixels along the y-axis
-     * @param j  the pixel's x-coordinate
-     * @param i  the pixel's y-coordinate
-     * @return the color at the pixel
-     */
-    private Color castRayBeam(int nX, int nY, int j, int i) {
-        int superSamp = superSampling;
-        List<Ray> ans = new ArrayList<>();
-
-        // Image center
-        Point p = p0.add(vTo.scale(distance));
-
-        // Ratio (pixel width & height)
-        double rY = height / nY;
-        double rX = width / nX;
-
-        // Pixel[i,j] center
-        double yI = -(i - ((nY - 1) / 2)) * rY;
-        double xJ = (j - ((nX - 1) / 2)) * rX;
-
-        // Distance between the start of the ray in the pixel
-        double dX = (double) rX / superSamp;
-        double dY = (double) rY / superSamp;
-
-        // The first point
-        double firstX = xJ + ((int) (superSamp / 2)) * dX;
-        double firstY = yI + ((int) (superSamp / 2)) * dY;
-        Point pIJ = p;
-        if (!isZero(firstX))
-            pIJ = pIJ.add(vRight.scale(firstX));
-        if (!isZero(firstY))
-            pIJ = pIJ.add(vUp.scale(firstY));
-        Point p1 = pIJ;
-
-        // Generate the rays for the ray beam
-        for (int c = 0; c < superSamp; c++) {
-            for (int b = 0; b < superSamp; b++) {
-                p1 = pIJ;
-                if (!isZero(c)) {
-                    p1 = p1.add(vRight.scale(dX * c));
-                }
-                if (!isZero(b)) {
-                    p1 = p1.add(vUp.scale(dY * b));
-                }
-
-                ans.add(new Ray(p0, p1.subtract(p0)));
-            }
-        }
-
-        // Calculate the average color from the rays in the beam
-        double r = 0, g = 0, b = 0;
-        for (Ray ray : ans) {
-            Color rayColor = rayTracer.traceRay(ray);
-            r += rayColor.getColor().getRed();
-            g += rayColor.getColor().getGreen();
-            b += rayColor.getColor().getBlue();
-        }
-        r = r / (ans.size());
-        g = g / (ans.size());
-        b = b / (ans.size());
-
-        return new Color(r, g, b);
-    }
+	 
+      
+   
+   
 	/**
 	 * Writes the image data to the image file using the appropriate method from the
 	 * image writer. This method should be invoked with caution as it directly

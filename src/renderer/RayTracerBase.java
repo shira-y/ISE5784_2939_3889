@@ -2,7 +2,7 @@ package renderer;
 
 
 
-import java.util.List;
+
 
 import primitives.*;
 import scene.Scene;
@@ -30,6 +30,5 @@ public abstract class RayTracerBase {
 	 * @return The color calculated by tracing the ray.
 	 */
 	public abstract Color traceRay(Ray ray);
-    public abstract Color adaptiveSuperSamplingRec(Point centerP, double Width, double Height, double minWidth, double minHeight, Point cameraLoc, Vector Vright, Vector Vup, List<Point> prePoints);
-
+   
 }
