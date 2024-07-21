@@ -6,7 +6,7 @@ import static geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import static primitives.Util.*;
 
-
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.alignZero;
@@ -311,5 +311,53 @@ public class SimpleRayTracer extends RayTracerBase {
 		double minusVR = -alignZero(v.dotProduct(r));
 		return minusVR <= 0 ? Double3.ZERO : mat.kS.scale(Math.pow(minusVR, mat.nShininess));
 	}
+	  @Override
+	    public Color adaptiveSuperSamplingRec(Point centerP, double Width, double Height, double minWidth, double minHeight, Point cameraLocation, Vector Vright, Vector Vup, List<Point> prePoints) {
 
+	        if (Width < minWidth * 2 || Height < minHeight * 2) {
+	            return this.traceRay(new Ray(cameraLocation, centerP.subtract(cameraLocation)));
+	        }
+
+	        List<Point> nextCenterPList = new LinkedList<>();
+	        List<Point> cornersList = new LinkedList<>();
+	        List<primitives.Color> colorList = new LinkedList<>();
+	        Point tempCorner;
+	        Ray tempRay;
+	        for (int i = -1; i <= 1; i += 2) {
+	            for (int j = -1; j <= 1; j += 2) {
+
+	                tempCorner = centerP.add(Vright.scale(i * Width / 2)).add(Vup.scale(j * Height / 2));
+	                cornersList.add(tempCorner);
+	                if (prePoints == null || !prePoints.contains(tempCorner)) {
+	                    tempRay = new Ray(cameraLocation, tempCorner.subtract(cameraLocation));
+	                    nextCenterPList.add(centerP.add(Vright.scale(i * Width / 4)).add(Vup.scale(j * Height / 4)));
+	                    colorList.add(traceRay(tempRay));
+	                }
+	            }
+	        }
+
+
+	        if (nextCenterPList == null || nextCenterPList.size() == 0) {
+	            return primitives.Color.BLACK;
+	        }
+
+
+	        boolean isAllEquals = true;
+	        primitives.Color tempColor = colorList.get(0);
+	        for (primitives.Color color : colorList) {
+	            if (!tempColor.almostEquals(color))
+	                isAllEquals = false;
+	        }
+	        if (isAllEquals && colorList.size() > 1)
+	            return tempColor;
+
+
+	        tempColor = primitives.Color.BLACK;
+	        for (Point center : nextCenterPList) {
+	            tempColor = tempColor
+	                    .add(adaptiveSuperSamplingRec(center, Width / 2, Height / 2, minWidth, minHeight, cameraLocation, Vright, Vup, cornersList));
+	        }
+	        return tempColor.reduce(nextCenterPList.size());
+
+	    }
 }

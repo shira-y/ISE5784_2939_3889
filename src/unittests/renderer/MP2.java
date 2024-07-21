@@ -24,7 +24,7 @@ public class MP2 {
                 .setDirection(towardsScene, upVector)
                 .setVpDistance(1000)
                 .setVpSize(200, 200)
-                .setRayTracer(new SimpleRayTracer(scene));
+                .setRayTracer(new SimpleRayTracer(scene)).setSuperSampling(500).setAdaptive(true);
     }
 
     private void addRandomGeometries() {
