@@ -62,28 +62,28 @@ public class MP2 {
         Camera.Builder cameraBuilder = createCamera();
 
         // Render with soft shadows OFF
-        long startTime = System.currentTimeMillis();
-        Camera camera = cameraBuilder
-                .setImageWriter(new ImageWriter("complexScene_noSoftShadows", 1000, 1000))
-                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(false))
-                .build();
-        camera.setMultithreading(3) 
-		.setDebugPrint(0.1);
-        camera.renderImage();
-        camera.writeToImage();
-        long endTime = System.currentTimeMillis();
-        System.out.println("Rendering time without soft shadows: " + (endTime - startTime) + " ms");
+//        long startTime = System.currentTimeMillis();
+//        Camera camera = cameraBuilder
+//                .setImageWriter(new ImageWriter("complexScene_noSoftShadows", 1000, 1000))
+//                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(false))
+//                .build();
+//        camera.setMultithreading(3) 
+//		.setDebugPrint(0.1);
+//        camera.renderImage();
+//        camera.writeToImage();
+//        long endTime = System.currentTimeMillis();
+//        System.out.println("Rendering time without soft shadows: " + (endTime - startTime) + " ms");
 
         // Render with soft shadows ON
-        startTime = System.currentTimeMillis();
-        camera = cameraBuilder
+        long startTime = System.currentTimeMillis();
+        Camera camera = cameraBuilder
                 .setImageWriter(new ImageWriter("complexScene_withSoftShadows", 1000, 1000))
-                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(true))
+                .setRayTracer(new SimpleRayTracer(scene) .setUseSoftShadow(true)).setAdaptive(true)
                 .build();
         camera.setMultithreading(3) 
 		.setDebugPrint(0.1);
         camera.renderImage();
         camera.writeToImage();
-        endTime = System.currentTimeMillis();   
+        long endTime = System.currentTimeMillis();   
         System.out.println("Rendering time with soft shadows: " + (endTime - startTime) + " ms");}
 }

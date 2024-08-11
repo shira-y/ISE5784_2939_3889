@@ -30,6 +30,11 @@ public abstract class RayTracerBase {
 	 * @return The color calculated by tracing the ray.
 	 */
 	public abstract Color traceRay(Ray ray);
-    public abstract Color adaptiveSuperSamplingRec(Point centerP, double Width, double Height, double minWidth, double minHeight, Point cameraLoc, Vector Vright, Vector Vup, List<Point> prePoints);
+	/**
+     * Declaration of abstract function
+     * @param rays rays to check the color
+     * @return Average color of some rays at the pixel, using adaptive super-sampling
+     */
+    public abstract Color adaptiveTraceRays(List<Ray> rays);
 
 }

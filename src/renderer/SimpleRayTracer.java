@@ -5,6 +5,7 @@ import scene.Scene;
 import static geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import static primitives.Util.*;
+import static java.lang.Math.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -311,53 +312,86 @@ public class SimpleRayTracer extends RayTracerBase {
 		double minusVR = -alignZero(v.dotProduct(r));
 		return minusVR <= 0 ? Double3.ZERO : mat.kS.scale(Math.pow(minusVR, mat.nShininess));
 	}
-	  @Override
-	    public Color adaptiveSuperSamplingRec(Point centerP, double Width, double Height, double minWidth, double minHeight, Point cameraLocation, Vector Vright, Vector Vup, List<Point> prePoints) {
+	
+	/**
+     * Returns the color of the point the ray hits using adaptive super sampling
+     *
+     * @param rays rays to check the color
+     * @return the color
+     */
+    public Color adaptiveTraceRays(List<Ray> rays) {
+        int numOfSampleRays = (int)sqrt(rays.size());
+        int ray1Index = (numOfSampleRays - 1) * numOfSampleRays + (numOfSampleRays - 1); //the index of the up and right ray
+        int ray2Index = (numOfSampleRays - 1) * numOfSampleRays;  //the index of the up and left ray
+        int ray3Index = 0;  //the index of the button and left ray
+        int ray4Index = (numOfSampleRays - 1);  // the index of the button and right ray
 
-	        if (Width < minWidth * 2 || Height < minHeight * 2) {
-	            return this.traceRay(new Ray(cameraLocation, centerP.subtract(cameraLocation)));
-	        }
+        Color color = adaptiveSuperSampling(rays, numOfSampleRays / 2, ray1Index, ray2Index, ray3Index, ray4Index, numOfSampleRays); //calculate the color for the pixel
+        return color;
+    }
+    
+    /**
+     * Helper method for adaptive super sampling
+     * recursively checks if the corners around a center point are the same and if yes doesnt check the rest of the rays and just pick the color if the center
+     * @param rays all the rays that were shot
+     * @param level_of_adaptive declares how many levels of adaptiveness to go
+     * @param ray1Index the index of top right corner ray
+     * @param ray2Index the index of top left corner ray
+     * @param ray3Index the index of bottom right corner ray
+     * @param ray4Index the index of bottom left corner ray
+     * @param numOfSampleRays number of rays to sample
+     * @return the color
+     */
+    private Color adaptiveSuperSampling(List<Ray> rays, int level_of_adaptive, int ray1Index, int ray2Index, int ray3Index, int ray4Index, int numOfSampleRays) {
+        int numOfAdaptiveRays = 5;
 
-	        List<Point> nextCenterPList = new LinkedList<>();
-	        List<Point> cornersList = new LinkedList<>();
-	        List<primitives.Color> colorList = new LinkedList<>();
-	        Point tempCorner;
-	        Ray tempRay;
-	        for (int i = -1; i <= 1; i += 2) {
-	            for (int j = -1; j <= 1; j += 2) {
+        Ray centerRay = rays.get(rays.size() - 1); //get the center screen ray
+        Color centerColor = traceRay(centerRay); //get the color of the center
+        Ray ray1 = rays.get(ray1Index);  //get the up and right screen ray
+        Color color1 = traceRay(ray1); //get the color of the up and right
+        Ray ray2 = rays.get(ray2Index); //get the up and left ray
+        Color color2 = traceRay(ray2);//get the color of the up and left
+        Ray ray3 = rays.get(ray3Index);//get the bottom and left ray
+        Color color3 = traceRay(ray3);//get the color of the bottom and left
+        Ray ray4 = rays.get(ray4Index);//get the bottom and right ray
+        Color color4 = traceRay(ray4);//get the color of the bottom and right
 
-	                tempCorner = centerP.add(Vright.scale(i * Width / 2)).add(Vup.scale(j * Height / 2));
-	                cornersList.add(tempCorner);
-	                if (prePoints == null || !prePoints.contains(tempCorner)) {
-	                    tempRay = new Ray(cameraLocation, tempCorner.subtract(cameraLocation));
-	                    nextCenterPList.add(centerP.add(Vright.scale(i * Width / 4)).add(Vup.scale(j * Height / 4)));
-	                    colorList.add(traceRay(tempRay));
-	                }
-	            }
-	        }
+        if (level_of_adaptive == 0) {
+            //Calculate the average color of the corners and the center
+            centerColor = centerColor.add(color1, color2, color3, color4);
+            return centerColor.reduce(numOfAdaptiveRays);
+        }
 
+        //If the corner color is the same as the center color, returns the center color
+        if (color1.isColorsEqual(centerColor) && color2.isColorsEqual(centerColor) && color3.isColorsEqual(centerColor) && color4.isColorsEqual(centerColor)) {
+            return centerColor;
+        }
 
-	        if (nextCenterPList == null || nextCenterPList.size() == 0) {
-	            return primitives.Color.BLACK;
-	        }
+        //Otherwise, for each color that is different from the center, the recursion goes down to the depth of the pixel and sums up
+        // the colors until it gets the same color as the center color,
+        else {
+            if (!color1.isColorsEqual(centerColor)) {
+                color1 = color1.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index - (numOfSampleRays + 1), ray2Index, ray3Index, ray4Index, numOfSampleRays));
+                color1 = color1.reduce(2);
+            }
+            if (!color2.isColorsEqual(centerColor)) {
+                ;
+                color2 = color2.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index, ray2Index - (numOfSampleRays - 1), ray3Index, ray4Index, numOfSampleRays));
+                color2 = color2.reduce(2);
+            }
+            if (!color3.isColorsEqual(centerColor)) {
+                color3 = color3.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index, ray2Index, ray3Index + (numOfSampleRays + 1), ray4Index, numOfSampleRays));
+                color3 = color3.reduce(2);
+            }
+            if (!color4.isColorsEqual(centerColor)) {
+                color4 = color4.add(adaptiveSuperSampling(rays, level_of_adaptive - 1, ray1Index, ray2Index, ray3Index, ray4Index + (numOfSampleRays - 1), numOfSampleRays));
+                color4 = color4.reduce(2);
+            }
+            //Calculate and return the average color
+            centerColor = centerColor.add(color1, color2, color3, color4);
 
+            return centerColor.reduce(numOfAdaptiveRays);
+        }
+    }
 
-	        boolean isAllEquals = true;
-	        primitives.Color tempColor = colorList.get(0);
-	        for (primitives.Color color : colorList) {
-	            if (!tempColor.almostEquals(color))
-	                isAllEquals = false;
-	        }
-	        if (isAllEquals && colorList.size() > 1)
-	            return tempColor;
-
-
-	        tempColor = primitives.Color.BLACK;
-	        for (Point center : nextCenterPList) {
-	            tempColor = tempColor
-	                    .add(adaptiveSuperSamplingRec(center, Width / 2, Height / 2, minWidth, minHeight, cameraLocation, Vright, Vup, cornersList));
-	        }
-	        return tempColor.reduce(nextCenterPList.size());
-
-	    }
 }
