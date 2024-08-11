@@ -377,21 +377,5 @@ public class SimpleRayTracer extends RayTracerBase {
         }
     }
 
-    /**
-     * Returns the average of colors of all the points the rays hit.
-     *
-     * @param rays Rays to check the color.
-     * @return The average color.
-     */
-    public Color traceRays(List<Ray> rays) {
-        Color avgColor = Color.BLACK;
 
-        // For each ray in the list, return the color at that point
-        for (Ray ray : rays) {
-            avgColor = avgColor.add(traceRay(ray));
-        }
-
-        // Return the average color
-        return avgColor.reduce(rays.size()); // Reduce by the number of rays to get the average color
-    }
 }

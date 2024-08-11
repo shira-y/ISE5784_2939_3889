@@ -176,32 +176,7 @@ public class Camera implements Cloneable {
 		return distance;
 	}
 
-	/**
-	 * Constructs a ray through a given pixel in the view plane.
-	 *
-	 * @param nX the number of horizontal pixels.
-	 * @param nY the number of vertical pixels.
-	 * @param j  the horizontal index of the pixel.
-	 * @param i  the vertical index of the pixel.
-	 * @return the constructed ray.
-	 */
-	public Ray constructRay(int nX, int nY, int j, int i) {
-		Point pc = p0.add(vTo.scale(distance));
-		double rY = height / nY;
-		double rX = width / nX;
-		double xJ = (j - (nX - 1) / 2.0) * rX;
-		double yI = -(i - (nY - 1) / 2.0) * rY;
-
-		Point pIJ = pc;
-
-		if (xJ != 0)
-			pIJ = pIJ.add(vRight.scale(xJ));
-		if (yI != 0)
-			pIJ = pIJ.add(vUp.scale(yI));
-
-		return new Ray(p0, pIJ.subtract(p0).normalize());
-	}
-
+	
 	/**
 	 * Returns a new {@link Camera.Builder} instance for constructing a
 	 * {@code Camera}.
@@ -577,10 +552,11 @@ public class Camera implements Cloneable {
 	 * @param i  index of row pixel.
 	 * @return Ray from the camera's {@code p0} to the view plane at (i,j).
 	 */
-	public Ray constructRayThroughCenter(int nX, int nY, int j, int i) {
-		Point Pij = getPixelCenter(nX, nY, j, i);
-		return new Ray(this.p0, Pij.subtract(this.p0));
-	}
+	 public Ray constructRay(int nX, int nY, int j, int i) {
+	        Point pIJ = getPixelCenter(nX, nY, j, i);
+	        return new Ray(p0, pIJ.subtract(p0).normalize());
+	    }
+
 
 	/**
 	 * Helper function to find the center of a pixel.
