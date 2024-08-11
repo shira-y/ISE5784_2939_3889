@@ -6,7 +6,6 @@ package primitives;
  * 255. Some additional operations are added that are useful for manipulating
  * light's colors
  * 
- * @author Dan Zilberstein
  */
 public class Color {
 	/**
@@ -138,6 +137,14 @@ public class Color {
         double avg = (c1 + c2) / 2d;
         return !(p1.distance(p2) > 0.25 * avg);
     }
+    
+    /**
+     * Determines if two colors are almost equal based on their RGB values.
+     * This method allows for a small difference of up to 10 in each RGB component.
+     * 
+     * @param other the color to compare with
+     * @return {@code true} if the colors are almost equal, {@code false} otherwise
+     */
     public boolean almostEquals(Color other) {
         java.awt.Color thisColor = this.getColor();
         java.awt.Color otherColor = other.getColor();
