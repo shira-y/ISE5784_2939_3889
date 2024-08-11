@@ -10,28 +10,26 @@ import renderer.PixelManager.Pixel;
 import static primitives.Util.*;
 
 /**
- * Represents a camera in 3D space, which is used to render images of scenes by casting rays through a view plane.
- * The {@code Camera} class provides methods to set up the camera's position, orientation, and view plane parameters.
- * It also includes support for multi-threaded rendering and adaptive super-sampling to improve image quality and performance.
+ * Represents a camera in 3D space, which is used to render images of scenes by
+ * casting rays through a view plane. The {@code Camera} class provides methods
+ * to set up the camera's position, orientation, and view plane parameters. It
+ * also includes support for multi-threaded rendering and adaptive
+ * super-sampling to improve image quality and performance.
  * 
  * <p>
- * This class is designed using the Builder design pattern, allowing the camera to be constructed with various optional settings.
+ * This class is designed using the Builder design pattern, allowing the camera
+ * to be constructed with various optional settings.
  * </p>
  * 
  * <p>
  * Example usage:
  * </p>
+ * 
  * <pre>{@code
- * Camera camera = Camera.getBuilder()
- *         .setLocation(new Point(0, 0, 0))
- *         .setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0))
- *         .setVpSize(200, 200)
- *         .setVpDistance(1000)
- *         .setImageWriter(new ImageWriter("image", 1000, 1000))
- *         .setRayTracer(new RayTracerBasic(scene))
- *         .setSuperSampling(500)
- *         .setAdaptive(true)
- *         .build();
+ * Camera camera = Camera.getBuilder().setLocation(new Point(0, 0, 0))
+ * 		.setDirection(new Vector(0, 0, -1), new Vector(0, 1, 0)).setVpSize(200, 200).setVpDistance(1000)
+ * 		.setImageWriter(new ImageWriter("image", 1000, 1000)).setRayTracer(new RayTracerBasic(scene))
+ * 		.setSuperSampling(500).setAdaptive(true).build();
  * camera.renderImage();
  * camera.writeToImage();
  * }</pre>
@@ -103,11 +101,6 @@ public class Camera implements Cloneable {
 	 * Number of spare threads to leave unused when using all available cores.
 	 */
 	private final int SPARE_THREADS = 2;
-
-	/**
-	 * The number of rays to use in super-sampling.
-	 */
-	private int superSampling = 0; //used in line 371
 
 	/**
 	 * Flag for enabling or disabling adaptive super-sampling.
@@ -210,7 +203,8 @@ public class Camera implements Cloneable {
 	}
 
 	/**
-	 * Returns a new {@link Camera.Builder} instance for constructing a {@code Camera}.
+	 * Returns a new {@link Camera.Builder} instance for constructing a
+	 * {@code Camera}.
 	 * 
 	 * @return a new Builder instance for constructing a Camera.
 	 */
@@ -222,6 +216,7 @@ public class Camera implements Cloneable {
 	 * Static nested Builder class for constructing {@code Camera} instances.
 	 */
 	public static class Builder {
+
 		/**
 		 * The Camera instance being built.
 		 */
@@ -288,7 +283,8 @@ public class Camera implements Cloneable {
 		 * @param vTo the forward vector.
 		 * @param vUp the upward vector.
 		 * @return this Builder instance.
-		 * @throws IllegalArgumentException if vectors are null, equal, or not perpendicular.
+		 * @throws IllegalArgumentException if vectors are null, equal, or not
+		 *                                  perpendicular.
 		 */
 		public Builder setDirection(Vector vTo, Vector vUp) {
 			if (vTo == null || vUp == null) {
@@ -361,17 +357,6 @@ public class Camera implements Cloneable {
 		}
 
 		/**
-		 * Sets the super-sampling value for the camera, which determines the number of rays to use for anti-aliasing.
-		 *
-		 * @param superSampling the super-sampling value.
-		 * @return this Builder instance.
-		 */
-		public Builder setSuperSampling(int superSampling) {
-			camera.superSampling = superSampling;
-			return this;
-		}
-
-		/**
 		 * Sets the adaptive super-sampling flag for the camera.
 		 *
 		 * @param adaptive the adaptive flag to be set.
@@ -430,8 +415,9 @@ public class Camera implements Cloneable {
 	/**
 	 * Sets the number of threads to use for multi-threaded rendering.
 	 * <p>
-	 * If the value is -2, the camera will use all available cores minus a few spare threads.
-	 * If the value is -1 or greater, the camera will use the specified number of threads.
+	 * If the value is -2, the camera will use all available cores minus a few spare
+	 * threads. If the value is -1 or greater, the camera will use the specified
+	 * number of threads.
 	 * </p>
 	 * 
 	 * @param threads the number of threads to use.
@@ -462,10 +448,11 @@ public class Camera implements Cloneable {
 	}
 
 	/**
-	 * Casts a ray through the center of a given pixel, computes the color by tracing the ray, and colors the pixel.
+	 * Casts a ray through the center of a given pixel, computes the color by
+	 * tracing the ray, and colors the pixel.
 	 *
-	 * @param nX number of pixels in the x direction.
-	 * @param nY number of pixels in the y direction.
+	 * @param nX  number of pixels in the x direction.
+	 * @param nY  number of pixels in the y direction.
 	 * @param col pixel's column number.
 	 * @param row pixel's row number.
 	 */
@@ -499,7 +486,8 @@ public class Camera implements Cloneable {
 	}
 
 	/**
-	 * Writes the image data to the image file using the appropriate method from the image writer.
+	 * Writes the image data to the image file using the appropriate method from the
+	 * image writer.
 	 * 
 	 * @return this Camera instance.
 	 * @throws IllegalStateException if the image writer is not initialized.
@@ -510,15 +498,18 @@ public class Camera implements Cloneable {
 	}
 
 	/**
-	 * Renders the image by casting rays through each pixel in the view plane and tracing them through the scene.
+	 * Renders the image by casting rays through each pixel in the view plane and
+	 * tracing them through the scene.
 	 * 
 	 * <p>
-	 * If multi-threading is enabled, the rendering will be performed using multiple threads. If adaptive super-sampling
-	 * is enabled, the camera will use adaptive techniques to optimize rendering quality and performance.
+	 * If multi-threading is enabled, the rendering will be performed using multiple
+	 * threads. If adaptive super-sampling is enabled, the camera will use adaptive
+	 * techniques to optimize rendering quality and performance.
 	 * </p>
 	 * 
 	 * @return this Camera instance.
-	 * @throws MissingResourceException if required resources such as the image writer or ray tracer are not initialized.
+	 * @throws MissingResourceException if required resources such as the image
+	 *                                  writer or ray tracer are not initialized.
 	 */
 	public Camera renderImage() {
 		// Check for missing resources

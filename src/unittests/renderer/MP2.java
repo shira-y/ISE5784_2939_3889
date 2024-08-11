@@ -103,7 +103,6 @@ public class MP2 {
         Camera camera = createCamera()
                 .setImageWriter(new ImageWriter("complexScene_withSoftShadows_withMultithreading_withAdaptive", 1000, 1000))
                 .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(true))
-                .setSuperSampling(500)  // Enable super-sampling
                 .setAdaptive(true)  // Enable adaptive super-sampling
                 .build();
         camera.setMultithreading(3)  // Enable multi-threading

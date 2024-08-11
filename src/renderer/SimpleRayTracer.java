@@ -5,6 +5,8 @@ import scene.Scene;
 import static geometries.Intersectable.GeoPoint;
 import lighting.LightSource;
 import static primitives.Util.*;
+import static java.lang.Math.*;
+
 
 import java.util.List;
 

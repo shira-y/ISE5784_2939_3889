@@ -119,7 +119,7 @@ public class MP1 {
 				.build();
 
 		// Enable multithreading and debug printing, render the image, and save it
-		camera1.setMultithreading(0)
+		camera1.setMultithreading(3)
 				.setDebugPrint(0.1);
 		camera1.renderImage();
 		camera1.writeToImage();
