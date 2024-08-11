@@ -4,6 +4,8 @@ package renderer;
 
 
 
+import java.util.List;
+
 import primitives.*;
 import scene.Scene;
 
@@ -30,5 +32,18 @@ public abstract class RayTracerBase {
 	 * @return The color calculated by tracing the ray.
 	 */
 	public abstract Color traceRay(Ray ray);
+    /**
+     * Declaration of abstract function
+     *
+     * @param rays rays to check the color
+     * @return Average color of all rays at the pixel
+     */
+    public abstract Color traceRays(List<Ray> rays);
+    /**
+     * Declaration of abstract function
+     * @param rays rays to check the color
+     * @return Average color of some rays at the pixel, using adaptive super-sampling
+     */
+    public abstract Color adaptiveTraceRays(List<Ray> rays);
    
 }

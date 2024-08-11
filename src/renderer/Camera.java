@@ -1,11 +1,8 @@
 package renderer;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.MissingResourceException;
-
-
 
 import primitives.*;
 import renderer.PixelManager.Pixel;
@@ -81,10 +78,10 @@ public class Camera implements Cloneable {
 	 * Spare threads if trying to use all the cores
 	 */
 	private final int SPARE_THREADS = 2;
-    private int superSampling = 0;
+
+	private int superSampling = 0;
 
 	private boolean adaptive;
-
 
 	/**
 	 * Private constructor to prevent direct instantiation.
@@ -180,9 +177,8 @@ public class Camera implements Cloneable {
 			pIJ = pIJ.add(vUp.scale(yI));
 
 		return new Ray(p0, pIJ.subtract(p0).normalize());
-		
+
 	}
-  
 
 	/**
 	 * getter of Builder
@@ -311,7 +307,7 @@ public class Camera implements Cloneable {
 				throw new IllegalArgumentException("Distance must be positive");
 			}
 			camera.distance = distance;
-		
+
 			return this;
 		}
 
@@ -336,27 +332,28 @@ public class Camera implements Cloneable {
 			camera.rayTracer = rayTracer;
 			return this;
 		}
-		  /**
-	     * sets the superSampling flag of the Camera.
-	     *
-	     * @param superSampling the SuperSampling flag and amount of rays in beam
-	     * @return this Camera object
-	     */
-	    public Builder setSuperSampling(int superSampling) {
-	        camera.superSampling = superSampling;
-	        return this;
-	    }
 
-	    /**
-	     * set the adaptive flag.
-	     *
-	     * @param adaptive the adaptive flag to be set
-	     * @return the Camera object
-	     */
-	    public Builder setAdaptive(boolean adaptive) {
-	    	camera.adaptive = adaptive;
-	        return this;
-	    }
+		/**
+		 * sets the superSampling flag of the Camera.
+		 *
+		 * @param superSampling the SuperSampling flag and amount of rays in beam
+		 * @return this Camera object
+		 */
+		public Builder setSuperSampling(int superSampling) {
+			camera.superSampling = superSampling;
+			return this;
+		}
+
+		/**
+		 * set the adaptive flag.
+		 *
+		 * @param adaptive the adaptive flag to be set
+		 * @return the Camera object
+		 */
+		public Builder setAdaptive(boolean adaptive) {
+			camera.adaptive = adaptive;
+			return this;
+		}
 
 		/**
 		 * Builds and returns the Camera instance.
@@ -405,49 +402,6 @@ public class Camera implements Cloneable {
 
 	}
 
-	/**
-	 * Method for rendering image
-	 */
-	public void renderImage() {
-		int nX = imageWriter.getNx();
-		int nY = imageWriter.getNy();
-
-		pixelManager = new PixelManager(nY, nX, printInterval);
-
-		if (threadsCount == 0) {
-
-			for (int i = 0; i < nY; i++) {
-				for (int j = 0; j < nX; j++) {
-					castRay(nX, nY, j, i);
-					
-				}
-			}
-		} else {
-			var threads = new LinkedList<Thread>(); // list of threads
-			while (threadsCount-- > 0) // add appropriate number of threads
-				threads.add(new Thread(() -> { // add a thread with its code
-					Pixel pixel; // current pixel(row,col)
-					// allocate pixel(row,col) in loop until there are no more pixels
-					while ((pixel = pixelManager.nextPixel()) != null)
-						// cast ray through pixel (and color it – inside castRay)
-						castRay(nX, nY, pixel.col(), pixel.row());
-						 
-				}));
-			// start all the threads
-			for (var thread : threads)
-				thread.start();
-			// wait until all the threads have finished
-			try {
-				for (var thread : threads)
-					thread.join();
-			} catch (InterruptedException ignore) {
-			}
-		}
-		  
-
-
-	}
-
 	public Camera setMultithreading(int threads) {
 		if (threads < -2)
 			throw new IllegalArgumentException("Multithreading must be -2 or higher");
@@ -492,7 +446,7 @@ public class Camera implements Cloneable {
 		imageWriter.writePixel(col, row, rayTracer.traceRay(constructRay(nX, nY, col, row)));
 		pixelManager.pixelDone();
 	}
-	
+
 	/**
 	 * Method for creating grid lines and print grid
 	 * 
@@ -516,10 +470,7 @@ public class Camera implements Cloneable {
 		}
 		return this;
 	}
-	 
-      
-   
-   
+
 	/**
 	 * Writes the image data to the image file using the appropriate method from the
 	 * image writer. This method should be invoked with caution as it directly
@@ -533,5 +484,122 @@ public class Camera implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * function that get the color of each point in the view plane and paint it .
+	 */
+	public Camera renderImage() {
+		// if one of the fields hasn't been initialized throw an exception
+		if (imageWriter == null) {
+			throw new MissingResourceException("missing resource", ImageWriter.class.getName(), "");
+		}
+		if (rayTracer == null) {
+			throw new MissingResourceException("missing resource", RayTracerBase.class.getName(), "");
+		}
+
+		int nX = imageWriter.getNx();
+		int nY = imageWriter.getNy();
+
+		pixelManager = new PixelManager(nY, nX, printInterval);
+		// if multithreading is set, render image with multithreads
+		if (threadsCount != 0) {
+
+			var threads = new LinkedList<Thread>(); // list of threads
+			while (threadsCount-- > 0) // add appropriate number of threads
+				threads.add(new Thread(() -> { // add a thread with its code
+					Pixel pixel; // current pixel(row,col)
+					// allocate pixel(row,col) in loop until there are no more pixels
+					while ((pixel = pixelManager.nextPixel()) != null)
+						// cast ray through pixel (and color it – inside castRay)
+						castRay(nX, nY, pixel.col(), pixel.row());
+
+				}));
+			// start all the threads
+			for (var thread : threads)
+				thread.start();
+			// wait until all the threads have finished
+			try {
+				for (var thread : threads)
+					thread.join();
+			} catch (InterruptedException ignore) {
+			}
+
+		}
+
+		// otherwise, do without adaptive
+		else if (!adaptive) {
+
+			// go over all the pixels
+			for (int i = 0; i < nX; i++) {
+				for (int j = 0; j < nY; j++) {
+//					// construct a ray through the current pixel
+					castRay(nX, nY, j, i);
+				}
+			}
+		}
+		// otherwise use adaptive supersampling
+		else {
+			// go over all the pixels
+			for (int i = 0; i < nX; i++) {
+				for (int j = 0; j < nY; j++) {
+					List<Ray> rays;
+					Ray centerRay = constructRay(nX, nY, j, i);
+					rays = List.of(centerRay);
+					Color color = rayTracer.adaptiveTraceRays(rays);//////////////////////////
+					imageWriter.writePixel(j, i, color);
+				}
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Constructing a ray through the center of a pixel
+	 *
+	 * @param nX amount of columns
+	 * @param nY amount of rows
+	 * @param j  index of column pixel
+	 * @param i  index of row pixel
+	 * @return Ray from camera's p0 to the view plane (i,j)
+	 */
+	public Ray constructRayThroughCenter(int nX, int nY, int j, int i) {
+		Point Pij = getPixelCenter(nX, nY, j, i);
+
+		// return Ray{p0=p0, direction=pij-p0}
+		return new Ray(this.p0, Pij.subtract(this.p0));
+	}
+
+	/**
+	 * Helper function to find the center of a pixel
+	 *
+	 * @param nX number of columns
+	 * @param nY number of rows
+	 * @param j  j index of pixel
+	 * @param i  i index of pixel
+	 * @return the center of the pixel
+	 */
+	private Point getPixelCenter(int nX, int nY, int j, int i) {
+		// image center
+		Point pC = this.p0.add(this.vTo.scale(this.distance));
+
+		// Ratio (pixel width and height)
+		double Ry = this.height / (double) nY;
+		double Rx = this.width / (double) nX;
+
+		// pixel[i,j] center
+		Point Pij = pC;
+		double Yi = -((double) i - (double) (nY - 1) / 2.0D) * Ry;
+		double Xj = ((double) j - (double) (nX - 1) / 2.0D) * Rx;
+
+		if (!Util.isZero(Yi)) {
+			Pij = pC.add(this.vUp.scale(Yi));
+		}
+
+		if (!Util.isZero(Xj)) {
+			Pij = Pij.add(this.vRight.scale(Xj));
+		}
+
+		return Pij;
+	}
 
 }

@@ -24,7 +24,7 @@ public class MP2 {
                 .setDirection(towardsScene, upVector)
                 .setVpDistance(1000)
                 .setVpSize(200, 200)
-                .setRayTracer(new SimpleRayTracer(scene)).setSuperSampling(500).setAdaptive(false);
+                .setRayTracer(new SimpleRayTracer(scene)).setSuperSampling(500).setAdaptive(true);
     }
 
     private void addRandomGeometries() {
@@ -65,7 +65,7 @@ public class MP2 {
         long startTime = System.currentTimeMillis();
         Camera camera = cameraBuilder
                 .setImageWriter(new ImageWriter("complexScene_noSoftShadows", 1000, 1000))
-                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(false))
+                .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(false)).setAdaptive(true)
                 .build();
         camera.setMultithreading(3) 
 		.setDebugPrint(0.1);
@@ -77,7 +77,7 @@ public class MP2 {
         // Render with soft shadows ON
         startTime = System.currentTimeMillis();
         camera = cameraBuilder
-                .setImageWriter(new ImageWriter("complexScene_withSoftShadows", 1000, 1000))
+                .setImageWriter(new ImageWriter("complexScene_withSoftShadows", 1000, 1000)).setAdaptive(true)
                 .setRayTracer(new SimpleRayTracer(scene).setUseSoftShadow(true))
                 .build();
         camera.setMultithreading(3) 
